@@ -45,24 +45,26 @@ class CRMEntity {
 		return false;
 	}
 
-	static function getInstance($module) {
-		$modName = $module;
-		if ($module == 'Calendar' || $module == 'Events') {
-			$module = 'Calendar';
-			$modName = 'Activity';
-		}
-		// File access security check
-		if (!class_exists($modName)) {
-			checkFileAccessForInclusion("modules/$module/$modName.php");
-			require_once("modules/$module/$modName.php");
-		}
-		$focus = new $modName();
-		$focus->moduleName = $module;
-		$focus->column_fields = new TrackableObject();
-		$focus->column_fields = getColumnFields($module);
-		if (method_exists($focus, 'initialize')) $focus->initialize();
-		return $focus;
-	}
+    static function getInstance($module) {
+        $modName = $module;
+        if ($module == 'Calendar' || $module == 'Events') {
+            $module = 'Calendar';
+            $modName = 'Activity';
+        }
+        // File access security check
+        if (!class_exists($modName) && $module) {
+            checkFileAccessForInclusion("modules/$module/$modName.php");
+            require_once("modules/$module/$modName.php");
+        }
+        if (class_exists($modName)) {
+            $focus = new $modName();
+            $focus->moduleName = $module;
+            $focus->column_fields = new TrackableObject();
+            $focus->column_fields = getColumnFields($module);
+            if (method_exists($focus, 'initialize')) $focus->initialize();
+            return $focus;
+        }
+    }
 
 	/**
 	 * Function which indicates whether to chagne the modified time or not while saving
@@ -2700,27 +2702,26 @@ class CRMEntity {
 		return $query;
 	}
 
-	/**
-	 *
-	 * @param <type> $module
-	 * @param <type> $user
-	 */
-	function getNonAdminModuleAccessQuery($module, $user) {
-		require('user_privileges/sharing_privileges_' . $user->id . '.php');
-		$tabId = getTabid($module);
-		$sharingRuleInfoVariable = $module . '_share_read_permission';
-		$sharingRuleInfo = $$sharingRuleInfoVariable;
-		$sharedTabId = null;
-		$query = '';
-		if (!empty($sharingRuleInfo) && (count($sharingRuleInfo['ROLE']) > 0 ||
-				count($sharingRuleInfo['GROUP']) > 0)) {
-			$query = " (SELECT shareduserid FROM vtiger_tmp_read_user_sharing_per " .
-					"WHERE userid=$user->id AND tabid=$tabId) UNION (SELECT " .
-					"vtiger_tmp_read_group_sharing_per.sharedgroupid FROM " .
-					"vtiger_tmp_read_group_sharing_per WHERE userid=$user->id AND tabid=$tabId)";
-		}
-		return $query;
-	}
+    /**
+     *
+     * @param <type> $module
+     * @param <type> $user
+     */
+    function getNonAdminModuleAccessQuery($module, $user) {
+        require('user_privileges/sharing_privileges_' . $user->id . '.php');
+        $tabId = getTabid($module);
+        $sharingRuleInfoVariable = $module . '_share_read_permission';
+        $sharingRuleInfo = $$sharingRuleInfoVariable;
+        $sharedTabId = null;
+        $query = '';
+        if (!empty($sharingRuleInfo) && (count($sharingRuleInfo['ROLE']) > 0 || count($sharingRuleInfo['GROUP']) > 0 || count($sharingRuleInfo['USER']) > 0)) {
+            $query = " (SELECT shareduserid FROM vtiger_tmp_read_user_sharing_per " .
+                "WHERE userid=$user->id AND tabid=$tabId) UNION (SELECT " .
+                "vtiger_tmp_read_group_sharing_per.sharedgroupid FROM " .
+                "vtiger_tmp_read_group_sharing_per WHERE userid=$user->id AND tabid=$tabId)";
+        }
+        return $query;
+    }
 
 	/**
 	 *
@@ -2746,42 +2747,43 @@ class CRMEntity {
 		return false;
 	}
 
-	/**
-	 *
-	 * @param String $module - module name for which query needs to be generated.
-	 * @param Users $user - user for which query needs to be generated.
-	 * @return String Access control Query for the user.
-	 */
-	function getNonAdminAccessControlQuery($module, $user, $scope = '') {
-		require('user_privileges/user_privileges_' . $user->id . '.php');
-		require('user_privileges/sharing_privileges_' . $user->id . '.php');
-		$query = ' ';
-		$tabId = getTabid($module);
-		if ($is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2]
-				== 1 && $defaultOrgSharingPermission[$tabId] == 3) {
-			$tableName = 'vt_tmp_u' . $user->id;
-			$sharingRuleInfoVariable = $module . '_share_read_permission';
-			$sharingRuleInfo = $$sharingRuleInfoVariable;
-			$sharedTabId = null;
-			if (!empty($sharingRuleInfo) && (count($sharingRuleInfo['ROLE']) > 0 ||
-					count($sharingRuleInfo['GROUP']) > 0)) {
-				$tableName = $tableName . '_t' . $tabId;
-				$sharedTabId = $tabId;
-			} elseif ($module == 'Calendar' || !empty($scope)) {
-				$tableName .= '_t' . $tabId;
-			}
-			$this->setupTemporaryTable($tableName, $sharedTabId, $user, $current_user_parent_role_seq, $current_user_groups);
-			// for secondary module we should join the records even if record is not there(primary module without related record)
-				if($scope == ''){
-					$query = " INNER JOIN $tableName $tableName$scope ON $tableName$scope.id = " .
-							"vtiger_crmentity$scope.smownerid ";
-				}else{
-					$query = " INNER JOIN $tableName $tableName$scope ON $tableName$scope.id = " .
-							"vtiger_crmentity$scope.smownerid OR vtiger_crmentity$scope.smownerid IS NULL";
-				}
-			}
-		return $query;
-	}
+    /**
+     *
+     * @param String $module - module name for which query needs to be generated.
+     * @param Users $user - user for which query needs to be generated.
+     * @return String Access control Query for the user.
+     */
+    function getNonAdminAccessControlQuery($module, $user, $scope = '') {
+        if (!file_exists('user_privileges/user_privileges_' . $user->id . '.php') || !file_exists('user_privileges/sharing_privileges_' . $user->id . '.php')) {
+            Vtiger_Deprecated::createModuleMetaFile();
+        }
+        require('user_privileges/user_privileges_' . $user->id . '.php');
+        require('user_privileges/sharing_privileges_' . $user->id . '.php');
+        $query = ' ';
+        $tabId = getTabid($module);
+        if ($is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tabId] == 3) {
+            $tableName = 'vt_tmp_u' . $user->id;
+            $sharingRuleInfoVariable = $module . '_share_read_permission';
+            $sharingRuleInfo = $$sharingRuleInfoVariable;
+            $sharedTabId = null;
+            if (!empty($sharingRuleInfo) && (count($sharingRuleInfo['ROLE']) > 0 || count($sharingRuleInfo['GROUP']) > 0) || count($sharingRuleInfo['USER']) > 0) {
+                $tableName = $tableName . '_t' . $tabId;
+                $sharedTabId = $tabId;
+            } elseif ($module == 'Calendar' || !empty($scope)) {
+                $tableName .= '_t' . $tabId;
+            }
+            $this->setupTemporaryTable($tableName, $sharedTabId, $user, $current_user_parent_role_seq, $current_user_groups);
+            // for secondary module we should join the records even if record is not there(primary module without related record)
+            if($scope == ''){
+                $query = " INNER JOIN $tableName $tableName$scope ON $tableName$scope.id = " .
+                    "vtiger_crmentity$scope.smownerid ";
+            }else{
+                $query = " INNER JOIN $tableName $tableName$scope ON $tableName$scope.id = " .
+                    "vtiger_crmentity$scope.smownerid OR vtiger_crmentity$scope.smownerid IS NULL";
+            }
+        }
+        return $query;
+    }
 
 	public function listQueryNonAdminChange($query, $scope = '') {
 		//make the module base table as left hand side table for the joins,

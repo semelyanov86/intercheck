@@ -79,6 +79,9 @@ class Users_Save_Action extends Vtiger_Save_Action {
 			if ($fieldName == 'roleid' && !($currentUserModel->isAdminUser())) {
 				$fieldValue = null;
 			}
+			if($fieldName == 'group_view' && !($currentUserModel->isAdminUser())) {
+			    $fieldValue = null;
+            }
 
 			if($fieldValue !== null) {
 				if(!is_array($fieldValue)) {
@@ -123,7 +126,7 @@ class Users_Save_Action extends Vtiger_Save_Action {
 			}
 		}
 		$recordModel = $this->saveRecord($request);
-
+        $this->generatePermissions($recordModel);
 		if ($request->get('relationOperation')) {
 			$parentRecordModel = Vtiger_Record_Model::getInstanceById($request->get('sourceRecord'), $request->get('sourceModule'));
 			$loadUrl = $parentRecordModel->getDetailViewUrl();
@@ -139,4 +142,22 @@ class Users_Save_Action extends Vtiger_Save_Action {
 
 		header("Location: $loadUrl");
 	}
+	public function generatePermissions(Users_Record_Model $userModel)
+    {
+        $modules = Vtiger_Module_Model::getEntityModules();
+        $groups = Users_Record_Model::getUserGroups($userModel->getId());
+        foreach ($modules as $module) {
+            foreach ($groups as $group) {
+                $ruleModel = Settings_SharingAccess_Rule_Model::getInstanceByData($module, $group, $userModel->getId());
+                if (!$ruleModel) {
+                    $ruleModel = new Settings_SharingAccess_Rule_Model();
+                    $ruleModel->setModuleFromInstance($module);
+                }
+                $ruleModel->set('source_id', 'Groups:' . $group);
+                $ruleModel->set('target_id', 'Users:' . $userModel->getId());
+                $ruleModel->set('permission', 1);
+                $ruleModel->save();
+            }
+        }
+    }
 }

@@ -239,16 +239,19 @@ $log->debug("Entering updateUser2RoleMapping(".$roleid.",".$userid.") method ...
   * @returns $rolename -- Role Name:: Type varchar
   *
  */
-function getRoleName($roleid)
-{
-	global $log;
-	$log->debug("Entering getRoleName(".$roleid.") method ...");
-	global $adb;
-	$sql1 = "select * from vtiger_role where roleid=?";
-	$result = $adb->pquery($sql1, array($roleid));
-	$rolename = $adb->query_result($result,0,"rolename");
-	$log->debug("Exiting getRoleName method ...");
-	return $rolename;
+function getRoleName($roleid) {
+    global $log;
+    $roleName = Vtiger_Cache::get('rolename',$roleid);
+    if (!$roleName || $roleName == "") {
+        $log->debug("Entering getRoleName(" . $roleid . ") method ...");
+        global $adb;
+        $sql1 = "select * from vtiger_role where roleid=?";
+        $result = $adb->pquery($sql1, array($roleid));
+        $roleName = $adb->query_result($result,0,"rolename");
+        Vtiger_Cache::set('rolename',$roleid, $roleName);
+        $log->debug("Exiting getRoleName method ...");
+    }
+    return $roleName;
 }
 
 /** Function to check if the currently logged in user is permitted to perform the specified action
@@ -512,66 +515,46 @@ function isPermitted($module,$actionname,$record_id='')
 		elseif($others_permission_id == 3)
 		{
 
-			if($actionid == 3 || $actionid == 4)
-			{
-				if($module == 'Calendar')
-				{
-					if($recOwnType == 'Users')
-					{
-						$activityType = vtws_getCalendarEntityType($record_id);
-						if($activityType == 'Events') {
-							$permission = isCalendarPermittedBySharing($record_id);
-						} else {
-							$permission = isToDoPermittedBySharing($record_id);
-						}
-					}
-					else
-					{
-						$permission='no';
-					}
-				}
-				else
-				{
-					$permission = isReadPermittedBySharing($module,$tabid,$actionid,$record_id);
-				}
-				$log->debug("Exiting isPermitted method ...");
-				return $permission;
-			}
-			elseif($actionid ==0 || $actionid ==1)
-			{
-				if($module == 'Calendar')
-				{
-					$permission='no';
-				}
-				else
-				{
-					$permission = isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id);
-				}
-				$log->debug("Exiting isPermitted method ...");
-				return $permission;
-			}
-			elseif($actionid ==2)
-			{
-					$permission ="no";
-					return $permission;
-			}
-			else
-			{
-				$permission = "yes";
-				$log->debug("Exiting isPermitted method ...");
-				return $permission;
-			}
-		}
-		else
-		{
-			$permission = "yes";
-		}
-	}else {
-		$permission = "no";
-	}
+            if ($actionid == 3 || $actionid == 4) {
+                if ($module == 'Calendar') {
+                    if ($recOwnType == 'Users') {
+                        $activityType = vtws_getCalendarEntityType($record_id);
+                        if ($activityType == 'Events') {
+                            $permission = isCalendarPermittedBySharing($record_id);
+                        } else {
+                            $permission = isToDoPermittedBySharing($record_id);
+                        }
+                    } else {
+                        $permission = 'no';
+                    }
+                } else {
+                    $permission = isReadPermittedBySharing($module, $tabid, $actionid, $record_id);
+                }
+                $log->debug("Exiting isPermitted method ...");
+                return $permission;
+            } elseif ($actionid == 0 || $actionid == 1 || $actionid == 2) {
+                if ($module == 'Calendar') {
+                    $permission = 'no';
+                } else {
+                    $permission = isReadWritePermittedBySharing($module, $tabid, $actionid, $record_id);
+                }
+                $log->debug("Exiting isPermitted method ...");
+                return $permission;
+            } else {
+                $permission = "yes";
+                $log->debug("Exiting isPermitted method ...");
+                return $permission;
+            }
+        } else {
+            $permission = "yes";
+        }
+    } else {
+        $log->debug('vtlib_isModuleActive NO');
+        $permission = "no";
+    }
 
-	$log->debug("Exiting isPermitted method ...");
-	return $permission;
+    $log->debug("Exiting isPermitted method ...");
+    return $permission;
 
 }
 
@@ -637,17 +620,23 @@ function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
 
 		}
 
-	}
-	elseif($ownertype == 'Groups')
-	{
-		$read_grp_per=$read_per_arr['GROUP'];
-		if(array_key_exists($ownerid,$read_grp_per))
-		{
-			$sharePer='yes';
-			$log->debug("Exiting isReadPermittedBySharing method ...");
-			return $sharePer;
-		}
-	}
+        $read_user_per = $read_per_arr['USER'];
+        if (in_array($ownerid, $read_user_per)) {
+            $sharePer = 'yes';
+            $log->debug("Exiting isReadPermittedBySharing method ...");
+            return $sharePer;
+        }
+
+
+
+    } elseif ($ownertype == 'Groups') {
+        $read_grp_per = $read_per_arr['GROUP'];
+        if (array_key_exists($ownerid, $read_grp_per)) {
+            $sharePer = 'yes';
+            $log->debug("Exiting isReadPermittedBySharing method ...");
+            return $sharePer;
+        }
+    }
 
 	//Checking for the Related Sharing Permission
 	$relatedModuleArray=$related_module_share[$tabid];
@@ -778,48 +767,45 @@ function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
 
 		}
 
-	}
-	elseif($ownertype == 'Groups')
-	{
-		$write_grp_per=$write_per_arr['GROUP'];
-		if(array_key_exists($ownerid,$write_grp_per))
-		{
-			$sharePer='yes';
-			$log->debug("Exiting isReadWritePermittedBySharing method ...");
-			return $sharePer;
-		}
-	}
-	//Checking for the Related Sharing Permission
-	$relatedModuleArray=$related_module_share[$tabid];
-	if(is_array($relatedModuleArray))
-	{
-		foreach($relatedModuleArray as $parModId)
-		{
-			$parRecordOwner=getParentRecordOwner($tabid,$parModId,$record_id);
-			if(sizeof($parRecordOwner) > 0)
-			{
-				$parModName=getTabname($parModId);
-				$rel_var=$parModName."_".$module."_share_write_permission";
-				$write_related_per_arr=$$rel_var;
-				$rel_owner_type='';
-				$rel_owner_id='';
-				foreach($parRecordOwner as $rel_type=>$rel_id)
-				{
-					$rel_owner_type=$rel_type;
-					$rel_owner_id=$rel_id;
-				}
-				if($rel_owner_type=='Users')
-				{
-					//Checking in Role Users
-					$write_related_role_per=$write_related_per_arr['ROLE'];
-					foreach($write_related_role_per as $roleid=>$userids)
-					{
-						if(in_array($rel_owner_id,$userids))
-						{
-							$sharePer='yes';
-							$log->debug("Exiting isReadWritePermittedBySharing method ...");
-							return $sharePer;
-						}
+        $write_user_per = $write_per_arr['USER'];
+        if (in_array($ownerid, $write_user_per)) {
+            $sharePer = 'yes';
+            $log->debug("Exiting isReadPermittedBySharing method ...");
+            return $sharePer;
+        }
+
+    } elseif ($ownertype == 'Groups') {
+        $write_grp_per = $write_per_arr['GROUP'];
+        if (array_key_exists($ownerid, $write_grp_per)) {
+            $sharePer = 'yes';
+            $log->debug("Exiting isReadWritePermittedBySharing method ...");
+            return $sharePer;
+        }
+    }
+    //Checking for the Related Sharing Permission
+    $relatedModuleArray = $related_module_share[$tabid];
+    if (is_array($relatedModuleArray)) {
+        foreach ($relatedModuleArray as $parModId) {
+            $parRecordOwner = getParentRecordOwner($tabid, $parModId, $record_id);
+            if (sizeof($parRecordOwner) > 0) {
+                $parModName = getTabname($parModId);
+                $rel_var = $parModName . "_" . $module . "_share_write_permission";
+                $write_related_per_arr = $$rel_var;
+                $rel_owner_type = '';
+                $rel_owner_id = '';
+                foreach ($parRecordOwner as $rel_type => $rel_id) {
+                    $rel_owner_type = $rel_type;
+                    $rel_owner_id = $rel_id;
+                }
+                if ($rel_owner_type == 'Users') {
+                    //Checking in Role Users
+                    $write_related_role_per = $write_related_per_arr['ROLE'];
+                    foreach ($write_related_role_per as $roleid => $userids) {
+                        if (in_array($rel_owner_id, $userids)) {
+                            $sharePer = 'yes';
+                            $log->debug("Exiting isReadWritePermittedBySharing method ...");
+                            return $sharePer;
+                        }
 
 					}
 					//Checking in Group Users
@@ -1214,21 +1200,26 @@ function getRoleAndSubordinatesRoleIds($roleId)
 }
 
 /** Function to delete the vtiger_role related sharing rules
-  * @param $roleid -- RoleId :: Type varchar
+ * @param $roleid -- RoleId :: Type varchar
  */
-function deleteRoleRelatedSharingRules($roleId)
-{
-	global $log;
-	$log->debug("Entering deleteRoleRelatedSharingRules(".$roleId.") method ...");
-		global $adb;
-		$dataShareTableColArr=Array('vtiger_datashare_grp2role'=>'to_roleid',
-									'vtiger_datashare_grp2rs'=>'to_roleandsubid',
-									'vtiger_datashare_role2group'=>'share_roleid',
-									'vtiger_datashare_role2role'=>'share_roleid::to_roleid',
-									'vtiger_datashare_role2rs'=>'share_roleid::to_roleandsubid',
-									'vtiger_datashare_rs2grp'=>'share_roleandsubid',
-									'vtiger_datashare_rs2role'=>'share_roleandsubid::to_roleid',
-									'vtiger_datashare_rs2rs'=>'share_roleandsubid::to_roleandsubid');
+function deleteRoleRelatedSharingRules($roleId) {
+    global $log;
+    $log->debug("Entering deleteRoleRelatedSharingRules(" . $roleId . ") method ...");
+    global $adb;
+    $dataShareTableColArr = Array(
+        'vtiger_datashare_grp2role' => 'to_roleid',
+        'vtiger_datashare_user2role' => 'to_roleid',
+        'vtiger_datashare_grp2rs' => 'to_roleandsubid',
+        'vtiger_datashare_user2rs' => 'to_roleandsubid',
+        'vtiger_datashare_role2group' => 'share_roleid',
+        'vtiger_datashare_role2user' => 'share_roleid',
+        'vtiger_datashare_role2role' => 'share_roleid::to_roleid',
+        'vtiger_datashare_role2rs' => 'share_roleid::to_roleandsubid',
+        'vtiger_datashare_rs2grp' => 'share_roleandsubid',
+        'vtiger_datashare_rs2user' => 'share_roleandsubid',
+        'vtiger_datashare_rs2role' => 'share_roleandsubid::to_roleid',
+        'vtiger_datashare_rs2rs' => 'share_roleandsubid::to_roleandsubid'
+    );
 
 		foreach($dataShareTableColArr as $tablename=>$colname)
 		{
@@ -1253,43 +1244,81 @@ function deleteRoleRelatedSharingRules($roleId)
 	$log->debug("Exiting deleteRoleRelatedSharingRules method ...");
 }
 
+/** Function to delete the vtiger_user related sharing rules
+ * @param $userid -- UserId :: Type varchar
+ */
+function deleteUserRelatedSharingRules($userId) {
+    global $log;
+    $log->debug("Entering deleteUserRelatedSharingRules(" . $userId . ") method ...");
+
+    global $adb;
+    $dataShareTableColArr = Array(
+        'vtiger_datashare_user2user' => 'share_userid::to_userid',
+        'vtiger_datashare_user2role' => 'share_userid',
+        'vtiger_datashare_user2rs' => 'share_userid',
+        'vtiger_datashare_user2group' => 'share_userid',
+        'vtiger_datashare_role2user' => 'to_userid',
+        'vtiger_datashare_rs2user' => 'to_userid',
+        'vtiger_datashare_grp2user' => 'to_userid'
+    );
+
+    foreach ($dataShareTableColArr as $tablename => $colname) {
+        $colNameArr = explode('::', $colname);
+        $query = "select shareid from " . $tablename . " where " . $colNameArr[0] . "=?";
+        $params = array($userId);
+        if (sizeof($colNameArr) > 1) {
+            $query .= " or " . $colNameArr[1] . "=?";
+            array_push($params, $userId);
+        }
+
+        $result = $adb->pquery($query, $params);
+        $num_rows = $adb->num_rows($result);
+        for ($i = 0; $i < $num_rows; $i++) {
+            $shareid = $adb->query_result($result, $i, 'shareid');
+            deleteSharingRule($shareid);
+        }
+
+    }
+    $log->debug("Exiting deleteUserRelatedSharingRules method ...");
+}
+
 /** Function to delete the group related sharing rules
   * @param $roleid -- RoleId :: Type varchar
  */
-function deleteGroupRelatedSharingRules($grpId)
-{
-	global $log;
-	$log->debug("Entering deleteGroupRelatedSharingRules(".$grpId.") method ...");
+function deleteGroupRelatedSharingRules($grpId) {
+    global $log;
+    $log->debug("Entering deleteGroupRelatedSharingRules(" . $grpId . ") method ...");
 
-		global $adb;
-		$dataShareTableColArr=Array('vtiger_datashare_grp2grp'=>'share_groupid::to_groupid',
-									'vtiger_datashare_grp2role'=>'share_groupid',
-									'vtiger_datashare_grp2rs'=>'share_groupid',
-									'vtiger_datashare_role2group'=>'to_groupid',
-									'vtiger_datashare_rs2grp'=>'to_groupid');
+    global $adb;
+    $dataShareTableColArr = Array(
+        'vtiger_datashare_grp2grp' => 'share_groupid::to_groupid',
+        'vtiger_datashare_grp2role' => 'share_groupid',
+        'vtiger_datashare_grp2rs' => 'share_groupid',
+        'vtiger_datashare_grp2user' => 'share_groupid',
+        'vtiger_datashare_role2group' => 'to_groupid',
+        'vtiger_datashare_rs2grp' => 'to_groupid',
+        'vtiger_datashare_user2group' => 'to_groupid'
+    );
 
 
-		foreach($dataShareTableColArr as $tablename=>$colname)
-		{
-				$colNameArr=explode('::',$colname);
-				$query="select shareid from ".$tablename." where ".$colNameArr[0]."=?";
-				$params = array($grpId);
-				if(sizeof($colNameArr) >1)
-				{
-						$query .=" or ".$colNameArr[1]."=?";
-						array_push($params, $grpId);
-				}
+    foreach ($dataShareTableColArr as $tablename => $colname) {
+        $colNameArr = explode('::', $colname);
+        $query = "select shareid from " . $tablename . " where " . $colNameArr[0] . "=?";
+        $params = array($grpId);
+        if (sizeof($colNameArr) > 1) {
+            $query .= " or " . $colNameArr[1] . "=?";
+            array_push($params, $grpId);
+        }
 
-				$result=$adb->pquery($query, $params);
-				$num_rows=$adb->num_rows($result);
-				for($i=0;$i<$num_rows;$i++)
-				{
-						$shareid=$adb->query_result($result,$i,'shareid');
-						deleteSharingRule($shareid);
-				}
+        $result = $adb->pquery($query, $params);
+        $num_rows = $adb->num_rows($result);
+        for ($i = 0; $i < $num_rows; $i++) {
+            $shareid = $adb->query_result($result, $i, 'shareid');
+            deleteSharingRule($shareid);
+        }
 
-		}
-	$log->debug("Exiting deleteGroupRelatedSharingRules method ...");
+    }
+    $log->debug("Exiting deleteGroupRelatedSharingRules method ...");
 }
 
 
@@ -1381,21 +1410,32 @@ function deleteSharingRule($shareid)
  *				    'RS::ROLE'=>'datashare_rs2role',
  *				    'RS::RS'=>'datashare_rs2rs');
  */
-function getDataShareTableName()
-{
-	global $log;
-	$log->debug("Entering getDataShareTableName() method ...");
-	$dataShareTableColArr=Array('GRP::GRP'=>'vtiger_datashare_grp2grp',
-					'GRP::ROLE'=>'vtiger_datashare_grp2role',
-					'GRP::RS'=>'vtiger_datashare_grp2rs',
-					'ROLE::GRP'=>'vtiger_datashare_role2group',
-					'ROLE::ROLE'=>'vtiger_datashare_role2role',
-					'ROLE::RS'=>'vtiger_datashare_role2rs',
-					'RS::GRP'=>'vtiger_datashare_rs2grp',
-					'RS::ROLE'=>'vtiger_datashare_rs2role',
-					'RS::RS'=>'vtiger_datashare_rs2rs');
-	$log->debug("Exiting getDataShareTableName method ...");
-	return $dataShareTableColArr;
+function getDataShareTableName() {
+    global $log;
+    $log->debug("Entering getDataShareTableName() method ...");
+    $dataShareTableColArr = Array(
+        'GRP::GRP' => 'vtiger_datashare_grp2grp',
+        'GRP::ROLE' => 'vtiger_datashare_grp2role',
+        'GRP::RS' => 'vtiger_datashare_grp2rs',
+        'GRP::USER' => 'vtiger_datashare_grp2user',
+
+        'ROLE::GRP' => 'vtiger_datashare_role2group',
+        'ROLE::ROLE' => 'vtiger_datashare_role2role',
+        'ROLE::RS' => 'vtiger_datashare_role2rs',
+        'ROLE::USER' => 'vtiger_datashare_role2user',
+
+        'RS::GRP' => 'vtiger_datashare_rs2grp',
+        'RS::ROLE' => 'vtiger_datashare_rs2role',
+        'RS::RS' => 'vtiger_datashare_rs2rs',
+        'RS::USER' => 'vtiger_datashare_rs2user',
+
+        'USER::GRP' => 'vtiger_datashare_user2group',
+        'USER::ROLE' => 'vtiger_datashare_user2role',
+        'USER::RS' => 'vtiger_datashare_user2rs',
+        'USER::USER' => 'vtiger_datashare_user2user',
+    );
+    $log->debug("Exiting getDataShareTableName method ...");
+    return $dataShareTableColArr;
 
 }
 
@@ -2154,8 +2194,8 @@ function getPermittedModuleNames()
 
 /**
  * Function to get the permitted module id Array with presence as 0
- * @global Users $current_user
  * @return Array Array of accessible tabids.
+ * @global Users $current_user
  */
 function getPermittedModuleIdList() {
 	global $current_user;
@@ -2224,13 +2264,13 @@ function getSharingModuleList($eliminateModules=false)
 	if(!in_array('Calendar', $eliminateModules)) $eliminateModules[] = 'Calendar';
 	if(!in_array('Events', $eliminateModules)) $eliminateModules[] = 'Events';
 
-	$query = "SELECT name FROM vtiger_tab WHERE presence=0 AND ownedby = 0 AND isentitytype = 1";
-	$query .= " AND name NOT IN(" . generateQuestionMarks($eliminateModules) . ")";
+    $query = "SELECT name FROM vtiger_tab WHERE presence=0 AND ownedby = 0 AND isentitytype = 1";
+    $query .= " AND name NOT IN('" . implode("','", $eliminateModules) . "')";
 
-	$result = $adb->pquery($query, $eliminateModules);
-	while($resrow = $adb->fetch_array($result)) {
-		$sharingModuleArray[] = $resrow['name'];
-	}
+    $result = $adb->query($query);
+    while ($resrow = $adb->fetch_array($result)) {
+        $sharingModuleArray[] = $resrow['name'];
+    }
 
 	return $sharingModuleArray;
 }

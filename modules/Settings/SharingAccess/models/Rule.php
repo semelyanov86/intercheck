@@ -13,9 +13,10 @@
  */
 class Settings_SharingAccess_Rule_Model extends Vtiger_Base_Model {
 
-	const RULE_TYPE_GROUPS = 'GRP';
-	const RULE_TYPE_ROLE = 'ROLE';
-	const RULE_TYPE_ROLE_AND_SUBORDINATES = 'RS';
+    const RULE_TYPE_GROUPS = 'GRP';
+    const RULE_TYPE_ROLE = 'ROLE';
+    const RULE_TYPE_ROLE_AND_SUBORDINATES = 'RS';
+    const RULE_TYPE_USER = 'USER';
 
 	const READ_ONLY_PERMISSION = 0;
 	const READ_WRITE_PERMISSION = 1;
@@ -25,65 +26,103 @@ class Settings_SharingAccess_Rule_Model extends Vtiger_Base_Model {
 		self::READ_WRITE_PERMISSION => 'Read Write'
 	);
 
-	static $ruleMemberToRelationMapping = array (
-		self::RULE_TYPE_GROUPS => Settings_SharingAccess_RuleMember_Model::RULE_MEMBER_TYPE_GROUPS,
-		self::RULE_TYPE_ROLE => Settings_SharingAccess_RuleMember_Model::RULE_MEMBER_TYPE_ROLES,
-		self::RULE_TYPE_ROLE_AND_SUBORDINATES => Settings_SharingAccess_RuleMember_Model::RULE_MEMBER_TYPE_ROLE_AND_SUBORDINATES
-	);
+    static $ruleMemberToRelationMapping = array (
+        self::RULE_TYPE_GROUPS => Settings_SharingAccess_RuleMember_Model::RULE_MEMBER_TYPE_GROUPS,
+        self::RULE_TYPE_ROLE => Settings_SharingAccess_RuleMember_Model::RULE_MEMBER_TYPE_ROLES,
+        self::RULE_TYPE_ROLE_AND_SUBORDINATES => Settings_SharingAccess_RuleMember_Model::RULE_MEMBER_TYPE_ROLE_AND_SUBORDINATES,
+        self::RULE_TYPE_USER => Settings_SharingAccess_RuleMember_Model::RULE_MEMBER_TYPE_USER
+    );
 
-	static $dataShareTableColArr = array (
-		self::RULE_TYPE_GROUPS => array (
-			self::RULE_TYPE_GROUPS => array (
-				'table' => 'vtiger_datashare_grp2grp',
-				'source_id' => 'share_groupid',
-				'target_id' => 'to_groupid'
-			),
-			self::RULE_TYPE_ROLE => array (
-				'table' => 'vtiger_datashare_grp2role',
-				'source_id' => 'share_groupid',
-				'target_id' => 'to_roleid'
-			),
-			self::RULE_TYPE_ROLE_AND_SUBORDINATES => array (
-				'table' => 'vtiger_datashare_grp2rs',
-				'source_id' => 'share_groupid',
-				'target_id' => 'to_roleandsubid'
-			),
-		),
-		self::RULE_TYPE_ROLE => array (
-			self::RULE_TYPE_GROUPS => array (
-				'table' => 'vtiger_datashare_role2group',
-				'source_id' => 'share_roleid',
-				'target_id' => 'to_groupid'
-			),
-			self::RULE_TYPE_ROLE => array (
-				'table' => 'vtiger_datashare_role2role',
-				'source_id' => 'share_roleid',
-				'target_id' => 'to_roleid'
-			),
-			self::RULE_TYPE_ROLE_AND_SUBORDINATES => array (
-				'table' => 'vtiger_datashare_role2rs',
-				'source_id' => 'share_roleid',
-				'target_id' => 'to_roleandsubid'
-			),
-		),
-		self::RULE_TYPE_ROLE_AND_SUBORDINATES => array (
-			self::RULE_TYPE_GROUPS => array (
-				'table' => 'vtiger_datashare_rs2grp',
-				'source_id' => 'share_roleandsubid',
-				'target_id' => 'to_groupid'
-			),
-			self::RULE_TYPE_ROLE => array (
-				'table' => 'vtiger_datashare_rs2role',
-				'source_id' => 'share_roleandsubid',
-				'target_id' => 'to_roleid'
-			),
-			self::RULE_TYPE_ROLE_AND_SUBORDINATES => array (
-				'table' => 'vtiger_datashare_rs2rs',
-				'source_id' => 'share_roleandsubid',
-				'target_id' => 'to_roleandsubid'
-			),
-		),
-	);
+    static $dataShareTableColArr = array (
+        self::RULE_TYPE_GROUPS => array (
+            self::RULE_TYPE_GROUPS => array (
+                'table' => 'vtiger_datashare_grp2grp',
+                'source_id' => 'share_groupid',
+                'target_id' => 'to_groupid'
+            ),
+            self::RULE_TYPE_ROLE => array (
+                'table' => 'vtiger_datashare_grp2role',
+                'source_id' => 'share_groupid',
+                'target_id' => 'to_roleid'
+            ),
+            self::RULE_TYPE_ROLE_AND_SUBORDINATES => array (
+                'table' => 'vtiger_datashare_grp2rs',
+                'source_id' => 'share_groupid',
+                'target_id' => 'to_roleandsubid'
+            ),
+            self::RULE_TYPE_USER => array (
+                'table' => 'vtiger_datashare_grp2user',
+                'source_id' => 'share_groupid',
+                'target_id' => 'to_userid'
+            ),
+        ),
+        self::RULE_TYPE_ROLE => array (
+            self::RULE_TYPE_GROUPS => array (
+                'table' => 'vtiger_datashare_role2group',
+                'source_id' => 'share_roleid',
+                'target_id' => 'to_groupid'
+            ),
+            self::RULE_TYPE_ROLE => array (
+                'table' => 'vtiger_datashare_role2role',
+                'source_id' => 'share_roleid',
+                'target_id' => 'to_roleid'
+            ),
+            self::RULE_TYPE_ROLE_AND_SUBORDINATES => array (
+                'table' => 'vtiger_datashare_role2rs',
+                'source_id' => 'share_roleid',
+                'target_id' => 'to_roleandsubid'
+            ),
+            self::RULE_TYPE_USER => array (
+                'table' => 'vtiger_datashare_role2user',
+                'source_id' => 'share_roleid',
+                'target_id' => 'to_userid'
+            ),
+        ),
+        self::RULE_TYPE_ROLE_AND_SUBORDINATES => array (
+            self::RULE_TYPE_GROUPS => array (
+                'table' => 'vtiger_datashare_rs2grp',
+                'source_id' => 'share_roleandsubid',
+                'target_id' => 'to_groupid'
+            ),
+            self::RULE_TYPE_ROLE => array (
+                'table' => 'vtiger_datashare_rs2role',
+                'source_id' => 'share_roleandsubid',
+                'target_id' => 'to_roleid'
+            ),
+            self::RULE_TYPE_ROLE_AND_SUBORDINATES => array (
+                'table' => 'vtiger_datashare_rs2rs',
+                'source_id' => 'share_roleandsubid',
+                'target_id' => 'to_roleandsubid'
+            ),
+            self::RULE_TYPE_USER => array (
+                'table' => 'vtiger_datashare_rs2user',
+                'source_id' => 'share_roleandsubid',
+                'target_id' => 'to_userid'
+            ),
+        ),
+        self::RULE_TYPE_USER => array (
+            self::RULE_TYPE_GROUPS => array (
+                'table' => 'vtiger_datashare_user2group',
+                'source_id' => 'share_userid',
+                'target_id' => 'to_groupid'
+            ),
+            self::RULE_TYPE_ROLE => array (
+                'table' => 'vtiger_datashare_user2role',
+                'source_id' => 'share_userid',
+                'target_id' => 'to_roleid'
+            ),
+            self::RULE_TYPE_ROLE_AND_SUBORDINATES => array (
+                'table' => 'vtiger_datashare_user2rs',
+                'source_id' => 'share_userid',
+                'target_id' => 'to_roleandsubid'
+            ),
+            self::RULE_TYPE_USER => array (
+                'table' => 'vtiger_datashare_user2user',
+                'source_id' => 'share_userid',
+                'target_id' => 'to_userid'
+            ),
+        )
+    );
 
 	/**
 	 * Function to get the Id of the Sharing Access Rule
@@ -200,144 +239,144 @@ class Settings_SharingAccess_Rule_Model extends Vtiger_Base_Model {
 		return '?module=SharingAccess&parent=Settings&view=IndexAjax&mode=editRule&for_module='.$this->getModule()->getId().'&record='.$this->getId();
 	}
 
-	public function getDeleteActionUrl() {
-		return '?module=SharingAccess&parent=Settings&action=IndexAjax&mode=deleteRule&for_module='.$this->getModule()->getId().'&record='.$this->getId();
-	}
-	
-	/**
-	 * Function to get the detailViewUrl for the rule member in Sharing Access Custom Rules
-	 * @return DetailViewUrl
-	 */
-	public function getSourceDetailViewUrl() {
-		$sourceMember = $this->getSourceMember()->getId();
-		$sourceMemberDetails = explode(':', $sourceMember);
-		
-		if($sourceMemberDetails[0] == 'Groups') {
-			return 'index.php?parent=Settings&module=Groups&view=Detail&record='.$sourceMemberDetails[1];
-		} else if($sourceMemberDetails[0] == 'Roles') {
-			return 'index.php?parent=Settings&module=Roles&view=Edit&record='.$sourceMemberDetails[1];
-		} else if($sourceMemberDetails[0] == 'RoleAndSubordinates') {
-			return 'index.php?parent=Settings&module=Roles&view=Edit&record='.$sourceMemberDetails[1];
-		}
-	}
-	
-	/**
-	 * Function to get the detailViewUrl for the rule member in Sharing Access Custom Rules
-	 * @return DetailViewUrl
-	 */
-	public function getTargetDetailViewUrl() {
-		$targetMember = $this->getTargetMember()->getId();
-		$targetMemberDetails = explode(':', $targetMember);
-		
-		if($targetMemberDetails[0] == 'Groups'){
-			return 'index.php?parent=Settings&module=Groups&view=Detail&record='.$targetMemberDetails[1];
-		} else if($targetMemberDetails[0] == 'Roles') {
-			return 'index.php?parent=Settings&module=Roles&view=Edit&record='.$targetMemberDetails[1];
-		} else if($targetMemberDetails[0] == 'RoleAndSubordinates') {
-			return 'index.php?parent=Settings&module=Roles&view=Edit&record='.$targetMemberDetails[1];
-		}
-	}
-	
-	/**
-	 * Function to get the Member Name from the Rule Model
-	 * @return Name of the rule Member
-	 */
-	public function getSourceMemberName() {
-		$sourceMember = $this->getSourceMember()->getId();
-		$sourceMemberDetails = explode(':', $sourceMember);
-		return $sourceMemberDetails[0];
-	}
-	
-	/**
-	 * Function to get the Member Name from the Rule Model
-	 * @return Name of the rule Member
-	 */
-	public function getTargetMemberName() {
-		$targetMember = $this->getTargetMember()->getId();
-		$targetMemberDetails = explode(':', $targetMember);
-		return $targetMemberDetails[0];
-	}
-	
-	/**
-	 * Function to get the list view actions for the record
-	 * @return <Array> - Associate array of Vtiger_Link_Model instances
-	 */
-	public function getRecordLinks() {
+    public function getDeleteActionUrl() {
+        return '?module=SharingAccess&parent=Settings&action=IndexAjax&mode=deleteRule&for_module='.$this->getModule()->getId().'&record='.$this->getId();
+    }
 
-		$links = array();
-		$recordLinks = array(
-			array(
-				'linktype' => 'LISTVIEWRECORD',
-				'linklabel' => 'LBL_EDIT_RECORD',
-				'linkurl' => 'javascript:app.showModalWindow(null, "'.$this->getEditViewUrl().'");',
-				'linkicon' => 'icon-pencil'
-			),
-			array(
-				'linktype' => 'LISTVIEWRECORD',
-				'linklabel' => 'LBL_DELETE_RECORD',
-				'linkurl' => 'javascript:app.showModalWindow(null, "'.$this->getDeleteActionUrl().'");',
-				'linkicon' => 'icon-trash'
-			)
-		);
-		foreach($recordLinks as $recordLink) {
-			$links[] = Vtiger_Link_Model::getInstanceFromValues($recordLink);
-		}
+    /**
+     * Function to get the detailViewUrl for the rule member in Sharing Access Custom Rules
+     * @return DetailViewUrl
+     */
+    public function getSourceDetailViewUrl() {
+        $sourceMember = $this->getSourceMember()->getId();
+        $sourceMemberDetails = explode(':', $sourceMember);
 
-		return $links;
-	}
+        if($sourceMemberDetails[0] == 'Groups') {
+            return 'index.php?parent=Settings&module=Groups&view=Detail&record='.$sourceMemberDetails[1];
+        } else if($sourceMemberDetails[0] == 'Roles') {
+            return 'index.php?parent=Settings&module=Roles&view=Edit&record='.$sourceMemberDetails[1];
+        } else if($sourceMemberDetails[0] == 'RoleAndSubordinates') {
+            return 'index.php?parent=Settings&module=Roles&view=Edit&record='.$sourceMemberDetails[1];
+        }
+    }
 
-	public function save() {
-		$db = PearDatabase::getInstance();
-		$ruleId = $this->getId();
+    /**
+     * Function to get the detailViewUrl for the rule member in Sharing Access Custom Rules
+     * @return DetailViewUrl
+     */
+    public function getTargetDetailViewUrl() {
+        $targetMember = $this->getTargetMember()->getId();
+        $targetMemberDetails = explode(':', $targetMember);
 
-		if(!$ruleId) {
-			$ruleId = $db->getUniqueId('vtiger_datashare_module_rel');
-			$this->set('shareid', $ruleId);
+        if($targetMemberDetails[0] == 'Groups'){
+            return 'index.php?parent=Settings&module=Groups&view=Detail&record='.$targetMemberDetails[1];
+        } else if($targetMemberDetails[0] == 'Roles') {
+            return 'index.php?parent=Settings&module=Roles&view=Edit&record='.$targetMemberDetails[1];
+        } else if($targetMemberDetails[0] == 'RoleAndSubordinates') {
+            return 'index.php?parent=Settings&module=Roles&view=Edit&record='.$targetMemberDetails[1];
+        }
+    }
 
-			$db->pquery("INSERT INTO vtiger_datashare_module_rel(shareid, tabid) VALUES(?,?)",
-					array($ruleId, $this->getModule()->getId()));
-		} else {
-			$relationTypeComponents = explode('::', $this->get('relationtype'));
-			$sourceType = $relationTypeComponents[0];
-			$targetType = $relationTypeComponents[1];
+    /**
+     * Function to get the Member Name from the Rule Model
+     * @return Name of the rule Member
+     */
+    public function getSourceMemberName() {
+        $sourceMember = $this->getSourceMember()->getId();
+        $sourceMemberDetails = explode(':', $sourceMember);
+        return $sourceMemberDetails[0];
+    }
 
-			$tableColumnInfo = self::$dataShareTableColArr[$sourceType][$targetType];
-			$tableName = $tableColumnInfo['table'];
-			$sourceColumnName = $tableColumnInfo['source_id'];
-			$targetColumnName = $tableColumnInfo['target_id'];
+    /**
+     * Function to get the Member Name from the Rule Model
+     * @return Name of the rule Member
+     */
+    public function getTargetMemberName() {
+        $targetMember = $this->getTargetMember()->getId();
+        $targetMemberDetails = explode(':', $targetMember);
+        return $targetMemberDetails[0];
+    }
 
-			$db->pquery("DELETE FROM $tableName WHERE shareid=?", array($ruleId));
-		}
+    /**
+     * Function to get the list view actions for the record
+     * @return <Array> - Associate array of Vtiger_Link_Model instances
+     */
+    public function getRecordLinks() {
 
-		$sourceId = $this->get('source_id');
-		$sourceIdComponents = Settings_SharingAccess_RuleMember_Model::getIdComponentsFromQualifiedId($sourceId);
-		$sourceType = array_search($sourceIdComponents[0], self::$ruleMemberToRelationMapping);
-		$targetId = $this->get('target_id');
-		$targetIdComponents = Settings_SharingAccess_RuleMember_Model::getIdComponentsFromQualifiedId($targetId);
-		$targetType = array_search($targetIdComponents[0], self::$ruleMemberToRelationMapping);
-		$tableColumnName = self::$dataShareTableColArr[$sourceType][$targetType];
-		$tableName = $tableColumnName['table'];
-		$sourceColumnName = $tableColumnName['source_id'];
-		$targetColumnName = $tableColumnName['target_id'];
+        $links = array();
+        $recordLinks = array(
+            array(
+                'linktype' => 'LISTVIEWRECORD',
+                'linklabel' => 'LBL_EDIT_RECORD',
+                'linkurl' => 'javascript:app.showModalWindow(null, "'.$this->getEditViewUrl().'");',
+                'linkicon' => 'icon-pencil'
+            ),
+            array(
+                'linktype' => 'LISTVIEWRECORD',
+                'linklabel' => 'LBL_DELETE_RECORD',
+                'linkurl' => 'javascript:app.showModalWindow(null, "'.$this->getDeleteActionUrl().'");',
+                'linkicon' => 'icon-trash'
+            )
+        );
+        foreach($recordLinks as $recordLink) {
+            $links[] = Vtiger_Link_Model::getInstanceFromValues($recordLink);
+        }
 
-		$this->set('relationtype', implode('::', array($sourceType, $targetType)));
+        return $links;
+    }
 
-		$permission = $this->get('permission');
+    public function save() {
+        $db = PearDatabase::getInstance();
+        $ruleId = $this->getId();
 
-		$sql = "INSERT INTO $tableName (shareid, $sourceColumnName, $targetColumnName, permission) VALUES (?,?,?,?)";
-		$params = array($ruleId, $sourceIdComponents[1], $targetIdComponents[1], $permission);
-		$db->pquery($sql, $params);
+        if(!$ruleId) {
+            $ruleId = $db->getUniqueId('vtiger_datashare_module_rel');
+            $this->set('shareid', $ruleId);
 
-		$sql = 'UPDATE vtiger_datashare_module_rel SET relationtype=? WHERE shareid=?';
-		$params = array($this->get('relationtype'), $ruleId);
-		$db->pquery($sql, $params);
+            $db->pquery("INSERT INTO vtiger_datashare_module_rel(shareid, tabid) VALUES(?,?)",
+                array($ruleId, $this->getModule()->getId()));
+        } else {
+            $relationTypeComponents = explode('::', $this->get('relationtype'));
+            $sourceType = $relationTypeComponents[0];
+            $targetType = $relationTypeComponents[1];
+
+            $tableColumnInfo = self::$dataShareTableColArr[$sourceType][$targetType];
+            $tableName = $tableColumnInfo['table'];
+            $sourceColumnName = $tableColumnInfo['source_id'];
+            $targetColumnName = $tableColumnInfo['target_id'];
+
+            $db->pquery("DELETE FROM $tableName WHERE shareid=?", array($ruleId));
+        }
+
+        $sourceId = $this->get('source_id');
+        $sourceIdComponents = Settings_SharingAccess_RuleMember_Model::getIdComponentsFromQualifiedId($sourceId);
+        $sourceType = array_search($sourceIdComponents[0], self::$ruleMemberToRelationMapping);
+        $targetId = $this->get('target_id');
+        $targetIdComponents = Settings_SharingAccess_RuleMember_Model::getIdComponentsFromQualifiedId($targetId);
+        $targetType = array_search($targetIdComponents[0], self::$ruleMemberToRelationMapping);
+        $tableColumnName = self::$dataShareTableColArr[$sourceType][$targetType];
+        $tableName = $tableColumnName['table'];
+        $sourceColumnName = $tableColumnName['source_id'];
+        $targetColumnName = $tableColumnName['target_id'];
+
+        $this->set('relationtype', implode('::', array($sourceType, $targetType)));
+
+        $permission = $this->get('permission');
+
+        $sql = "INSERT INTO $tableName (shareid, $sourceColumnName, $targetColumnName, permission) VALUES (?,?,?,?)";
+        $params = array($ruleId, $sourceIdComponents[1], $targetIdComponents[1], $permission);
+        $db->pquery($sql, $params);
+
+        $sql = 'UPDATE vtiger_datashare_module_rel SET relationtype=? WHERE shareid=?';
+        $params = array($this->get('relationtype'), $ruleId);
+        $db->pquery($sql, $params);
         Settings_SharingAccess_Module_Model::recalculateSharingRules();
-	}
+    }
 
 	public function delete() {
 		$db = PearDatabase::getInstance();
 
-		$ruleId = $this->getId();
+        $ruleId = $this->getId();
 
 		$relationTypeComponents = explode('::', $this->get('relationtype'));
 		$sourceType = $relationTypeComponents[0];
@@ -368,6 +407,20 @@ class Settings_SharingAccess_Rule_Model extends Vtiger_Base_Model {
 		}
 		return false;
 	}
+
+	public static function getInstanceByData($moduleModel, $groupId, $userId)
+    {
+        $db = PearDatabase::getInstance();
+
+        $sql = 'SELECT * FROM vtiger_datashare_module_rel INNER JOIN vtiger_datashare_grp2user ON vtiger_datashare_grp2user.shareid = vtiger_datashare_module_rel.shareid WHERE tabid = ? AND share_groupid = ? AND to_userid = ?';
+        $params = array($moduleModel->getId(), $groupId, $userId);
+        $result = $db->pquery($sql, $params);
+        if ($result && $db->num_rows($result)) {
+            $ruleId = $db->query_result($result, 0, 'shareid');
+            return self::getInstance($moduleModel, $ruleId);
+        }
+        return false;
+    }
 
 	/**
 	 * Function to get all the rules

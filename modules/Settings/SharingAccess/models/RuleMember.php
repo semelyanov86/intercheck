@@ -13,9 +13,10 @@
  */
 class Settings_SharingAccess_RuleMember_Model extends Vtiger_Base_Model {
 
-	const RULE_MEMBER_TYPE_GROUPS = 'Groups';
-	const RULE_MEMBER_TYPE_ROLES = 'Roles';
-	const RULE_MEMBER_TYPE_ROLE_AND_SUBORDINATES = 'RoleAndSubordinates';
+    const RULE_MEMBER_TYPE_GROUPS = 'Groups';
+    const RULE_MEMBER_TYPE_ROLES = 'Roles';
+    const RULE_MEMBER_TYPE_ROLE_AND_SUBORDINATES = 'RoleAndSubordinates';
+    const RULE_MEMBER_TYPE_USER = 'Users';
 
 	/**
 	 * Function to get the Qualified Id of the Group RuleMember
@@ -118,8 +119,20 @@ class Settings_SharingAccess_RuleMember_Model extends Vtiger_Base_Model {
 			}
 		}
 
-		return false;
-	}
+        if($type == self::RULE_MEMBER_TYPE_USER) {
+            $qualifiedId = self::getQualifiedId(self::RULE_MEMBER_TYPE_USER, $memberId);
+            $name = getUserFullName($memberId);
+            $sql = 'SELECT deleted FROM vtiger_users WHERE id = ?';
+            $params = array($memberId);
+            $result = $db->pquery($sql, $params);
+            $row = $db->query_result_rowdata($result, 0);
+
+            $rule = new self();
+            return $rule->set('id', $qualifiedId)->set('name', $name)->set('deleted', $row['deleted']);
+        }
+
+        return false;
+    }
 
 	/**
 	 * Function to get all the rule members
@@ -135,11 +148,20 @@ class Settings_SharingAccess_RuleMember_Model extends Vtiger_Base_Model {
 			$rules[self::RULE_MEMBER_TYPE_GROUPS][$qualifiedId] = $rule->set('id', $qualifiedId)->set('name', $groupModel->getName());
 		}
 
-		$allRoles = Settings_Roles_Record_Model::getAll();
-		foreach($allRoles as $roleId => $roleModel) {
-			$qualifiedId = self::getQualifiedId(self::RULE_MEMBER_TYPE_ROLES, $roleId);
-			$rule = new self();
-			$rules[self::RULE_MEMBER_TYPE_ROLES][$qualifiedId] = $rule->set('id', $qualifiedId)->set('name', $roleModel->getName());
+
+        $allUsers = Users_Record_Model::getAll(1);
+        foreach($allUsers as $userId => $userModel) {
+            $qualifiedId = self::getQualifiedId(self::RULE_MEMBER_TYPE_USER, $userId);
+            $rule = new self();
+            $rules[self::RULE_MEMBER_TYPE_USER][$qualifiedId] = $rule->set('id', $qualifiedId)->set('name', $userModel->getName());
+        }
+
+
+        $allRoles = Settings_Roles_Record_Model::getAll();
+        foreach($allRoles as $roleId => $roleModel) {
+            $qualifiedId = self::getQualifiedId(self::RULE_MEMBER_TYPE_ROLES, $roleId);
+            $rule = new self();
+            $rules[self::RULE_MEMBER_TYPE_ROLES][$qualifiedId] = $rule->set('id', $qualifiedId)->set('name', $roleModel->getName());
 
 			$qualifiedId = self::getQualifiedId(self::RULE_MEMBER_TYPE_ROLE_AND_SUBORDINATES, $roleId);
 			$rule = new self();

@@ -25,56 +25,62 @@
                 </div>
             </div>
         </div>
-        <hr>	
-            <div class="contents">
-                {if $RULE_MODEL_LIST}
-                    <table class="table table-bordered table-condensed customRuleTable">
-                        <thead>
-                            <tr class="customRuleHeaders">
-                                <th>{vtranslate('LBL_RULE_NO', $QUALIFIED_MODULE)}</th>
-                                <!-- Check if the module should the for module to get the translations -->
-                                <th>{if $FOR_MODULE == 'Accounts'}{vtranslate($FOR_MODULE, $QUALIFIED_MODULE)}{else}{vtranslate($FOR_MODULE, $MODULE)}{/if}
-                                        &nbsp;{vtranslate('LBL_OF', $MODULE)}</th>
-                                <th>{vtranslate('LBL_CAN_ACCESSED_BY', $QUALIFIED_MODULE)}</th>
-                                <th>{vtranslate('LBL_PRIVILEGES', $QUALIFIED_MODULE)}</th>
-                            </tr>
-                        </thead>
-                            <tbody>
-                                {foreach item=RULE_MODEL key=RULE_ID from=$RULE_MODEL_LIST name="customRuleIterator"}
-                                    <tr class="customRuleEntries">
-                                        <td class="sequenceNumber">
-                                            {$smarty.foreach.customRuleIterator.index + 1}
-                                        </td>
-                                        <td>
-                                            <a href="{$RULE_MODEL->getSourceDetailViewUrl()}">{vtranslate('SINGLE_'|cat:$RULE_MODEL->getSourceMemberName(), $QUALIFIED_MODULE)}::{$RULE_MODEL->getSourceMember()->getName()}</a>
-                                        </td>
-                                        <td>
-                                            <a href="{$RULE_MODEL->getTargetDetailViewUrl()}">{vtranslate('SINGLE_'|cat:$RULE_MODEL->getTargetMemberName(), $QUALIFIED_MODULE)}::{$RULE_MODEL->getTargetMember()->getName()}</a>
-                                        </td>
-                                        <td>
-                                            {if $RULE_MODEL->isReadOnly()}
-                                                {vtranslate('Read Only', $QUALIFIED_MODULE)}
-                                            {else}
-                                                {vtranslate('Read Write', $QUALIFIED_MODULE)}
-                                            {/if}
+        <hr>
+        <div class="contents">
+            {if $RULE_MODEL_LIST}
+                <table class="table table-bordered table-condensed customRuleTable">
+                    <thead>
+                    <tr class="customRuleHeaders">
+                        <th>{vtranslate('LBL_RULE_NO', $QUALIFIED_MODULE)}</th>
+                        <!-- Check if the module should the for module to get the translations -->
+                        <th>{if $FOR_MODULE == 'Accounts'}{vtranslate($FOR_MODULE, $QUALIFIED_MODULE)}{else}{vtranslate($FOR_MODULE, $MODULE)}{/if}
+                            &nbsp;{vtranslate('LBL_OF', $MODULE)}</th>
+                        <th>{vtranslate('LBL_CAN_ACCESSED_BY', $QUALIFIED_MODULE)}</th>
+                        <th>{vtranslate('LBL_PRIVILEGES', $QUALIFIED_MODULE)}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach item=RULE_MODEL key=RULE_ID from=$RULE_MODEL_LIST name="customRuleIterator"}
+                        {if $RULE_MODEL->getTargetMember()->getName() neq '' and $RULE_MODEL->getSourceMember()->getName() neq ''}
+                            <tr class="customRuleEntries">
+                                <td class="sequenceNumber">
+                                    {$smarty.foreach.customRuleIterator.index + 1}
+                                </td>
+                                <td>
+                                    <a href="{$RULE_MODEL->getSourceDetailViewUrl()}">{vtranslate('SINGLE_'|cat:$RULE_MODEL->getSourceMemberName(), $QUALIFIED_MODULE)}::{$RULE_MODEL->getSourceMember()->getName()}</a>
+                                    {if $RULE_MODEL->getSourceMember()->get('deleted') eq 1}&nbsp;&nbsp;({vtranslate('LBL_DELETED')}){/if}
+                                </td>
+                                <td>
+                                    <a href="{$RULE_MODEL->getTargetDetailViewUrl()}">{vtranslate('SINGLE_'|cat:$RULE_MODEL->getTargetMemberName(), $QUALIFIED_MODULE)}::{$RULE_MODEL->getTargetMember()->getName()}</a>
+                                    {if $RULE_MODEL->getTargetMember()->get('deleted') eq 1}&nbsp;&nbsp;({vtranslate('LBL_DELETED')}){/if}
+                                </td>
+                                <td>
+                                    {if $RULE_MODEL->isReadOnly()}
+                                        {vtranslate('Read Only', $QUALIFIED_MODULE)}
+                                    {else}
+                                        {vtranslate('Read Write', $QUALIFIED_MODULE)}
+                                    {/if}
 
-                                            <div class="table-actions pull-right">
-                                                <span><a href="javascript:void(0);" class="edit" data-url="{$RULE_MODEL->getEditViewUrl()}"><i title="{vtranslate('LBL_EDIT', $MODULE)}" class="fa fa-pencil"></i></a></span>
-                                                &nbsp;<span><a href="javascript:void(0);" class="delete" data-url="{$RULE_MODEL->getDeleteActionUrl()}"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="fa fa-trash"></i></a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                {/foreach}
-                            </tbody>
-                    </table>
-                    <div class="recordDetails hide">
-                        <p class="textAlignCenter">{vtranslate('LBL_CUSTOM_ACCESS_MESG', $QUALIFIED_MODULE)}.<!--<a href="">{vtranslate('LBL_CLICK_HERE', $QUALIFIED_MODULE)}</a>&nbsp;{vtranslate('LBL_CREATE_RULE_MESG', $QUALIFIED_MODULE)}--></p>
-                    </div>
-                {else}
-                    <div class="recordDetails">
-                        <p class="textAlignCenter">{vtranslate('LBL_CUSTOM_ACCESS_MESG', $QUALIFIED_MODULE)}.<!--<a href="">{vtranslate('LBL_CLICK_HERE', $QUALIFIED_MODULE)}</a>&nbsp;{vtranslate('LBL_CREATE_RULE_MESG', $QUALIFIED_MODULE)}--></p>
-                    </div>
-                {/if}
-            </div>
-	</div>
+                                    <div class="table-actions pull-right">
+                                        {if $RULE_MODEL->getSourceMember()->get('deleted') neq 1 and $RULE_MODEL->getTargetMember()->get('deleted') neq 1}
+                                            <span><a href="javascript:void(0);" class="edit" data-url="{$RULE_MODEL->getEditViewUrl()}"><i title="{vtranslate('LBL_EDIT', $MODULE)}" class="fa fa-pencil"></i></a></span>
+                                        {/if}
+                                        &nbsp;<span><a href="javascript:void(0);" class="delete" data-url="{$RULE_MODEL->getDeleteActionUrl()}"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="fa fa-trash"></i></a></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        {/if}
+                    {/foreach}
+                    </tbody>
+                </table>
+                <div class="recordDetails hide">
+                    <p class="textAlignCenter">{vtranslate('LBL_CUSTOM_ACCESS_MESG', $QUALIFIED_MODULE)}.<!--<a href="">{vtranslate('LBL_CLICK_HERE', $QUALIFIED_MODULE)}</a>&nbsp;{vtranslate('LBL_CREATE_RULE_MESG', $QUALIFIED_MODULE)}--></p>
+                </div>
+            {else}
+                <div class="recordDetails">
+                    <p class="textAlignCenter">{vtranslate('LBL_CUSTOM_ACCESS_MESG', $QUALIFIED_MODULE)}.<!--<a href="">{vtranslate('LBL_CLICK_HERE', $QUALIFIED_MODULE)}</a>&nbsp;{vtranslate('LBL_CREATE_RULE_MESG', $QUALIFIED_MODULE)}--></p>
+                </div>
+            {/if}
+        </div>
+    </div>
 {/strip}
