@@ -1,0 +1,90 @@
+<?xml version='1.0'?>
+<schema>
+	<tables>
+		<table>
+			<name>webapp_userdevicetoken</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `webapp_userdevicetoken` (
+  `userid` int(11) NOT NULL,
+  `devicetoken` longtext NOT NULL,
+  `longitude` longtext NOT NULL,
+  `latitude` longtext NOT NULL,
+  UNIQUE KEY `userid` (`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1]]></sql>
+		</table>
+		<table>
+			<name>webapp_userdevicetoken</name>
+			<sql><![CDATA[ALTER TABLE `webapp_userdevicetoken` ADD `device_type` VARCHAR(100) NOT NULL AFTER `devicetoken`]]></sql>
+		</table>
+		<table>
+			<name>vtiger_field</name>
+			<sql><![CDATA[UPDATE `vtiger_field` SET `summaryfield` = '1' WHERE `fieldname` LIKE 'location']]></sql>
+		</table>
+		<table>
+			<name>webapp_record_shortcut</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `webapp_record_shortcut` (
+  `shortcutid` int(11) NOT NULL AUTO_INCREMENT,
+  `shortcutname` varchar(255) NOT NULL,
+  `recordid` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `module` varchar(100) NOT NULL,
+  `createdtime` datetime NOT NULL,
+  PRIMARY KEY (`shortcutid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8]]></sql>
+		</table>
+		<table>
+			<name>webapp_filter_shortcut</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `webapp_filter_shortcut` (
+  `shortcutid` int(11) NOT NULL AUTO_INCREMENT,
+  `shortcutname` varchar(255) NOT NULL,
+  `filterid` int(11) NOT NULL,
+  `fieldname` varchar(100) NOT NULL,
+  `search_value` varchar(255) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `module` varchar(100) NOT NULL,
+  `createdtime` datetime NOT NULL,
+  PRIMARY KEY (`shortcutid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8]]></sql>
+		</table>
+		<table>
+			<name>webapp_userdevicetoken</name>
+			<sql><![CDATA[ALTER TABLE `webapp_userdevicetoken` ADD `sessionid` VARCHAR(255) NULL AFTER `latitude`]]></sql>
+		</table>
+		<table>
+			<name>webapp_session_expire</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `webapp_session_expire` (
+  `session_expire_id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `sessionid` varchar(255) NOT NULL,
+  PRIMARY KEY (`session_expire_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8]]></sql>
+		</table>
+		<table>
+			<name>webapp_userdevicetoken</name>
+			<sql><![CDATA[ALTER TABLE `webapp_userdevicetoken` ADD `currency_id` int(19) NULL AFTER `sessionid`, ADD `time_zone` VARCHAR(255) NULL AFTER `currency_id`, ADD `date_format` VARCHAR(255) NULL AFTER `time_zone`, ADD `hour_format` VARCHAR(50) NULL AFTER `date_format`, ADD `language` VARCHAR(50) NULL AFTER `hour_format` ]]></sql>
+		</table>
+		<table>
+			<name>webapp_access_users</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `webapp_access_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `access_key` varchar(190) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1]]></sql>
+		</table>
+		<table>
+			<name>webapp_access_users</name>
+			<sql><![CDATA[ALTER TABLE `webapp_access_users` CHANGE `userid` `userid` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL]]></sql>
+		</table>
+		<table>
+			<name>web_address_lat_long</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `web_address_lat_long` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `recordid` int(11) NOT NULL,
+  `moduleid` int(11) NOT NULL,
+  `latitude` varchar(255) DEFAULT NULL,
+  `longitude` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=188]]></sql>
+		</table>
+	</tables>
+</schema>

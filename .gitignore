@@ -1,0 +1,13 @@
+/logs/
+/.idea/
+/cache/
+/backup/
+/storage/
+/modules/CloudFile/cache/
+/test/templates_c/v7/
+config.inc.php
+config.inc.php.orig
+config.template.php
+config.performance.php
+config.db.php
+/portal/vue-app/node_modules

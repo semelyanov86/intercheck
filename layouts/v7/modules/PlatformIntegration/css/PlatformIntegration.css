@@ -1,0 +1,199 @@
+ul.list-setting{
+    padding: 10px;
+}
+ul.list-setting li{
+    display: inline-block;
+    min-width: 200px;
+    margin: 10px;
+}
+.bg-color-green{
+    background-color: #859419;
+}
+.bg-color-blue{
+    background-color: #1D92AF;
+}
+.bg-color-orange{
+    background-color: #CE7B11;
+}
+ul.list-setting li a{
+    
+}
+ul.list-setting li a .setting-item{
+    position: relative;
+    min-height: 80px;
+    padding: 5px;
+}
+ul.list-setting li a .setting-item i{
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    font-size: 60px;
+    color: #d8d8d8;
+    z-index: 2;
+    opacity: 0.5;
+    -moz-transform: rotate(-20deg);
+    -ms-transform: rotate(-20deg);
+    -webkit-transform: rotate(-20deg);
+    transform: rotate(-20deg);
+}
+ul.list-setting li a:hover .setting-item i{
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
+ul.list-setting li a .setting-item h5{
+    z-index: 3;
+    font-weight: bold;
+    display: block;
+    width: 100%;
+    color: #fff;
+}
+ul.list-setting li a .setting-item em{
+    z-index: 3;
+    position: absolute;
+    color: #fff;
+    bottom: 5px;
+}
+.list-fields{
+    min-width: 190px;
+    max-width: 190px;
+    width: 1%;
+}
+.config-by-module{
+    border: 1px solid #ddd;
+}
+.nav-tabs>li.active{
+    border-bottom: 2px solid #000;
+}
+.nav-tabs>li.active strong{
+    color: #000;
+}
+.btn-link{
+    
+}
+.defaultField{
+    padding-left: 5px;
+    background: #efefef;
+}
+.btnVTEQBOQueues, .btnVTEQBOLogs, .btnVTEQBOLinks, .btnSaveDate{
+    min-width: 160px;
+}
+#messageBar {
+    opacity: 1!important;
+    background: rgba(255, 255, 255, 0.5)!important;
+}
+#messageBar>div{
+    top: 25%!important;
+    left: 30%!important;
+    width: 40%!important;
+    overflow: hidden!important;
+    min-height: 30px;
+}
+#messageBar>div>img{
+    position: absolute;
+    top: 10px;
+}
+#messageBar .message{
+    max-height: max-content;
+}
+#messageBar .message span{
+    display: inline-block;
+    width: 100%;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.333);
+    text-align: left;
+    color: #333;
+    -webkit-box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    min-height: 40px;
+    line-height: 40px;
+}
+#messageBar .divProgressInfo{
+    min-height: 120px;
+    padding: 5px;    
+}
+#messageBar .divProgressInfo .blockName{
+    padding: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px dotted #ccc;
+}
+#messageBar .divProgressFooter{
+    text-align: right;
+    background: #dcdcdc;
+    padding: 5px;
+}
+#messageBar .divProgressFooter .btnCloseProgress{    
+    min-width: 100px;
+}
+.vteqboDate{
+    width: 160px;
+    min-width: auto;
+    float: left;
+}
+.vteqbo-tooltip{
+    float: left;
+    margin-right: 3px;
+    font-size: 16px;
+    line-height: 32px;
+}
+.popover-title{
+    display: none!important;
+}
+.popover-inner{
+    padding: 2px;
+    background: #5ab75b;
+}
+.text-right{text-align: right;}
+.text-left{text-align: left;}
+.text-center{text-align: center;}
+.box-info{
+    background-color: #fff; padding: 20px; border: 1px solid #eeeff2; margin-left: 1px; padding-top: 5px;
+}
+.vteqboDateFilters{
+    text-align: center;
+}
+.vteqboDateFilters button.active {
+    background: #3B83F7;
+    color: white;
+    text-shadow: 0 1px rgba(0,0,0,0.3);
+    border: 1px solid #135fd7;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+}
+#vtigerSummary, #qboSummary{
+    border-top: 2px solid #ddd;
+    border-bottom: 2px solid #ddd;
+}
+#vtigerSummary th, #qboSummary th{
+    text-align: center;
+    border-right: 1px solid #ddd;
+}
+#vtigerSummary td, #qboSummary td{
+    text-align: right;
+    border-right: 1px solid #ddd;
+}
+#vtigerSummary td.tdName, #qboSummary td.tdName{
+    text-align: left;
+}
+#vtigerSummary td.text-center, #qboSummary td.text-center{
+    text-align: center;
+}
+.tdFailed{
+    color: red!important;
+    font-weight: bold;
+}
+.btnConnectToQBO{
+    height: 32px;
+    padding: 0px;
+    margin-left: 20px;
+    background: #40a130!important;
+    color: #fff!important;
+    line-height: 32px;
+    padding-right: 5px;
+    text-shadow: none!important;
+}
+.btnConnectToQBO img{
+    height: 23px;
+    vertical-align: middle;
+}

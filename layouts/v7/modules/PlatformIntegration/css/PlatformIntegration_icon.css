@@ -1,0 +1,40 @@
+
+.vicon-vteqbologs {
+    display: block;
+    width: 150%;
+}
+.vicon-vteqbologs:before {
+    content: 'v';
+    color: transparent;
+    background: url(images/VTEQBOLogs.png) #fff no-repeat;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-size: contain;
+}
+.vicon-vteqbolinks {
+    display: block;
+    width: 150%;
+}
+.vicon-vteqbolinks:before {
+    content: 'v';
+    color: transparent;
+    background: url(images/VTEQBOLinks.png) #fff no-repeat;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-size: contain;
+}
+.vicon-vteqboqueues {
+    display: block;
+    width: 150%;
+}
+.vicon-vteqboqueues:before {
+    content: 'v';
+    color: transparent;
+    background: url(images/VTEQBOQueues.png) #fff no-repeat;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-size: contain;
+}

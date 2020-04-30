@@ -1,0 +1,6 @@
+{
+    "require": {
+        "guzzlehttp/guzzle": "~6.0",
+        "hhxsv5/php-sse": "~1.0"
+    }
+}

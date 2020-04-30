@@ -1,0 +1,26 @@
+<?xml version='1.0'?>
+<schema>
+	<tables>
+		<table>
+			<name>vtiger_platformintegrationlinks</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `vtiger_platformintegrationlinks` (
+              `platformintegrationlinkid` int(19) NOT NULL,
+              `platform_module` varchar(100) NULL,
+              `platform_id` int(19) NULL,
+              `vt_module` varchar(100) NULL,
+              `vt_id` int(19) NULL,
+              `latest_value` text NULL,
+              `latest_update` varchar(50) NULL,
+              `latest_update_vt` varchar(50) NULL,
+              PRIMARY KEY  (`platformintegrationlinkid`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
+		</table>
+		<table>
+			<name>vtiger_platformintegrationlinkscf</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `vtiger_platformintegrationlinkscf` (
+                  `platformintegrationlinkid` int(19) NOT NULL,
+                  PRIMARY KEY  (`platformintegrationlinkid`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
+		</table>
+	</tables>
+</schema>

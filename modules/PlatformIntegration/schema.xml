@@ -1,0 +1,146 @@
+<?xml version='1.0'?>
+<schema>
+	<tables>
+		<table>
+			<name>platformintegration_api</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `platformintegration_api` (
+                  `id`  int NOT NULL AUTO_INCREMENT ,
+				  `realmid` varchar(100) NULL,
+				  `access_token` varchar(1000) NULL,
+				  `access_token_secret` varchar(100) NULL,
+				  `consumer_key` varchar(100) NULL,
+				  `consumer_secret` varchar(100) NULL,
+				  `sync2vt` int(1) NULL,
+				  `sync2platform` int(1) NULL,
+				  `sync_picklist` int(1) NULL,
+				  `primary_datasource` varchar(20) NULL,
+				  `latest_update` varchar(50) NULL,
+				  PRIMARY KEY (`id`)
+				);]]></sql>
+		</table>
+		<table>
+			<name>platformintegration_api</name>
+			<sql><![CDATA[ALTER TABLE `platformintegration_api` 
+                ADD COLUMN `platform_version`  varchar(20) NULL DEFAULT 'US' AFTER `primary_datasource`;]]></sql>
+		</table>
+		<table>
+			<name>platformintegration_modules</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `platformintegration_modules` (
+                  `id`  int NOT NULL AUTO_INCREMENT ,
+				  `platform_module` varchar(100) NOT NULL,
+				  `platform_module_table` varchar(100) NOT NULL,
+				  `vt_module` varchar(100) NOT NULL,
+				  `tab` varchar(100) NULL,
+				  `tab_seq` int(11) NULL,
+				  `seq_in_tab` int(11) NULL,
+				  `conditions` varchar(250) NULL,
+				  `default_value` text NULL,
+				  `representation_field` varchar(200) NULL,
+				  `has_custom_fields` int(1) NULL,
+				  `has_active_field` int(1) NULL,
+				  `allow_sync` int(1) NULL,
+				  `sync_scope` varchar(20) NULL,
+				  `has_from_date` int(1) NULL,
+				  `from_date` varchar(20) NULL,
+				  `tooltip` varchar(100) NULL,
+				  PRIMARY KEY (`id`)
+				);]]></sql>
+		</table>
+		<table>
+			<name>platformintegration_modules_fields</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `platformintegration_modules_fields` (
+                  `id`  int NOT NULL AUTO_INCREMENT ,
+				  `platform_module` varchar(100) NOT NULL,
+				  `platform_field` varchar(200) NOT NULL,
+				  `platform_field_label` varchar(200) NOT NULL,
+				  `is_active` int(1) NOT NULL,
+				  `is_picklist` int(1) NOT NULL,
+				  `module_ref` varchar(100) NULL,
+				  `data_type` varchar(20) NULL,
+				  `non_editable` int(1) NULL,
+				  `max_len` int(19) NULL,
+				  PRIMARY KEY (`id`)
+				);]]></sql>
+		</table>
+		<table>
+			<name>platformintegration_mapping_modules</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `platformintegration_mapping_modules` (
+                  `id`  int NOT NULL AUTO_INCREMENT ,
+				  `platform_module` varchar(100) NOT NULL,
+				  `vt_module` varchar(100) NOT NULL,
+				  PRIMARY KEY (`id`)
+				);]]></sql>
+		</table>
+		<table>
+			<name>platformintegration_mapping_fields</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `platformintegration_mapping_fields` (
+                  `id`  int NOT NULL AUTO_INCREMENT ,
+				  `platform_module` varchar(100) NOT NULL,
+				  `platform_field` varchar(250) NOT NULL,
+				  `vt_module` varchar(100) NOT NULL,
+				  `vt_field` varchar(250) NOT NULL,
+				  `is_active` int(1) NOT NULL,
+				  PRIMARY KEY (`id`)
+				);]]></sql>
+		</table>
+		<table>
+			<name>platformintegration_picklist_fields</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `platformintegration_picklist_fields` (
+                  `id`  int NOT NULL AUTO_INCREMENT ,
+				  `platform_module` varchar(100) NULL,
+				  `platform_field` varchar(250) NULL,
+				  `platform_source_module` varchar(100) NULL,
+				  `platform_type` varchar(250) NULL,
+				  `platform_value` varchar(20) NOT NULL,
+				  `platform_name` varchar(250) NOT NULL,
+				  PRIMARY KEY (`id`)
+				);]]></sql>
+		</table>
+		<table>
+			<name>platformintegration_taxcode</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `platformintegration_taxcode` (
+                  `id`  int NOT NULL AUTO_INCREMENT ,
+				  `taxcode_id` int(11) NULL,
+				  `name` varchar(250) NULL,
+				  `description` varchar(250) NULL,
+				  PRIMARY KEY (`id`)
+				);]]></sql>
+		</table>
+		<table>
+			<name>platformintegration_taxcode_sales</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `platformintegration_taxcode_sales` (
+				  `taxcode_id` int(11) NULL,
+				  `taxrate_id` int(11) NULL
+				);]]></sql>
+		</table>
+		<table>
+			<name>platformintegration_taxcode_purchase</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `platformintegration_taxcode_purchase` (
+				  `taxcode_id` int(11) NULL,
+				  `taxrate_id` int(11) NULL
+				);]]></sql>
+		</table>
+		<table>
+			<name>platformintegration_mapping_tax</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `platformintegration_mapping_tax` (
+                  `id`  int NOT NULL AUTO_INCREMENT ,
+				  `platform_tax_id` int(11) NULL,
+				  `vt_tax_id` int(11) NULL,
+				  `latest_value` text NULL,
+				  `latest_update` varchar(50) NULL,
+				  PRIMARY KEY (`id`)
+				);]]></sql>
+		</table>
+		<table>
+			<name>vte_modules</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `vte_modules` (
+                `module`  varchar(50) NOT NULL ,
+                `valid`  int(1) NULL ,
+                PRIMARY KEY (`module`));]]></sql>
+		</table>
+		<table>
+			<name>platformintegration_modules</name>
+			<sql><![CDATA[ALTER TABLE `platformintegration_modules` ADD COLUMN `start_position`  int(11) NULL DEFAULT 1 AFTER `tooltip`;]]></sql>
+		</table>
+	</tables>
+</schema>

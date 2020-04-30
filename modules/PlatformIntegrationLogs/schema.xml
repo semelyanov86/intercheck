@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<schema>
+	<tables>
+		<table>
+			<name>vtiger_platformintegration_logs</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `vtiger_platformintegration_logs` (
+              `platformintegration_logid` int(19) NOT NULL,
+              `platform_module` varchar(100) NULL,
+              `platform_id` int(19) NULL,
+              `vt_module` varchar(100) NULL,
+              `vt_id` int(19) NULL,
+              `sync_type` varchar(20) NULL,
+              `action_type` varchar(20) NULL,
+              `platformintegration_log_status` varchar(20) NULL,
+              `message` text NULL,
+              `sent_data` text NULL,
+              `received_data` text NULL,
+			  
+              PRIMARY KEY  (`platformintegration_logid`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
+		</table>
+		<table>
+			<name>vtiger_platformintegration_logscf</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `vtiger_platformintegration_logscf` (
+                  `platformintegration_logid` int(11) NOT NULL,
+                  PRIMARY KEY  (`platformintegration_logid`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
+		</table>
+	</tables>
+</schema>

@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<schema>
+	<tables>
+		<table>
+			<name>vtiger_alarms</name>
+			<sql><![CDATA[CREATE TABLE `vtiger_alarms` (
+  `alarmsid` int(19) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `alarmsno` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`alarmsid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
+		</table>
+		<table>
+			<name>vtiger_alarmscf</name>
+			<sql><![CDATA[CREATE TABLE `vtiger_alarmscf` (
+  `alarmsid` int(19) NOT NULL,  
+  PRIMARY KEY (`alarmsid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
+		</table>
+		<table>
+			<name>vtiger_alarms_user_field</name>
+			<sql><![CDATA[CREATE TABLE `vtiger_alarms_user_field` ( 
+  `recordid` Int( 25 ) NOT NULL,
+  `userid` Int( 25 ) NOT NULL,
+  `starred` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL )
+CHARACTER SET = utf8
+COLLATE = utf8_general_ci
+ENGINE = InnoDB]]></sql>
+		</table>
+	</tables>
+</schema>

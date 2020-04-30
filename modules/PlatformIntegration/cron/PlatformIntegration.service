@@ -1,0 +1,336 @@
+<?php
+global $_REQUEST;
+$_REQUEST['module'] = 'PlatformIntegration';
+$_REQUEST['syncType'] = '';
+$_REQUEST['tab'] = '';
+$_REQUEST['action'] = 'SaveAjax';
+$_REQUEST['mode'] = 'platformintegrationSync';
+
+ini_set('display_errors','off');
+ini_set('max_execution_time', 60000);
+// chdir('../../..');
+require_once("includes/runtime/BaseModel.php");
+require_once("modules/Vtiger/models/Record.php");
+require_once("modules/Users/models/Record.php");
+require_once("includes/runtime/Globals.php");
+require_once("include/utils/utils.php");
+require_once("includes/runtime/LanguageHandler.php");
+require_once("includes/Loader.php");
+
+// ini_set('display_errors', 1);error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
+
+echo '<br />\n Start synchronize data between Platform and Vtiger.';
+ob_flush(); flush();
+
+function runServicePlatformIntegration(){
+    try {
+        // Check if Platform library was loaded or not
+        $sdkContainer = "modules/PlatformIntegration/helpers/";
+        $sdkSource = $sdkContainer . 'vendor/';
+        if (is_dir($sdkSource)) {
+            $autoloadFile = $sdkSource . '/autoload.php';
+            if (!file_exists($autoloadFile)){
+                echo '<br />\n Platform API has not loaded yet.';
+                ob_flush(); flush();
+                return false;
+            }
+        } else {
+            echo '<br />\n Platform API has not loaded yet.';
+            ob_flush(); flush();
+            return false;
+        }
+
+        foreach (glob('modules/PlatformIntegration/models/*.php') as $filename){
+            require_once($filename);
+        }
+        include_once ('libraries/htmlpurifier/library/HTMLPurifier/Bootstrap.php');
+        spl_autoload_register(array('HTMLPurifier_Bootstrap', 'autoload'));
+        
+        $current_user = Users_Record_Model::getCurrentUserModel();
+        if((int)$current_user->id==0){
+            $current_user->id=1;
+        }
+        $adb=PearDatabase::getInstance();
+        $moduleName = 'PlatformIntegration';
+        $vteqboModel = new PlatformIntegration_Engine_Model($moduleName);
+        $res = $adb->pquery("SELECT * FROM vtiger_tab WHERE `name`=? AND presence=0", array($moduleName));
+        if ($adb->num_rows($res) == 0){
+            $error = vtranslate('ERROR_THIS_MODULE_IS_DISABLED', $moduleName);
+            echo '<br />\n Error:';
+            echo '<br />\n ' . $error;
+            ob_flush();
+            flush();
+            $vteqboModel->insertIntoPlatformIntegrationLogs(array('sync_type'=>'VT2Platform', 'action_type'=>'UPDATE',
+                'platformintegrationlog_status'=>'Failed', 'message'=>$error,
+                'platform_module'=>$moduleName, 'platform_id'=>'', 'vt_module'=>'', 'vt_id'=>'',
+                'sent_data'=>'', 'received_data'=>''));
+            return false;
+        }        
+        $isSyncCommonData = true; // Todo: Revert to true
+        $api = $vteqboModel->getPlatformApi();
+        if ($api['code'] == 'Succeed'){
+            $api = $api['result'];
+            if (empty($api['primary_datasource'])) {
+                $error = 'Primary datasource is not selected.';
+                echo '<br />\n Error:';
+                echo '<br />\n ' . $error;
+                ob_flush(); flush();
+                $vteqboModel->insertIntoPlatformIntegrationLogs(array('sync_type'=>'VT2Platform', 'action_type'=>'UPDATE',
+                    'platformintegrationlog_status'=>'Failed', 'message'=>$error,
+                    'platform_module'=>$moduleName, 'platform_id'=>'', 'vt_module'=>'', 'vt_id'=>'',
+                    'sent_data'=>'', 'received_data'=>''));
+                return false;
+            }
+            $sql = "SELECT * FROM platformintegration_modules WHERE tab IS NOT NULL AND tab <> '' ORDER BY tab_seq, seq_in_tab";
+            $res = $adb->pquery($sql, array());
+            if ($adb->num_rows($res) > 0){
+                while($row=$adb->fetchByAssoc($res)){
+                    $vtModule = $row['vt_module'];
+                    $qboModule = $row['platform_module'];
+                    if ($row['allow_sync'] != '1'){
+                        $error = vtranslate('LBL_THIS_MODULE_IS_NOT_ALLOWED_TO_SYNC', $moduleName);
+                        echo "<br />\n $qboModule(Platform) <-> $vtModule(Vtiger) : " . $error;
+                        ob_flush();
+                        flush();
+                        $vteqboModel->insertIntoPlatformIntegrationLogs(array('sync_type'=>'VT2Platform', 'action_type'=>'UPDATE',
+                            'platformintegrationlog_status'=>'Skipped', 'message'=>$error,
+                            'platform_module'=>$qboModule, 'platform_id'=>'', 'vt_module'=>$vtModule, 'vt_id'=>'',
+                            'sent_data'=>'', 'received_data'=>''));
+                        continue;
+                    }
+                    $vtModuleClass = "PlatformIntegration_{$vtModule}_Model";
+                    if (class_exists($vtModuleClass)){
+                        $obj = new $vtModuleClass($moduleName);
+                    } else {
+                        $obj = new PlatformIntegration_Engine_Model($moduleName);
+                    }
+                    if ($obj->checkValidFieldsBeforeSyncing($qboModule, $vtModule) == false){
+                        $error = vtranslate('MSG_CANNOT_SYNC_BECAUSE_MAPPED_FIELDS_ARE_INVALID', $moduleName);
+                        echo "<br />\n $qboModule(Platform) <-> $vtModule(Vtiger) : " . $error;
+                        ob_flush();
+                        flush();
+                        $vteqboModel->insertIntoPlatformIntegrationLogs(array('sync_type'=>'VT2Platform', 'action_type'=>'UPDATE',
+                            'platformintegrationlog_status'=>'Failed', 'message'=>$error,
+                            'platform_module'=>$qboModule, 'platform_id'=>'', 'vt_module'=>$vtModule, 'vt_id'=>'',
+                            'sent_data'=>'', 'received_data'=>''));
+                        continue;
+                    }
+                    // Get info of Quickbooks module
+                    $res1 = $obj->getInfoOfPlatformModule($qboModule);
+                    if ($res1['code'] != 'Succeed'){
+                        echo "<br />\n $qboModule(Platform) <-> $vtModule(Vtiger) : " . $res1['error'];
+                        ob_flush();
+                        flush();
+                        $error = $res1['error'];
+                        $vteqboModel->insertIntoPlatformIntegrationLogs(array('sync_type'=>'VT2Platform', 'action_type'=>'UPDATE',
+                            'platformintegrationlog_status'=>'Failed', 'message'=>$error,
+                            'platform_module'=>$qboModule, 'platform_id'=>'', 'vt_module'=>$vtModule, 'vt_id'=>'',
+                            'sent_data'=>'', 'received_data'=>''));
+                        continue;
+                    }
+                    $qboModuleInfo = $res1['result'];
+                    $mappedFields = $obj->getMappedFields($qboModule, $vtModule);
+                    if (empty($mappedFields)){
+                        $error = vtranslate('MSG_HAVE_NOT_ANY_MAPPED_FIELD', $moduleName);
+                        echo "<br />\n $qboModule(Platform) <-> $vtModule(Vtiger) : " . $error;
+                        ob_flush();
+                        flush();
+                        $vteqboModel->insertIntoPlatformIntegrationLogs(array('sync_type'=>'VT2Platform', 'action_type'=>'UPDATE',
+                            'platformintegrationlog_status'=>'Failed', 'message'=>$error,
+                            'platform_module'=>$qboModule, 'platform_id'=>'', 'vt_module'=>$vtModule, 'vt_id'=>'',
+                            'sent_data'=>'', 'received_data'=>''));
+                        continue;
+                    }
+                    if ($isSyncCommonData){
+                        if ($api['sync_picklist'] == '1'){
+                            $resPL = $vteqboModel->syncAllPicklists();
+                            if($resPL['code'] != 'Succeed'){
+                                $error = $resPL['error'];
+                                echo '<br />\n Error: <pre>'; echo print_r($resPL); echo '</pre>';
+                                ob_flush();
+                                flush();
+                                $vteqboModel->insertIntoPlatformIntegrationLogs(array('sync_type'=>'VT2Platform', 'action_type'=>'UPDATE',
+                                    'platformintegrationlog_status'=>'Failed', 'message'=>$error,
+                                    'platform_module'=>$qboModule, 'platform_id'=>'', 'vt_module'=>$vtModule, 'vt_id'=>'',
+                                    'sent_data'=>'', 'received_data'=>''));
+                                return false;
+                            }
+                        }
+                        if (true){
+                            $pDatasource = strtolower($api['primary_datasource']);
+                            $vteqboTaxRateModel = new PlatformIntegration_TaxRate_Model($moduleName);
+                            $resTaxes = $vteqboTaxRateModel->syncAllTaxRates($pDatasource);
+                            if($resTaxes['code'] != 'Succeed'){
+                                $error = $resTaxes['error'];
+                                echo '<br />\n Error: <pre>'; echo print_r($resTaxes); echo '</pre>';
+                                ob_flush();
+                                flush();
+                                $vteqboModel->insertIntoPlatformIntegrationLogs(array('sync_type'=>'VT2Platform', 'action_type'=>'UPDATE',
+                                    'platformintegrationlog_status'=>'Failed', 'message'=>$error,
+                                    'platform_module'=>$qboModule, 'platform_id'=>'', 'vt_module'=>$vtModule, 'vt_id'=>'',
+                                    'sent_data'=>'', 'received_data'=>''));
+                                return false;
+                            }
+                        }
+                        $isSyncCommonData = false;
+                    }
+                    
+                    if(strpos($qboModuleInfo['sync_scope'], 'Platform2VT') !== false && $api['sync2vt'] == 1){
+                        $error = '';
+                        $code = 'Succeed';
+                        // Get all fields of vtiger module
+                        $vt_fields = $obj->getAllFieldsOfVTModule($vtModule);
+
+                        // Get all records from QBO
+                        $res2 = $obj->getRecordsFromPlatform($qboModule);
+                        if ($res2['code'] != 'Succeed'){
+                            $error = $res2['error'];
+                            echo "<br />\n $qboModule(Platform) - $vtModule(Vtiger) : " . $error;
+                            ob_flush();
+                            flush();
+                            $vteqboModel->insertIntoPlatformIntegrationLogs(array('sync_type'=>'VT2Platform', 'action_type'=>'UPDATE',
+                                'platformintegrationlog_status'=>'Skipped', 'message'=>$error,
+                                'platform_module'=>$qboModule, 'platform_id'=>'', 'vt_module'=>$vtModule, 'vt_id'=>'',
+                                'sent_data'=>'', 'received_data'=>''));
+                        }
+                        // Loop through all records and insert into vt Module if not exists, update if exists.
+                        $noChanged = 0;
+                        $successed = 0;
+                        $failed = 0;
+                        $error = '';
+                        $ids = '0';
+                        foreach ($res2['result'] as $record){
+                            $ids .= ',' . $record->Id;
+                        }
+                        $mappedInfosA = $obj->getMappedInfoByPlatformRecord($ids, $qboModule, true);
+                        $mappedInfos = array();
+                        foreach ($mappedInfosA as $mappedInfo){
+                            $mappedInfos[strtolower($mappedInfo['platform_id'])] = $mappedInfo;
+                        }
+                        foreach ($res2['result'] as $record){
+                            // $mappedInfo = $obj->getMappedInfoByQboRecord($record->Id, $qboModule);
+                            $mappedInfo = $mappedInfos[strtolower($record->Id)];
+                            if (count($mappedInfo) == 0){
+                                if ($vtModule == 'Contacts'){ // Todo: Remove this hardcode block
+                                    $givenName = $record->GivenName;
+                                    $familyName = $record->FamilyName;
+                                    if (empty($givenName) && empty($familyName)){
+                                        $noChanged = $noChanged + 1;
+                                        continue;
+                                    }
+                                }
+                                $res3 = $obj->insertIntoVtiger($record, $mappedFields, $vtModule, $vt_fields);
+                            } else {
+                                if ($mappedInfo['latest_update'] == $record->MetaData->LastUpdatedTime){
+                                    $noChanged = $noChanged + 1;
+                                    continue;
+                                }
+                                $res3 = $obj->updateToVtiger($record, $mappedFields, $mappedInfo, $vtModule, $vt_fields);
+                            }
+                            if($res3['code'] != 'Succeed'){
+                                $failed = $failed + 1;
+                            } else {
+                                $successed = $successed + 1;
+                            }
+                        }
+                        $error = vtranslate('LBL_SUCCESSED', $moduleName);
+                        $error .= ": $successed.<br />\n";
+                        $error .= vtranslate('LBL_FAILED', $moduleName);
+                        $error .= ": $failed.<br />\n";
+                        if ($noChanged != 0) {
+                            $error .= vtranslate('LBL_NO_CHANGED', 'PlatformIntegration');
+                            $error .= ": $noChanged.<br />\n";
+                        }
+                        echo "<br />\n $qboModule(Platform) - $vtModule(Vtiger) : <br />\n" . $error;
+                    }
+                    
+                    if(strpos($qboModuleInfo['sync_scope'], 'VT2Platform') !== false && $api['sync2platform'] == 1){
+                        $vt_fields = $obj->getAllFieldsOfVTModule($vtModule);
+
+                        // Get all records from QBO
+                        $res2 = $obj->getAllVtigerRecordToSync($vtModule, $recordId);
+                        if ($res2['code'] != 'Succeed'){
+                            $error = $res2['error'];
+                            echo "<br />\n $vtModule(Vtiger) - $qboModule(Platform) : " . $error;
+                            ob_flush();
+                            flush();
+                            $vteqboModel->insertIntoPlatformIntegrationLogs(array('sync_type'=>'VT2Platform', 'action_type'=>'UPDATE',
+                                'platformintegrationlog_status'=>'Skipped', 'message'=>$error,
+                                'platform_module'=>$qboModule, 'platform_id'=>'', 'vt_module'=>$vtModule, 'vt_id'=>'',
+                                'sent_data'=>'', 'received_data'=>''));
+                            continue;
+                        }
+
+                        // Loop through all records and insert into vt Module if not exists, update if exists.
+                        $noChanged = 0;
+                        $successed = 0;
+                        $failed = 0;
+                        $error = '';
+                        if($vtModule != 'Contacts') {
+                            $ids = '0';
+                            foreach ($res2['result'] as $record) {
+                                $ids .= ',' . $record['crmid'];
+                            }
+                            $mappedInfosA = $obj->getMappedInfoByVtigerRecord($ids, $vtModule, true);
+                            $mappedInfos = array();
+                            foreach ($mappedInfosA as $mappedInfo) {
+                                $mappedInfos[strtolower($mappedInfo['vt_id'])] = $mappedInfo;
+                            }
+                        }
+                        foreach ($res2['result'] as $record){
+                            $vtId = $record['crmid'];
+                            $vteqboqueueid = $record['platformintegrationqueueid'];
+                            if($vtModule == 'Contacts') {
+                                $mappedInfo = $obj->getMappedInfoByVtigerRecord($vtId, $vtModule);
+                            } else {
+                                $mappedInfo = $mappedInfos[strtolower($vtId)];
+                            }
+                            $recordModel = Vtiger_Record_Model::getInstanceById($vtId, $vtModule);
+                            if (count($mappedInfo) == 0){
+                                $res3 = $obj->insertIntoPlatform($recordModel, $mappedFields, $qboModule, $vt_fields, $vteqboqueueid);
+                            } else {
+                                $res3 = $obj->updatePlatformRecord($recordModel, $mappedFields, $mappedInfo, $qboModule, $vt_fields, $vteqboqueueid);
+                            }
+                            if($res3['code'] != 'Succeed'){
+                                $failed = $failed + 1;
+                            } else {
+                                $successed = $successed + 1;
+                            }
+                        }
+                        $error = vtranslate('LBL_SUCCESSED', $moduleName);
+                        $error .= ": $successed.<br />\n";
+                        $error .= vtranslate('LBL_FAILED', $moduleName);
+                        $error .= ": $failed";
+                        if ($noChanged != 0) {
+                            $error .= vtranslate('LBL_NO_CHANGED', $moduleName);
+                            $error .= ": $noChanged.<br />\n";
+                        }
+                        echo "<br />\n $vtModule(Vtiger) - $qboModule(Platform) : <br />\n" . $error;
+                        ob_flush();
+                        flush();
+                    }
+                }
+            }
+        } else {
+            echo '<br />\n Error: <pre>'; echo print_r($api); echo '</pre>';
+            ob_flush();
+            flush();
+            $error = $api['error'];
+            $vteqboModel->insertIntoPlatformIntegrationLogs(array('sync_type'=>'VT2Platform', 'action_type'=>'UPDATE',
+                'platformintegrationlog_status'=>'Failed', 'message'=>$error,
+                'platform_module'=>$qboModule, 'platform_id'=>'', 'vt_module'=>$vtModule, 'vt_id'=>'',
+                'sent_data'=>'', 'received_data'=>''));
+        }
+    } catch (Exception $ex) {
+        $error = $ex->getMessage();
+        $vteqboModel->insertIntoPlatformIntegrationLogs(array('sync_type'=>'VT2Platform', 'action_type'=>'UPDATE',
+            'platformintegrationlog_status'=>'Failed', 'message'=>$error,
+            'platform_module'=>$moduleName, 'platform_id'=>'', 'vt_module'=>'', 'vt_id'=>'',
+            'sent_data'=>'', 'received_data'=>''));
+    }
+}
+runServicePlatformIntegration();
+
+echo '<br />\n End synchronize data between Platform and Vtiger.<br />\n ';
+ob_flush(); flush();
+ini_set('display_errors','on');
