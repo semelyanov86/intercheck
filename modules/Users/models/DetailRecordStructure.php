@@ -44,6 +44,17 @@ class Users_DetailRecordStructure_Model extends Vtiger_DetailRecordStructure_Mod
 					if($fieldModel->isViewableInDetailView()) {
 						if($recordId) {
 							$fieldModel->set('fieldvalue', $recordModel->get($fieldName));
+                            if ($fieldName == 'user_groups') {
+                                $groups = Users_Record_Model::getUserGroups($recordId);
+                                $groupsName = array();
+                                foreach ($groups as $group) {
+                                    $groupModel = Settings_Groups_Record_Model::getInstanceById($group);
+                                    if ($groupModel) {
+                                        $groupsName[] = $groupModel->getName();
+                                    }
+                                }
+                                $fieldModel->set('fieldvalue', implode(' |##| ', $groupsName));
+                            }
 						}
 						$values[$blockLabel][$fieldName] = $fieldModel;
 					}

@@ -72,6 +72,10 @@ class Users_EditRecordStructure_Model extends Vtiger_EditRecordStructure_Model {
 						} else if($fieldModel->get('uitype') != 99){
 							$values[$blockLabel][$fieldName] = $fieldModel;
 						}
+						if ($fieldName == 'user_groups') {
+						    $groups = Users_Record_Model::getUserGroups($recordId);
+						    $fieldModel->set('fieldvalue', implode(' |##| ', $groups));
+                        }
 					}
 				}
 			}

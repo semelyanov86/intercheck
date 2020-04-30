@@ -264,6 +264,15 @@ class Vtiger_Field_Model extends Vtiger_Field {
 
 		if($fieldName == 'hdnTaxType' || ($fieldName == 'region_id' && $this->get('displaytype') == 5)) return null;
 
+		if ($fieldName == 'user_groups') {
+		    $groups = Settings_Groups_Record_Model::getAll();
+		    $res = array();
+		    foreach($groups as $group) {
+		        $res[$group->getId()] = $group->getName();
+            }
+		    return $res;
+        }
+
         if($fieldDataType == 'picklist' || $fieldDataType == 'multipicklist' || $fieldDataType == 'metricpicklist' || $fieldDataType == 'timestring') {
             $fieldPickListValues = array();
             $picklistValues = Vtiger_Util_Helper::getPickListValues($fieldName);

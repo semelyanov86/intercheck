@@ -383,4 +383,20 @@ class Settings_Groups_Record_Model extends Settings_Vtiger_Record_Model {
 	   return null;
    }
 
+    /* Function to get the instance of the group by Name
+ * @param type $name -- name of the group
+ * @return null/group instance
+ */
+    public static function getInstanceById($id) {
+        $db = PearDatabase::getInstance();
+        $sql = 'SELECT * FROM vtiger_groups WHERE groupid=?';
+        $params = array($id);
+
+        $result = $db->pquery($sql, $params);
+        if($db->num_rows($result) > 0) {
+            return self::getInstanceFromQResult($result, 0);
+        }
+        return false;
+    }
+
 }

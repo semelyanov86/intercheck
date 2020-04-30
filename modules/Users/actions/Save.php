@@ -82,6 +82,9 @@ class Users_Save_Action extends Vtiger_Save_Action {
 			if($fieldName == 'group_view' && !($currentUserModel->isAdminUser())) {
 			    $fieldValue = null;
             }
+            if($fieldName == 'user_groups' && !($currentUserModel->isAdminUser())) {
+                $fieldValue = null;
+            }
 
 			if($fieldValue !== null) {
 				if(!is_array($fieldValue)) {
@@ -126,7 +129,11 @@ class Users_Save_Action extends Vtiger_Save_Action {
 			}
 		}
 		$recordModel = $this->saveRecord($request);
-        $this->generatePermissions($recordModel);
+		if (Users_Record_Model::getCurrentUserModel()->isAdminUser()) {
+            $this->addToGroups($recordModel);
+            $this->removeFromGroups($recordModel);
+            $this->generatePermissions($recordModel);
+        }
 		if ($request->get('relationOperation')) {
 			$parentRecordModel = Vtiger_Record_Model::getInstanceById($request->get('sourceRecord'), $request->get('sourceModule'));
 			$loadUrl = $parentRecordModel->getDetailViewUrl();
@@ -159,5 +166,61 @@ class Users_Save_Action extends Vtiger_Save_Action {
                 $ruleModel->save();
             }
         }
+    }
+    public function addToGroups(Users_Record_Model $recordModel)
+    {
+        $groups = $recordModel->get('user_groups');
+        if ($groups && !empty($groups)) {
+            foreach ($groups as $group) {
+                $groupModel = Settings_Groups_Record_Model::getInstance($group);
+                $members = $groupModel->getMembers();
+                $userValue = 'Users:' . $recordModel->getId();
+                $oldKeys = array_keys($members['Users']);
+                if (!in_array($userValue, $oldKeys)) {
+                    $oldKeys[] = $userValue;
+                    $oldKeys = $this->pluckMembers($oldKeys, $members, 'Groups');
+                    $oldKeys = $this->pluckMembers($oldKeys, $members, 'Roles');
+                    $oldKeys = $this->pluckMembers($oldKeys, $members, 'RoleAndSubordinates');
+                    $groupModel->set('group_members', $oldKeys);
+                    $groupModel->save();
+                }
+
+            }
+        }
+    }
+    public function removeFromGroups(Users_Record_Model $record_Model)
+    {
+        $allGroups = Settings_Groups_Record_Model::getAll();
+        $curGroups = $record_Model->get('user_groups');
+        if ($curGroups && !empty($curGroups)) {
+            foreach ($allGroups as $id=>$groupModel) {
+                if (in_array($id, $curGroups) || $id == 24) {
+                    continue;
+                }
+                $members = $groupModel->getMembers();
+                $userValue = 'Users:' . $record_Model->getId();
+                $keys = array_keys($members['Users']);
+                $keys = array_diff($keys, [$userValue]);
+                $keys = $this->pluckMembers($keys, $members, 'Groups');
+                $keys = $this->pluckMembers($keys, $members, 'Roles');
+                $keys = $this->pluckMembers($keys, $members, 'RoleAndSubordinates');
+                $newKeys = array();
+                foreach ($keys as $key) {
+                    $newKeys[] = $key;
+                }
+                $groupModel->set('group_members', $newKeys);
+                $groupModel->save();
+            }
+        }
+    }
+    private function pluckMembers($oldKeys, $members, $name)
+    {
+        $oldGroups = array_keys($members[$name]);
+        if (!empty($oldGroups)) {
+            foreach ($oldGroups as $oldgroup) {
+                $oldKeys[] = $oldgroup;
+            }
+        }
+        return $oldKeys;
     }
 }
