@@ -85,6 +85,9 @@ class Users_Save_Action extends Vtiger_Save_Action {
             if($fieldName == 'user_groups' && !($currentUserModel->isAdminUser())) {
                 $fieldValue = null;
             }
+            if($fieldName == 'user_profiles' && !($currentUserModel->isAdminUser())) {
+                $fieldValue = null;
+            }
 
 			if($fieldValue !== null) {
 				if(!is_array($fieldValue)) {
@@ -117,7 +120,7 @@ class Users_Save_Action extends Vtiger_Save_Action {
 	public function process(Vtiger_Request $request) {
 		$result = Vtiger_Util_Helper::transformUploadedFiles($_FILES, true);
 		$_FILES = $result['imagename'];
-
+        $currentUser = Users_Record_Model::getCurrentUserModel();
 		$recordId = $request->get('record');
 		if (!$recordId) {
 			$module = $request->getModule();
@@ -128,8 +131,14 @@ class Users_Save_Action extends Vtiger_Save_Action {
 				throw new AppException(vtranslate('LBL_DUPLICATE_USER_EXISTS', $module));
 			}
 		}
+		if ($currentUser->isAdminUser()) {
+            $roleId = $this->generateProfiles($request->get('user_profiles'));
+            if ($roleId) {
+                $request->set('roleid', $roleId);
+            }
+        }
 		$recordModel = $this->saveRecord($request);
-		if (Users_Record_Model::getCurrentUserModel()->isAdminUser()) {
+		if ($currentUser->isAdminUser()) {
             $this->addToGroups($recordModel);
             $this->removeFromGroups($recordModel);
             $this->generatePermissions($recordModel);
@@ -222,5 +231,65 @@ class Users_Save_Action extends Vtiger_Save_Action {
             }
         }
         return $oldKeys;
+    }
+    public function generateProfiles($profiles)
+    {
+        global $adb;
+        if($profiles && !empty($profiles)) {
+            $query = "SELECT roleid, GROUP_CONCAT(profileid) AS `profiles` FROM vtiger_role2profile GROUP BY roleid";
+            $res = $adb->pquery($query, array());
+            $mappedProfiles = array();
+            if (0 < $adb->num_rows($res)) {
+                while ($row = $adb->fetchByAssoc($res)) {
+                    $mappedProfiles[$row["roleid"]] = explode(',', $row["profiles"]);
+                }
+            }
+            foreach($mappedProfiles as $role=>$mapProfiles) {
+                if ($this->arrayEqual($profiles, $mapProfiles)) {
+                    return $role;
+                }
+            }
+            $role = $this->createRoleFromProfiles($profiles);
+            return $role;
+        }
+    }
+    public function arrayEqual($a, $b) {
+        return (
+            is_array($a)
+            && is_array($b)
+            && count($a) == count($b)
+            && array_diff($a, $b) === array_diff($b, $a)
+        );
+    }
+    public function createRoleFromProfiles(array $profiles)
+    {
+        if ($profiles && !empty($profiles)) {
+            $roleName = '';
+            foreach ($profiles as $profileId) {
+                $profileModel = Settings_Profiles_Record_Model::getInstanceById($profileId);
+                $roleName .= $profileModel->getName() . '+';
+            }
+            $roleName = trim($roleName, '+');
+            $recordModel = new Settings_Roles_Record_Model();
+            $parentRoleId = 'H2';
+            if($recordModel && !empty($parentRoleId)) {
+                $parentRole = Settings_Roles_Record_Model::getInstanceById($parentRoleId);
+                if($parentRole && !empty($roleName) && !empty($profiles)) {
+                    $recordModel->set('rolename', $roleName);
+                    $recordModel->set('profileIds', $profiles);
+                    $recordModel->set('allowassignedrecordsto', 1);
+                    $roleModel = $parentRole->addChildRole($recordModel);
+                    if ($profiles) {
+                        foreach ($profiles as $profileId) {
+                            $profileRecordModel = Settings_Profiles_Record_Model::getInstanceById($profileId);
+                            $profileRecordModel->recalculate(array($roleModel->getId()));
+                        }
+                    }
+                    return $roleModel->getId();
+                }
+            }
+        } else {
+            return false;
+        }
     }
 }

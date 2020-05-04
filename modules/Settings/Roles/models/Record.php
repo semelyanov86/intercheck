@@ -308,6 +308,7 @@ class Settings_Roles_Record_Model extends Settings_Vtiger_Record_Model {
 			$picklist2RoleSQL = "INSERT INTO vtiger_role2picklist SELECT '".$roleId."',picklistvalueid,picklistid,sortid
 					FROM vtiger_role2picklist WHERE roleid = ?";
 			$db->pquery($picklist2RoleSQL, array($parentRole->getId()));
+			$this->set('roleid', 'H'.$roleIdNumber);
 		}
 
 		$profileIds = $this->get('profileIds');

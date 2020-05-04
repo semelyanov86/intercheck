@@ -75,6 +75,15 @@ class Users_EditRecordStructure_Model extends Vtiger_EditRecordStructure_Model {
 						if ($fieldName == 'user_groups') {
 						    $groups = Users_Record_Model::getUserGroups($recordId);
 						    $fieldModel->set('fieldvalue', implode(' |##| ', $groups));
+                        } elseif ($fieldName == 'user_profiles') {
+						    $roleId = $recordModel->getRole();
+						    $roleModel = Settings_Roles_Record_Model::getInstanceById($roleId);
+						    $profiles = $roleModel->getProfiles();
+						    $profilesArr = array();
+                            foreach ($profiles as $key=>$profile) {
+                                $profilesArr[] = $profile->getId();
+						    }
+                            $fieldModel->set('fieldvalue', implode(' |##| ', $profilesArr));
                         }
 					}
 				}

@@ -54,6 +54,15 @@ class Users_DetailRecordStructure_Model extends Vtiger_DetailRecordStructure_Mod
                                     }
                                 }
                                 $fieldModel->set('fieldvalue', implode(' |##| ', $groupsName));
+                            } elseif ($fieldName == 'user_profiles') {
+                                $roleId = $recordModel->getRole();
+                                $roleModel = Settings_Roles_Record_Model::getInstanceById($roleId);
+                                $profiles = $roleModel->getProfiles();
+                                $profilesName = array();
+                                foreach($profiles as $profile) {
+                                    $profilesName[$profile->getId()] = $profile->getName();
+                                }
+                                $fieldModel->set('fieldvalue', implode(' |##| ', $profilesName));
                             }
 						}
 						$values[$blockLabel][$fieldName] = $fieldModel;

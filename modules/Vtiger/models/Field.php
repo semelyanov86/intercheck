@@ -272,6 +272,14 @@ class Vtiger_Field_Model extends Vtiger_Field {
             }
 		    return $res;
         }
+        if ($fieldName == 'user_profiles') {
+            $profiles = Settings_Profiles_Record_Model::getAll();
+            $profilesArr = array();
+            foreach($profiles as $key=>$profile) {
+                $profilesArr[$key] = $profile->getName();
+            }
+            return $profilesArr;
+        }
 
         if($fieldDataType == 'picklist' || $fieldDataType == 'multipicklist' || $fieldDataType == 'metricpicklist' || $fieldDataType == 'timestring') {
             $fieldPickListValues = array();

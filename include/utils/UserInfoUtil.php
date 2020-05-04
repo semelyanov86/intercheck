@@ -1494,6 +1494,9 @@ function getCombinedUserGlobalPermissions($userId)
 	$log->debug("Entering getCombinedUserGlobalPermissions(".$userId.") method ...");
 	global $adb;
 	$profArr=getUserProfile($userId);
+	if (!$profArr) {
+	    return array();
+    }
 	$no_of_profiles=sizeof($profArr);
 	$userGlobalPerrArr=Array();
 
