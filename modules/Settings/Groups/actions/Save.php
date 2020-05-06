@@ -27,12 +27,22 @@ class Settings_Groups_Save_Action extends Settings_Vtiger_Index_Action {
 			$recordModel->set('group_members', $request->get('members'));
 			$recordModel->save();
 		}
-
+        $this->runGeneratePermissionsEvent($recordModel);
 		$redirectUrl = $recordModel->getDetailViewUrl();
 		header("Location: $redirectUrl");
 	}
     
     public function validateRequest(Vtiger_Request $request) {
         $request->validateWriteAccess();
+    }
+
+    public function runGeneratePermissionsEvent(Settings_Groups_Record_Model $groupModel)
+    {
+        $users = Users_Record_Model::getAll();
+        foreach ($users as $user) {
+            if ($user->get('all_groups')) {
+                $user->generatePermissions($user, array($groupModel));
+            }
+        }
     }
 }

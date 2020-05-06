@@ -139,8 +139,8 @@ class Users_Save_Action extends Vtiger_Save_Action {
         }
 		$recordModel = $this->saveRecord($request);
 		if ($currentUser->isAdminUser()) {
-            $this->addToGroups($recordModel);
             $this->removeFromGroups($recordModel);
+            $this->addToGroups($recordModel);
             $this->generatePermissions($recordModel);
         }
 		if ($request->get('relationOperation')) {
@@ -158,10 +158,30 @@ class Users_Save_Action extends Vtiger_Save_Action {
 
 		header("Location: $loadUrl");
 	}
-	public function generatePermissions(Users_Record_Model $userModel)
+	public function generatePermissions(Users_Record_Model $userModel, $onlySelected = array())
     {
         $modules = Vtiger_Module_Model::getEntityModules();
-        $groups = Users_Record_Model::getUserGroups($userModel->getId());
+        if (empty($onlySelected)) {
+            if ($userModel->get('all_groups')) {
+                $groups = array();
+                $groupModels = Settings_Groups_Record_Model::getAll();
+                foreach ($groupModels as $groupModel) {
+                    if ($groupModel->getId() == 24) {
+                        continue;
+                    }
+                    $groups[] = $groupModel->getId();
+                }
+            } else {
+                $groups = Users_Record_Model::getUserGroups($userModel->getId());
+                $this->removeOldPermissions($userModel);
+            }
+        } else {
+            $groups = array();
+            foreach ($onlySelected as $groupModel) {
+                $groups[] = $groupModel->getId();
+            }
+        }
+
         foreach ($modules as $module) {
             foreach ($groups as $group) {
                 $ruleModel = Settings_SharingAccess_Rule_Model::getInstanceByData($module, $group, $userModel->getId());
@@ -173,6 +193,22 @@ class Users_Save_Action extends Vtiger_Save_Action {
                 $ruleModel->set('target_id', 'Users:' . $userModel->getId());
                 $ruleModel->set('permission', 1);
                 $ruleModel->save();
+            }
+        }
+    }
+    public function removeOldPermissions(Users_Record_Model $user)
+    {
+        $userRule = 'Users:' . $user->getId();
+        $modules = Vtiger_Module_Model::getEntityModules();
+        foreach ($modules as $module) {
+            if(!$module || !$module->isActive()) {
+                continue;
+            }
+            $rules = Settings_SharingAccess_Rule_Model::getAllByModule($module);
+            foreach ($rules as $rule) {
+                if ($rule && $rule->getTargetMember()->getId() == $userRule) {
+                    $rule->delete();
+                }
             }
         }
     }
