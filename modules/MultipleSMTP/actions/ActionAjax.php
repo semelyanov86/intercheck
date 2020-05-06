@@ -35,6 +35,9 @@ class MultipleSMTP_ActionAjax_Action extends Vtiger_Action_Controller
         global $adb;
         $rs = $adb->pquery("SELECT `enable` FROM `multiple_smtp_settings`;", array());
         $enable = $adb->query_result($rs, 0, "enable");
+        if (!Users_Record_Model::getCurrentUserModel()->isAdminUser()) {
+            $enable = 0;
+        }
         $response = new Vtiger_Response();
         $response->setEmitType(Vtiger_Response::$EMIT_JSON);
         $response->setResult(array("enable" => $enable));
