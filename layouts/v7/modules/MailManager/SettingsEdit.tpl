@@ -50,6 +50,7 @@
                                     <input name="_mbox_user" class="inputElement width75per" id="_mbox_user" value="{$MAILBOX->username()}" type="text" placeholder="{vtranslate('LBL_Your_Mailbox_Account',$MODULE)}">
                                 </td>
                             </tr>
+                            {if !$MAILBOX->password()}
                             <tr class="settings_details {if $SERVERNAME eq ''}hide{/if}">
                                 <td class="fieldLabel width40per">
                                     <label class="pull-right detailViewButtoncontainer"><font color="red">*</font> {vtranslate('LBL_Password',$MODULE)}</label>
@@ -58,6 +59,7 @@
                                     <input name="_mbox_pwd" class="inputElement width75per" id="_mbox_pwd" value="{$MAILBOX->password()}" type="password" placeholder="{vtranslate('LBL_Account_Password',$MODULE)}">
                                 </td>
                             </tr>
+                            {/if}
                             <tr class="additional_settings {if $SERVERNAME neq 'other'}hide{/if}">
                                 <td class="fieldLabel width40per">
                                     <label class="pull-right detailViewButtoncontainer">{vtranslate('LBL_Protocol',$MODULE)}</label>
