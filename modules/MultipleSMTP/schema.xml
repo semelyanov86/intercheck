@@ -1,0 +1,40 @@
+<?xml version='1.0'?>
+<schema>
+	<tables>
+		<table>
+			<name>multiple_smtp_settings</name>
+			<sql><![CDATA[CREATE TABLE `multiple_smtp_settings` (
+				`enable`  int(3) NULL DEFAULT NULL 
+				)]]></sql>
+		</table>
+		<table>
+			<name>vte_multiple_smtp</name>
+			<sql><![CDATA[CREATE TABLE `vte_multiple_smtp` (
+					`id` int(19) NOT NULL AUTO_INCREMENT,
+					`server` varchar(100) DEFAULT NULL,
+					`server_port` int(19) DEFAULT NULL,
+					`server_username` varchar(100) DEFAULT NULL,
+					`server_password` varchar(100) DEFAULT NULL,	
+					`smtp_auth` varchar(5) DEFAULT NULL,					
+					`from_email_field` varchar(50) DEFAULT NULL,
+					`replyto_email_field` varchar(50) DEFAULT NULL,
+					`userid` int(19) NOT NULL,
+					`sequence` int(2) DEFAULT NULL,
+					`send_folder` varchar(5) DEFAULT NULL,
+					`name` varchar(50) DEFAULT NULL,
+					PRIMARY KEY (`id`)
+				) ENGINE=`InnoDB` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ROW_FORMAT=COMPACT CHECKSUM=0 DELAY_KEY_WRITE=0;]]></sql>
+		</table>
+		<table>
+			<name>vte_multiple_smtp</name>
+			<sql><![CDATA[ALTER TABLE `vte_multiple_smtp` MODIFY COLUMN `server_password` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL;]]></sql>
+		</table>
+		<table>
+			<name>vte_modules</name>
+			<sql><![CDATA[CREATE TABLE `vte_modules` (
+                `module`  varchar(50) NOT NULL ,
+                `valid`  int(1) NULL ,
+                PRIMARY KEY (`module`));]]></sql>
+		</table>
+	</tables>
+</schema>
