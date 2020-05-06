@@ -29,7 +29,10 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 
 			$mail = $connector->openMail($request->get('_msgno'), $foldername);
 			$connector->updateFolder($folder, SA_MESSAGES|SA_UNSEEN);
-
+			if (Users_Record_Model::isEmailAndPhoneViewPermitted()) {
+				$mail->setTo('****');
+				$mail->setFrom('****');
+			}
 			$viewer = $this->getViewer($request);
 			$viewer->assign('FOLDER', $folder);
 			$viewer->assign('MAIL', $mail);

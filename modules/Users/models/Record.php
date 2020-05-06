@@ -918,4 +918,16 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		return $userModuleModel->checkDuplicateUser($userName);
 	}
 
+	public static function isEmailAndPhoneViewPermitted($userId = false)
+    {
+        global $restrictedFieldRoles;
+        if ($userId) {
+            $userModel = Users_Record_Model::getInstanceById($userId);
+        } else {
+            $userModel = Users_Record_Model::getCurrentUserModel();
+        }
+        $role = $userModel->getRole();
+        return in_array($role, $restrictedFieldRoles);
+    }
+
 }
