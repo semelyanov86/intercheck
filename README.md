@@ -77,4 +77,5 @@ To implement functionality with adding user for sharing rules, first of all you 
 - Rename files: _config.inc.php, _config.performance.php, _config.template.php, removed underscore in the beginning.
 - create folders with 777: /logs/, /cache/, /storage/
 - Change your config.inc.php file.
+- Run composer update in modules/PlatformIntegration/helpers folder
 

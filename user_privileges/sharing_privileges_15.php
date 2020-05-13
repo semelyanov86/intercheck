@@ -2,25 +2,25 @@
 
 
 //This is the sharing access privilege file
-$defaultOrgSharingPermission=array('2'=>3,'4'=>3,'6'=>2,'7'=>2,'9'=>3,'13'=>2,'16'=>3,'20'=>2,'21'=>2,'22'=>2,'23'=>2,'26'=>2,'8'=>2,'14'=>2,'31'=>2,'34'=>2,'36'=>3,'38'=>2,'39'=>2,'40'=>2,'46'=>2,'47'=>2,'48'=>2,'18'=>2,'10'=>2,'50'=>3,'51'=>3,'52'=>3,'53'=>3,);
+$defaultOrgSharingPermission=array('2'=>3,'4'=>3,'6'=>2,'7'=>2,'9'=>3,'13'=>2,'16'=>3,'20'=>2,'21'=>2,'22'=>2,'23'=>2,'26'=>2,'8'=>2,'14'=>2,'31'=>2,'34'=>2,'36'=>3,'38'=>2,'39'=>2,'40'=>2,'46'=>3,'47'=>3,'48'=>2,'18'=>2,'10'=>3,'50'=>3,'51'=>3,'52'=>3,'53'=>3,'56'=>2,'60'=>2,'61'=>2,'62'=>2,'63'=>2,'65'=>2,);
 
 $related_module_share=array(2=>array(6,),13=>array(6,),20=>array(6,2,),22=>array(6,2,20,),23=>array(6,22,),);
 
-$Leads_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
+$Leads_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
 
-$Leads_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
+$Leads_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
 
 $Leads_Emails_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
 
 $Leads_Emails_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
 
-$Accounts_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
+$Accounts_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
 
-$Accounts_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
+$Accounts_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
 
-$Contacts_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
+$Contacts_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(1,11,15,),), 'USER'=>array());
 
-$Contacts_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
+$Contacts_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(1,11,15,),), 'USER'=>array());
 
 $Accounts_Potentials_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
 
@@ -46,9 +46,9 @@ $Accounts_Invoice_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
 
 $Accounts_Invoice_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
 
-$Potentials_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
+$Potentials_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
-$Potentials_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
+$Potentials_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
 $Potentials_Quotes_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
 
@@ -94,28 +94,52 @@ $Invoice_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
 
 $Invoice_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
 
-$SMSNotifier_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
+$PBXManager_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
-$SMSNotifier_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
+$PBXManager_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
-$ModComments_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
+$SMSNotifier_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
-$ModComments_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
+$SMSNotifier_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
-$Transactions_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
+$ModComments_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
-$Transactions_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
+$ModComments_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
-$Commissions_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
+$Transactions_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
-$Commissions_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
+$Transactions_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
-$KYC_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
+$Commissions_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
-$KYC_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
+$Commissions_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
-$Alarms_share_read_permission=array('ROLE'=>array(),'GROUP'=>array());
+$KYC_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
 
-$Alarms_share_write_permission=array('ROLE'=>array(),'GROUP'=>array());
+$KYC_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
+
+$Alarms_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
+
+$Alarms_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(29=>array(0=>1,1=>11,2=>15,),), 'USER'=>array());
+
+$Countries_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
+
+$Countries_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
+
+$PlatformIntegrationQueues_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
+
+$PlatformIntegrationQueues_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
+
+$PlatformIntegrationLogs_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
+
+$PlatformIntegrationLogs_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
+
+$PlatformIntegrationLinks_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
+
+$PlatformIntegrationLinks_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
+
+$Activities_share_read_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
+
+$Activities_share_write_permission=array('ROLE'=>array(),'GROUP'=>array(), 'USER'=>array());
 
 ?>
