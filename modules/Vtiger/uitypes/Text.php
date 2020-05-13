@@ -16,7 +16,11 @@ class Vtiger_Text_UIType extends Vtiger_Base_UIType {
 	 * @return <Object>
 	 */
 	public function getDisplayValue($value, $record=false, $recordInstance=false) {
-		return nl2br($value);
+        $fieldModel = $this->get('field');
+        if($fieldModel != null && $fieldModel->getModule()->getName() == 'Emails') {
+            return decode_html($value);
+        }
+	    return nl2br($value);
 	}
     
     /**
