@@ -71,4 +71,6 @@ To implement functionality with adding user for sharing rules, first of all you 
                        KEY `idx_datashare_user2user_to_userid` (`to_userid`),
                        CONSTRAINT `fk_vtiger_datashare_user2user` FOREIGN KEY (`to_userid`) REFERENCES `vtiger_users` (`id`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
 =======
+=======
+
 
