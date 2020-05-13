@@ -19,5 +19,5 @@ development-deployment:
     name: dev
     url: ${DEV_URL}
   only:
-    - master
+    - dev
   tags: [linux-shell]
