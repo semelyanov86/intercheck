@@ -325,7 +325,7 @@ class Settings_SharingAccess_Rule_Model extends Vtiger_Base_Model {
         return $links;
     }
 
-    public function save() {
+    public function save($doRecalculate = true) {
         $db = PearDatabase::getInstance();
         $ruleId = $this->getId();
 
@@ -370,7 +370,9 @@ class Settings_SharingAccess_Rule_Model extends Vtiger_Base_Model {
         $sql = 'UPDATE vtiger_datashare_module_rel SET relationtype=? WHERE shareid=?';
         $params = array($this->get('relationtype'), $ruleId);
         $db->pquery($sql, $params);
-        Settings_SharingAccess_Module_Model::recalculateSharingRules();
+        if ($doRecalculate) {
+            Settings_SharingAccess_Module_Model::recalculateSharingRules();
+        }
     }
 
 	public function delete() {

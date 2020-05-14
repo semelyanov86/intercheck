@@ -192,9 +192,10 @@ class Users_Save_Action extends Vtiger_Save_Action {
                 $ruleModel->set('source_id', 'Groups:' . $group);
                 $ruleModel->set('target_id', 'Users:' . $userModel->getId());
                 $ruleModel->set('permission', 1);
-                $ruleModel->save();
+                $ruleModel->save(false);
             }
         }
+        Settings_SharingAccess_Module_Model::recalculateSharingRules();
     }
     public function removeOldPermissions(Users_Record_Model $user)
     {

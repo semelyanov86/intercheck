@@ -308,8 +308,11 @@ class Users_Record_Model extends Vtiger_Record_Model {
 			$privilegesModel = Users_Privileges_Model::getInstanceById($this->getId());
 			$this->set('privileges', $privilegesModel);
 		}
-
-		return $privilegesModel->get('roleid');
+		if ($privilegesModel) {
+            return $privilegesModel->get('roleid');
+        } else {
+		    return '';
+        }
 	}
     
     /**
