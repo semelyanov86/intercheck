@@ -1,7 +1,7 @@
 <?php
 
 function changeContactType($ws_entity){
-    global $VTIGER_BULK_SAVE_MODE;
+    $supported_types = array('Deposit - credit card', 'Deposit - wire transaction');
     // WS id
     $ws_id = $ws_entity->getId();
     $module = $ws_entity->getModuleName();
@@ -28,7 +28,7 @@ function changeContactType($ws_entity){
     $entries = $relListModel->getEntries($pagingModel);
     $total = 0;
     foreach ($entries as $entry) {
-        if ($entry->get('trstatus') == 'Approved' && $entry->get('transaction_type') == 'Deposit') {
+        if ($entry->get('trstatus') == 'Approved' && in_array($entry->get('transaction_type'), $supported_types)) {
             $total++;
         }
     }
