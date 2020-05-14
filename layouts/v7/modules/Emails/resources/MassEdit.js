@@ -200,6 +200,7 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 							app.helper.showModal(data);
 						} else {
 							app.event.trigger('post.mail.sent',data);
+							app.helper.showModal(data);
 						}
 					});
 				}
