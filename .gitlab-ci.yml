@@ -1,0 +1,22 @@
+production-deployment:
+  stage: deploy
+  script:
+    - sshpass -p ${PROD_SSH_PASS} rsync -avz -e 'ssh -o StrictHostKeyChecking=no' --exclude=README.md --exclude=.git --exclude=.gitlab-ci.yml ${CI_PROJECT_DIR}/ ${PROD_SSH_USER}@${PROD_SSH_HOST}:${PROD_SSH_FOLDER}
+    - sh /etc/sonarscanner/bin/sonar-scanner -Dsonar.projectKey=${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}
+  environment:
+    name: prod
+    url: ${PROD_URL}
+  only:
+    - master
+  tags: [linux-shell]
+
+development-deployment:
+  stage: deploy
+  script:
+    - sshpass -p ${DEV_SSH_PASS} rsync -avz -e 'ssh -o StrictHostKeyChecking=no' --exclude=README.md --exclude=.git --exclude=.gitlab-ci.yml ${CI_PROJECT_DIR}/ ${DEV_SSH_USER}@${DEV_SSH_HOST}:${DEV_SSH_FOLDER}
+  environment:
+    name: dev
+    url: ${DEV_URL}
+  only:
+    - dev
+  tags: [linux-shell]
