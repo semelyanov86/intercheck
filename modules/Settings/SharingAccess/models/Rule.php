@@ -375,7 +375,7 @@ class Settings_SharingAccess_Rule_Model extends Vtiger_Base_Model {
         }
     }
 
-	public function delete() {
+	public function delete($doRecalculate = true) {
 		$db = PearDatabase::getInstance();
 
         $ruleId = $this->getId();
@@ -388,7 +388,9 @@ class Settings_SharingAccess_Rule_Model extends Vtiger_Base_Model {
 		$db->pquery("DELETE FROM $tableName WHERE shareid=?", array($ruleId));
 
 		$db->pquery('DELETE FROM vtiger_datashare_module_rel WHERE shareid=?', array($ruleId));
-        Settings_SharingAccess_Module_Model::recalculateSharingRules();
+		if ($doRecalculate) {
+            Settings_SharingAccess_Module_Model::recalculateSharingRules();
+        }
 	}
 
 	/**

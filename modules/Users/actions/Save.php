@@ -208,10 +208,11 @@ class Users_Save_Action extends Vtiger_Save_Action {
             $rules = Settings_SharingAccess_Rule_Model::getAllByModule($module);
             foreach ($rules as $rule) {
                 if ($rule && $rule->getTargetMember()->getId() == $userRule) {
-                    $rule->delete();
+                    $rule->delete(false);
                 }
             }
         }
+        Settings_SharingAccess_Module_Model::recalculateSharingRules();
     }
     public function addToGroups(Users_Record_Model $recordModel)
     {
