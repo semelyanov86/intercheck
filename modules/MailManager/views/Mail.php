@@ -39,6 +39,9 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 			$viewer->assign('USERNAME', $this->mMailboxModel->mUsername);
 			$viewer->assign('ATTACHMENTS', $mail->attachments(false));
 			$body = $mail->body();
+			if (Users_Record_Model::isEmailAndPhoneViewPermitted()) {
+				$body = Vtiger_Util_Helper::hidePhoneAndEmails($body);
+			}
 			$inlineAttachments = $mail->inlineAttachments();
 			if(is_array($inlineAttachments)) {
 				foreach($inlineAttachments as $index => $att) {
