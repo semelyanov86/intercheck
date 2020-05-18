@@ -344,6 +344,7 @@ jQuery.validator.addMethod("email", function(value, element, params) {
 		var emailFilter = /^[_/a-zA-Z0-9*]+([!"#$%&'()*+,./:;<=>?\^_`'{|}~-]?[a-zA-Z0-9/_/-])*@[a-zA-Z0-9]+([\_\.]?[a-zA-Z0-9\-]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/;
 
 		if(!value) return true;
+		if(value === '****') return true;
 
 		if (!emailFilter.test(value)) {
 			return false;
