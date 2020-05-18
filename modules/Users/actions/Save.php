@@ -238,8 +238,12 @@ class Users_Save_Action extends Vtiger_Save_Action {
     public function removeFromGroups(Users_Record_Model $record_Model)
     {
         $allGroups = Settings_Groups_Record_Model::getAll();
-        $curGroups = $record_Model->get('user_groups');
-        if ($curGroups && !empty($curGroups)) {
+        if (true) {
+            if ($record_Model->has('user_groups')) {
+                $curGroups = $record_Model->get('user_groups');
+            } else {
+                $curGroups = array();
+            }
             foreach ($allGroups as $id=>$groupModel) {
                 if (in_array($id, $curGroups) || $id == 24) {
                     continue;
