@@ -20,4 +20,3 @@ development-deployment:
   only:
     - dev
   tags: [linux-shell]
-  
