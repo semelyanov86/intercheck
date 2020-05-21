@@ -172,7 +172,11 @@ class Users_Save_Action extends Vtiger_Save_Action {
                     $groups[] = $groupModel->getId();
                 }
             } else {
-                $groups = Users_Record_Model::getUserGroups($userModel->getId());
+                if ($userModel->get('group_view')) {
+                    $groups = Users_Record_Model::getUserGroups($userModel->getId());
+                } else {
+                    $groups = array();
+                }
                 $this->removeOldPermissions($userModel);
             }
         } else {
