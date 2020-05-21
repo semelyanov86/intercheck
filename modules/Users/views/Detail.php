@@ -10,7 +10,9 @@
 
 class Users_Detail_View extends Users_PreferenceDetail_View {
 
-	public function preProcess(Vtiger_Request $request) {
+    public static $excludedForEdit = array('user_groups', 'user_profiles', 'group_view', 'all_groups');
+
+    public function preProcess(Vtiger_Request $request) {
 		parent::preProcess($request, false);
 		$this->preProcessSettings($request);
 	}
