@@ -21,6 +21,12 @@ class ModComments_Delete_Action extends Vtiger_Delete_Action {
 
         $recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
         $moduleModel = $recordModel->getModule();
+        $relatedModel = Vtiger_Record_Model::getInstanceById($recordModel->get('related_to'));
+        if(vtlib_isModuleActive('ModTracker')) {
+            //Track the time the relation was deleted
+            require_once 'modules/ModTracker/ModTracker.php';
+            ModTracker::unLinkRelation($relatedModel->getModuleName(), $recordModel->get('related_to'), 'ModComments', $recordId);
+        }
         $recordModel->delete();
 
         $response = new Vtiger_Response();
