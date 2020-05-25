@@ -101,5 +101,11 @@ $languageStrings = Array(
     'Debit' => 'Debit',
     'Target Code' => 'Target Code',
     'LBL_VALIDATION_POSITIVE_ERROR' => 'Amount for this type can be only positive',
-    'LBL_VALIDATION_NEGATIVE_ERROR' => 'Amount for this type can be only negative'
+    'LBL_VALIDATION_NEGATIVE_ERROR' => 'Amount for this type can be only negative',
+    'requires_action' => 'Requires Action',
+    'processing' => 'Processing',
+    'succeeded' => 'Success',
+    'amount_capturable_updated' => 'Ready for capture',
+    'payment_failed' => 'Payment Failed',
+    'card' => 'Deposit - credit card'
 );
