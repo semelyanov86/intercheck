@@ -88,26 +88,31 @@ class DocumentApprovals extends Vtiger_CRMEntity {
 	*/
 	function vtlib_handler($moduleName, $eventType) {
 		global $adb;
+        require 'modules/com_vtiger_workflow/VTEntityMethodManager.inc';
+        $emm = new VTEntityMethodManager($adb);
  		if($eventType == 'module.postinstall') {
 			// TODO Handle actions after this module is installed.
 			$this->init($moduleName);
 			$this->createHandle($moduleName);
 			$this->createRelationship($moduleName);
 			$this->addRelatedList($moduleName, 'Contacts', 'DocumentApprovals', array('add'));
+            self::createScheduler();
 		} else if($eventType == 'module.disabled') {
 			$this->removeHandle($moduleName);
-			// TODO Handle actions before this module is being uninstalled.
+            self::deactiveScheduler();
 		} else if($eventType == 'module.enabled') {
 			$this->createHandle($moduleName);
-			// TODO Handle actions before this module is being uninstalled.
+            self::createScheduler();
+//            $emm->addEntityMethod("DocumentApprovals", "Update Platform Status","modules/DocumentApprovals/workflow/updatePlatformStatus.php", "UpdatePlatformStatus");
 		} else if($eventType == 'module.preuninstall') {
 			$this->removeHandle($moduleName);
-			// TODO Handle actions when this module is about to be deleted.
+            self::deleteScheduler();
+//			$emm->removeEntityMethod('DocumentApprovals', 'Update Platform Status');
 		} else if($eventType == 'module.preupdate') {
 			$this->createHandle($moduleName);
-			// TODO Handle actions before this module is updated.
 		} else if($eventType == 'module.postupdate') {
-			// TODO Handle actions after this module is updated.
+            self::deleteScheduler();
+            self::createScheduler();
 		}
  	}
 
@@ -289,5 +294,25 @@ class DocumentApprovals extends Vtiger_CRMEntity {
         include_once "vtlib/Vtiger/Module.php";
         $module = Vtiger_Module::getInstance($module2);
         $module->setRelatedList(Vtiger_Module::getInstance($module1), $relListLabel, $actions, "get_dependents_list");
+    }
+
+    private function createScheduler()
+    {
+        $adb = PearDatabase::getInstance();
+        $sql = "SELECT id FROM `vtiger_cron_task` WHERE `module` = 'DocumentApprovals'";
+        $res = $adb->pquery($sql, array());
+        if (!$adb->num_rows($res)) {
+            $adb->pquery("INSERT INTO `vtiger_cron_task` (`name`, `handler_file`, `frequency`, `status`, `module`, `sequence`) VALUES ('Document Approvals', 'modules/DocumentApprovals/cron/DocumentApprovals.service', '500', '0', 'DocumentApprovals', '37')", array());
+        }
+    }
+    private function deactiveScheduler()
+    {
+        $adb = PearDatabase::getInstance();
+        $adb->pquery("UPDATE `vtiger_cron_task` SET `status`='1' WHERE (`module`='DocumentApprovals')", array());
+    }
+    private function deleteScheduler()
+    {
+        $adb = PearDatabase::getInstance();
+        $adb->pquery("DELETE FROM `vtiger_cron_task` WHERE (`module`='DocumentApprovals')", array());
     }
 }
