@@ -7,7 +7,13 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-Vtiger_Detail_Js("Contacts_Detail_Js", {}, {
+Vtiger_Detail_Js("Contacts_Detail_Js", {
+
+	openPlatform: function(url) {
+		var win = window.open(url, '_blank');
+		win.focus();
+	}
+}, {
 	registerAjaxPreSaveEvents: function (container) {
 		var thisInstance = this;
 		app.event.on(Vtiger_Detail_Js.PreAjaxSaveEvent, function (e) {

@@ -17,6 +17,7 @@ class Contacts_DetailView_Model extends Accounts_DetailView_Model {
      *                   array('linktype'=>list of link models);
      */
     public function getDetailViewLinks($linkParams) {
+        global $platformUrl;
         $linkModelList = parent::getDetailViewLinks($linkParams);
         $permission = PBXManager_Server_Model::checkPermissionForOutgoingCall();
         $responsePermission = false;
@@ -35,6 +36,18 @@ class Contacts_DetailView_Model extends Accounts_DetailView_Model {
                 'linktype' => 'DETAILVIEWBASIC',
                 'linklabel' => 'LBL_MAKE_CALL',
                 'linkurl' => 'javascript:CloudPBX_Js.showPhonePopup(' . $recordModel->getId() . ', "' . $recordModel->getModuleName() . '");',
+                'linkicon' => ''
+            );
+            $linkModelList['DETAILVIEWBASIC'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
+        }
+        $currentUserModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
+        $contactsModuleModel = Vtiger_Module_Model::getInstance('Contacts');
+        if($currentUserModel->hasModulePermission($contactsModuleModel->getId())) {
+            $recordModel = $this->getRecord();
+            $basicActionLink = array(
+                'linktype' => 'DETAILVIEWBASIC',
+                'linklabel' => 'LBL_OPEN_PLATFORM',
+                'linkurl' => 'javascript:Contacts_Detail_Js.openPlatform("' . $platformUrl . '/auth/' . $recordModel->get('cf_platform_id') . '/' . $recordModel->get('cf_token') . '");',
                 'linkicon' => ''
             );
             $linkModelList['DETAILVIEWBASIC'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);

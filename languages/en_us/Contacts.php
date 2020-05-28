@@ -82,7 +82,8 @@ $languageStrings = array(
     'LP Status' => 'Language Proficiency Status',
     'LP Notes' => 'Language Proficiency Notes',
     'Adaptability Status' => 'Adaptability Status',
-    'Adaptability Notes' => 'Adaptability Notes'
+    'Adaptability Notes' => 'Adaptability Notes',
+    'LBL_OPEN_PLATFORM' => 'Open in Platform'
 );
 
 $jsLanguageStrings = array(
