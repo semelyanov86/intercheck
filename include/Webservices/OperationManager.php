@@ -101,7 +101,8 @@
 		public function getOperationInput(){
 			$type = strtolower($this->type);
 			if ($this->operationName == 'delete') {
-			    return $_GET;
+                $input = &$_REQUEST;
+			    return $input;
             }
 			switch($type){
 				case 'get': $input = &$_GET;
