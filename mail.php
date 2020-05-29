@@ -9,7 +9,7 @@ $mail->SMTPAuth = true;
 $mail->SMTPDebug = 1;
 
 $mail->Host = 'mail.canada-relocation.com';
-$mail->Port = 25;
+$mail->Port = 587;
 $mail->Username = 'support@canada-relocation.com';
 $mail->Password = 'VZBNniEsuGs93Hwbg5u9aSRzmBE4R9';
 
