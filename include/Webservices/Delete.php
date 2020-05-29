@@ -10,6 +10,7 @@
 	
 	function vtws_delete($id,$user){
 		global $log,$adb;
+		$log->debug("SE: Prepared ID for delete: $id and user:");
 		$webserviceObject = VtigerWebserviceObject::fromId($adb,$id);
 		$handlerPath = $webserviceObject->getHandlerPath();
 		$handlerClass = $webserviceObject->getHandlerClass();

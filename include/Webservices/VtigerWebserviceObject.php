@@ -91,7 +91,7 @@ class VtigerWebserviceObject{
 					$rowData['handler_path'],$rowData['handler_class']);
 		}
 		
-		throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied for id");
+		throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied for id - $entityId");
 	}
 	
 	static function fromQuery($adb,$query){
