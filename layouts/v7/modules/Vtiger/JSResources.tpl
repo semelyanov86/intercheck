@@ -10,6 +10,20 @@
 ********************************************************************************/
 -->*}
 {strip}
+    {if ($DATADOG)}
+        {literal}
+            <script
+                    src="https://www.datadoghq-browser-agent.com/datadog-rum-us.js"
+                    type="text/javascript">
+            </script>
+            <script>
+                window.DD_RUM && window.DD_RUM.init({
+                    clientToken: 'pubd17c02f05e700fd17c663882fe93e6b0',
+                    applicationId: '3a4fba81-4c2b-4464-8c1a-39d6364b9f84',
+                });
+            </script>
+        {/literal}
+    {/if}
     <script type="text/javascript" src="layouts/v7/lib/jquery/purl.js"></script>
     <script type="text/javascript" src="layouts/v7/lib/jquery/select2/select2.min.js"></script>
     <script type="text/javascript" src="layouts/v7/lib/jquery/jquery.class.min.js"></script>
