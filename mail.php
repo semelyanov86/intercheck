@@ -7,7 +7,7 @@ $mail->CharSet = 'UTF-8';
 $mail->isSMTP();
 //$mail->SMTPAuth = true;
 $mail->SMTPDebug = 1;
-$mail->SMTPAuth = false;
+$mail->SMTPAuth = true;
 $mail->SMTPAutoTLS = false;
 $mail->SMTPSecure = 'tls';
 $mail->SMTPOptions = array(
@@ -25,7 +25,7 @@ $mail->Password = 'VZBNniEsuGs93Hwbg5u9aSRzmBE4R9';
 
 $mail->setFrom('support@canada-relocation.com', 'support@canada-relocation.com');
 
-$mail->addAddress('se@sergeyem.ru');
+$mail->addAddress('support@canada-relocation.com');
 
 $mail->Subject = 'This is test message';
 $body = '<p><strong>«This is super test» </strong></p>';
