@@ -61,11 +61,22 @@ class Vtiger_Mailer extends PHPMailer {
 			$smtpsecure = $hostinfo[0];
 			if($smtpsecure == 'tls'){
 				$this->SMTPSecure = $smtpsecure;
-				$this->Host = $hostinfo[1];
+//				$this->Host = $hostinfo[1];
 			}
 			// End
-
+			$this->Port = 587;
 			if(empty($this->SMTPAuth)) $this->SMTPAuth = false;
+
+			$this->SMTPAuth = true;
+			$this->SMTPAutoTLS = false;
+			$this->SMTPSecure = 'tls';
+			$this->SMTPOptions = array(
+				'ssl' => array(
+					'verify_peer' => false,
+					'verify_peer_name' => false,
+					'allow_self_signed' => true
+				)
+			);
 
 			$this->ConfigSenderInfo($adb->query_result($result, 0, 'from_email_field'));
 

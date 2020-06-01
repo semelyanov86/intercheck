@@ -21,7 +21,7 @@ $mail->SMTPOptions = array(
 $mail->Host = 'mail.canada-relocation.com';
 $mail->Port = 587;
 $mail->Username = 'support@canada-relocation.com';
-$mail->Password = 'VZBNniEsuGs93Hwbg5u9aSRzmBE4R9';
+$mail->Password = 'DMfhN8ZzT4';
 
 $mail->setFrom('support@canada-relocation.com', 'support@canada-relocation.com');
 
@@ -29,5 +29,6 @@ $mail->addAddress('support@canada-relocation.com');
 
 $mail->Subject = 'This is test message';
 $body = '<p><strong>«This is super test» </strong></p>';
+var_dump($mail);die;
 $mail->msgHTML($body);
 $mail->send();
