@@ -21,7 +21,7 @@ $mail->SMTPOptions = array(
 $mail->Host = 'mail.canada-relocation.com';
 $mail->Port = 587;
 $mail->Username = 'support@canada-relocation.com';
-$mail->Password = 'DMfhN8ZzT4';
+$mail->Password = '47cbQ8#QwEA1';
 
 $mail->setFrom('support@canada-relocation.com', 'support@canada-relocation.com');
 
