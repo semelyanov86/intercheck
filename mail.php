@@ -5,8 +5,18 @@ require_once("modules/Emails/class.phpmailer.php");
 $mail = new PHPMailer();
 $mail->CharSet = 'UTF-8';
 $mail->isSMTP();
-$mail->SMTPAuth = true;
+//$mail->SMTPAuth = true;
 $mail->SMTPDebug = 1;
+$mail->SMTPAuth = false;
+$mail->SMTPAutoTLS = false;
+$mail->SMTPSecure = 'tls';
+$mail->SMTPOptions = array(
+    'ssl' => array(
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true
+    )
+);
 
 $mail->Host = 'mail.canada-relocation.com';
 $mail->Port = 587;
@@ -15,7 +25,7 @@ $mail->Password = 'VZBNniEsuGs93Hwbg5u9aSRzmBE4R9';
 
 $mail->setFrom('support@canada-relocation.com', 'support@canada-relocation.com');
 
-$mail->addAddress('se@sergeyem.ru', 'se@sergeyem.ru');
+$mail->addAddress('se@sergeyem.ru');
 
 $mail->Subject = 'This is test message';
 $body = '<p><strong>«This is super test» </strong></p>';
