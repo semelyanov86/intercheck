@@ -1,7 +1,8 @@
 <?php
 
 function changeContactType($ws_entity){
-    $supported_types = array('Deposit - credit card', 'Deposit - wire transaction');
+    $supported_types = array('Deposit - credit card', 'Deposit - wire transaction', 'card');
+    $supported_status = array('succeeded', 'Approved');
     // WS id
     $ws_id = $ws_entity->getId();
     $module = $ws_entity->getModuleName();
@@ -28,7 +29,7 @@ function changeContactType($ws_entity){
     $entries = $relListModel->getEntries($pagingModel);
     $total = 0;
     foreach ($entries as $entry) {
-        if ($entry->get('trstatus') == 'Approved' && in_array($entry->get('transaction_type'), $supported_types)) {
+        if (in_array($entry->get('trstatus'), $supported_status) && in_array($entry->get('transaction_type'), $supported_types)) {
             $total++;
         }
     }
