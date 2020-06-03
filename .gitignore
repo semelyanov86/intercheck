@@ -12,3 +12,4 @@ config.template.php
 config.performance.php
 config.db.php
 /portal/vue-app/node_modules
+tabdata.php

@@ -45,7 +45,7 @@ function vtws_create($elementType, $element, $user) {
 	}
 
 	$referenceFields = $meta->getReferenceFieldDetails();
-	foreach ($referenceFields as $fieldName => $details) {
+    foreach ($referenceFields as $fieldName => $details) {
 		if (isset($element[$fieldName]) && strlen($element[$fieldName]) > 0) {
 			$ids = vtws_getIdComponents($element[$fieldName]);
 			$elemTypeId = $ids[0];
@@ -81,6 +81,25 @@ function vtws_create($elementType, $element, $user) {
 			}
 		}
 		$entity = $handler->create($elementType, $element);
+		$entityIds = vtws_getIdComponents($entity['id']);
+        foreach ($referenceFields as $fieldName => $details) {
+            if (isset($element[$fieldName]) && strlen($element[$fieldName]) > 0) {
+                $ids = vtws_getIdComponents($element[$fieldName]);
+                $elemTypeId = $ids[0];
+                $elemId = $ids[1];
+                $referenceObject = VtigerWebserviceObject::fromId($adb, $elemTypeId);
+                if (!in_array($referenceObject->getEntityName(), $details)) {
+                    continue;
+                }
+                if ($referenceObject->getEntityName() == 'Users') {
+                    continue;
+                }
+                if (!in_array($referenceObject->getEntityName(), $types['types']) && $referenceObject->getEntityName() != 'Users') {
+                    continue;
+                }
+                relateEntities(CRMEntity::getInstance($referenceObject->getEntityName()), $referenceObject->getEntityName(), $elemId, $elementType, $entityIds[1]);
+            }
+        }
 		VTWS_PreserveGlobal::flush();
 		return $entity;
 	} else {
