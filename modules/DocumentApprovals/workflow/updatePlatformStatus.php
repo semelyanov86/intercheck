@@ -15,5 +15,5 @@ function UpdatePlatformStatus($ws_entity){
 
     //получение объекта со всеми данными о текущей записи Модуля "DocumentApprovals"
     $docInstance = Vtiger_Record_Model::getInstanceById($crmid);
-var_dump($docInstance);die;
+
 }

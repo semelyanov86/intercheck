@@ -36,17 +36,15 @@ function runServiceSendToPlatform() {
             }
             $docResult[$id]['media_id'] = $docModel->get('cf_platform_id');
             $docResult[$id]['status'] = $docModel->get('document_approvals_status');
-            $pageNo = $docModel->get('page');
-            $notes[$pageNo] = $notes[$pageNo] . '||' . $docModel->get('description');
+            $docResult[$id]['contact_id'] = $docModel->get('cf_contacts_id');
+            $docResult[$id]['platform_id'] = $platformUserId;
         }
     }
-    $notes[1] = trim($notes[1], '||');
-    $notes[2] = trim($notes[2], '||');
     foreach ($docResult as $docId=>$docData) {
-        $httpClient = new Vtiger_Net_Client($platformUrl . '/api/v1/users/docs/' . $platformUserId);
+        $httpClient = new Vtiger_Net_Client($platformUrl . '/api/v1/users/docs/' . $docData['platform_id']);
         $params = array(
-            'notes_docs_1' => $notes[1],
-            'notes_docs_2' => $notes[2],
+            'notes_docs_1' => DocumentApprovals_Record_Model::getNotesForPage($docData['contact_id'], 1),
+            'notes_docs_2' => DocumentApprovals_Record_Model::getNotesForPage($docData['contact_id'], 2),
             'media_id' => $docData['media_id'],
             'status' => $docData['status']
         );
