@@ -1068,7 +1068,7 @@ class Users extends CRMEntity {
 			$this->db->pquery($sql1, $params1);
 
 			$sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path, storedname) values(?,?,?,?,?,?)";
-			$params2 = array($current_id, $filename, $this->column_fields['description'], $filetype, $upload_file_path, $encryptFileName);
+			$params2 = array($current_id, $encryptFileName, $this->column_fields['description'], $filetype, $upload_file_path, $encryptFileName);
 			$result=$this->db->pquery($sql2, $params2);
 
 			if($id != '') {
