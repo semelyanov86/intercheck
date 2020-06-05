@@ -30,7 +30,7 @@
 		
 		$types = vtws_listtypes(null, $user);
 		if(!in_array($elementType,$types['types'])){
-			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied for describe in $elementType");
 		}
 		
 		$entity = $handler->describe($elementType);

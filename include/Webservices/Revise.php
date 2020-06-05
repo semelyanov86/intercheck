@@ -33,7 +33,7 @@
 		
 		$types = vtws_listtypes(null, $user);
 		if(!in_array($entityName,$types['types'])){
-			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied for revise in $entityName");
 		}
 		
 		if($entityName !== $webserviceObject->getEntityName()){
