@@ -28,19 +28,42 @@ class ModComments_Delete_Action extends Vtiger_Delete_Action {
             require_once 'modules/ModTracker/ModTracker.php';
             ModTracker::unLinkRelation($relatedModel->getModuleName(), $recordModel->get('related_to'), 'ModComments', $recordId);
         }
+        $childArr = array();
         $parents = $commentModel->getChildComments();
         foreach ($parents as $parent) {
             if(vtlib_isModuleActive('ModTracker')) {
                 ModTracker::unLinkRelation($relatedModel->getModuleName(), $parent->get('related_to'), 'ModComments', $parent->getId());
             }
             $parentRecord = Vtiger_Record_Model::getInstanceById($parent->getId(), $moduleName);
+            $childArr[] = $parent->getId();
+            $parents2 = $parent->getChildComments();
+            foreach ($parents2 as $parent2) {
+                $childArr[] = $parent2->getId();
+                $parents3 = $parent2->getChildComments();
+                foreach ($parents3 as $parent3) {
+                    $childArr[] = $parent3->getId();
+                }
+            }
             $parentRecord->delete();
         }
         $recordModel->delete();
-
+        $this->massRemoveComments($childArr);
         $response = new Vtiger_Response();
         $response->setResult(array('success' => true));
         return $response;
+    }
 
+    private function massRemoveComments(array $childArr)
+    {
+        global $adb;
+        $sqlString = implode(',', $childArr);
+        $query = "SELECT modcommentsid FROM vtiger_modcomments INNER JOIN vtiger_crmentity ON vtiger_modcomments.modcommentsid = vtiger_crmentity.crmid WHERE parent_comments in ( $sqlString ) AND vtiger_crmentity.deleted = 0";
+        $result = $adb->pquery($query, array());
+        if ($adb->num_rows($result)) {
+            while ($data = $adb->fetch_array($result)) {
+                $recModel = Vtiger_Record_Model::getInstanceById($data['modcommentsid'], 'ModComments');
+                $recModel->delete();
+            }
+        }
     }
 }

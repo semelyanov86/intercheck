@@ -3029,6 +3029,7 @@ Vtiger.Class("Vtiger_Detail_Js",{
 		detailContentsHolder.on('click','.deleteComment', function(e){
 			var currentTarget = jQuery(e.currentTarget);
 			var commentInfoBlock = currentTarget.closest('.singleComment');
+			var commentDetailsBlock = currentTarget.closest('.commentDetails');
 			var commentInfoHeader = commentInfoBlock.find('.commentInfoHeader');
 			var commentId = commentInfoHeader.data('commentid');
 
@@ -3041,7 +3042,7 @@ Vtiger.Class("Vtiger_Detail_Js",{
 			app.request.post({data: params}).then(
 				function(err, data) {
 					if (err === null) {
-						commentInfoBlock.remove();
+						commentDetailsBlock.remove();
 						app.helper.showSuccessNotification({message:'Comment Deleted Successfully'});
 					} else {
 						app.helper.showErrorNotification({message: err.message});
