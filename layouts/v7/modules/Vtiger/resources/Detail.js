@@ -592,6 +592,7 @@ Vtiger.Class("Vtiger_Detail_Js",{
 	 * Function to Save and sending the Sms and hide the modal window of send sms
 	 */
 	SendSmsSave: function(form) {
+		var self = this;
 		app.helper.showProgress();
 		var formData = form.serializeFormData();
 		app.request.post({data: formData}).then(
@@ -611,6 +612,7 @@ Vtiger.Class("Vtiger_Detail_Js",{
 						var msg = statusDetails.statusmessage;
 						app.helper.showSuccessNotification({'title' : status, 'message' : msg});
 					}
+					self.updateRelatedRecordsCount();
 				}
 		);
 	},
