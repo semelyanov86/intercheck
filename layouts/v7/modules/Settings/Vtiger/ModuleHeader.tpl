@@ -60,6 +60,8 @@
 									<a href="{$URL}">
 									{if $smarty.request.extensionModule}{$smarty.request.extensionModule}{else}{vtranslate({$PAGETITLE}, $QUALIFIED_MODULE)}{/if}&nbsp;
 									</a>
+								</span>
+								<span class="current-filter-name">
 									<span class="fa fa-angle-right" aria-hidden="true"></span>&nbsp;
 									{if $smarty.request.view eq 'Edit'}
 										{if $RECORD}
