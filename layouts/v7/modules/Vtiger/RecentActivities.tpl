@@ -107,7 +107,7 @@
 
                             {else if ($RECENT_ACTIVITY->isRelationLink() || $RECENT_ACTIVITY->isRelationUnLink())}
                                 {assign var=RELATED_MODULE value= $RELATION->getLinkedRecord()->getModuleName()}
-                                {if isPermitted($RELATION->getLinkedRecord()->getModuleName(), 'ListView', $RELATION->getLinkedRecord()->getId()) eq 'yes'}
+                                {if isPermitted($RELATION->getLinkedRecord()->getModuleName(), 'DetailView', $RELATION->getLinkedRecord()->getId()) eq 'yes'}
                                 <li>
                                     <time class="update_time cursorDefault">
                                         <small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($RELATION->get('changedon'))}">
