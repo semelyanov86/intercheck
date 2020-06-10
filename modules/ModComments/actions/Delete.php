@@ -47,13 +47,13 @@ class ModComments_Delete_Action extends Vtiger_Delete_Action {
             $parentRecord->delete();
         }
         $recordModel->delete();
-        $this->massRemoveComments($childArr);
+        $this->massRemoveComments($childArr, $relatedModel);
         $response = new Vtiger_Response();
         $response->setResult(array('success' => true));
         return $response;
     }
 
-    private function massRemoveComments(array $childArr)
+    private function massRemoveComments(array $childArr, Vtiger_Record_Model $relatedModel)
     {
         global $adb;
         $sqlString = implode(',', $childArr);
@@ -62,6 +62,9 @@ class ModComments_Delete_Action extends Vtiger_Delete_Action {
         if ($adb->num_rows($result)) {
             while ($data = $adb->fetch_array($result)) {
                 $recModel = Vtiger_Record_Model::getInstanceById($data['modcommentsid'], 'ModComments');
+                if(vtlib_isModuleActive('ModTracker')) {
+                    ModTracker::unLinkRelation($relatedModel->getModuleName(), $recModel->get('related_to'), 'ModComments', $recModel->getId());
+                }
                 $recModel->delete();
             }
         }
