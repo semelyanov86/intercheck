@@ -295,38 +295,79 @@ Vtiger.Class("Vtiger_Detail_Js",{
 
 		registerRelatedRecordSave: function(){
 			var thisInstance = this;
+			var spFlagCheckBeforeSave = false;
+			var editViewForm = jQuery('#EditView');
 			app.event.on('post.overLayEditView.loaded',function(e, container){
 				jQuery('#EditView').vtValidate({
 					submitHandler : function(form){
+						if (spFlagCheckBeforeSave) {
+							return true;
+						}
 						window.onbeforeunload = null;
 						var e = jQuery.Event(Vtiger_Edit_Js.recordPresaveEvent);
 						app.event.trigger(e);
 						if(e.isDefaultPrevented()) {
 							return false;
 						}
-						var formData = new FormData(form);
-						var postParams = {
-							data: formData,
-							contentType: false,
-							processData: false
-						};
-						app.helper.showProgress();
-						app.request.post(postParams).then(function(err,data){
-							app.helper.hideProgress();
-							if (err === null) {
-								jQuery('.vt-notification').remove();
-								app.helper.hidePageContentOverlay();
-								var relatedModuleName = formData.module;
-								if(relatedModuleName == 'Events') {
-									relatedModuleName = 'Calendar';
-								}
-								var relatedController = thisInstance.getRelatedController(relatedModuleName);
-								relatedController.loadRelatedList();
-							} else {
-								app.event.trigger('post.save.failed', err);
+						if (editViewForm) {
+							var mode = jQuery(editViewForm).find('[name="mode"]').val();
+							//Form should submit only once for multiple clicks also
+							if(typeof editViewForm.data('submit') != "undefined") {
+								return false;
 							}
-					});
-					return false;
+							//CheckBeforeSave
+							else {
+								var module = jQuery(editViewForm).find('[name="module"]').val();
+								//Once the form is submiting add data attribute to that form element
+								editViewForm.data('submit', 'true');
+								e.preventDefault();
+								sp_js_editview_checkBeforeSave(module, editViewForm, mode).then(function () {
+										spFlagCheckBeforeSave = true;
+
+										//on submit form trigger the recordPreSave event
+										var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPresaveEvent);
+										editViewForm.trigger(recordPreSaveEvent, {'value': 'edit'});
+
+										if (recordPreSaveEvent.isDefaultPrevented()) {
+											//If duplicate record validation fails, form should submit again
+											editViewForm.removeData('submit');
+											e.preventDefault();
+											return false;
+										}
+										var progressIndicator = $.progressIndicator({message: app.vtranslate('JS_SAVE')});
+
+
+										var formData = new FormData(form);
+										var postParams = {
+											data: formData,
+											contentType: false,
+											processData: false
+										};
+										app.helper.showProgress();
+										app.request.post(postParams).then(function(err,data){
+											app.helper.hideProgress();
+											if (err === null) {
+												jQuery('.vt-notification').remove();
+												app.helper.hidePageContentOverlay();
+												var relatedModuleName = formData.module;
+												if(relatedModuleName == 'Events') {
+													relatedModuleName = 'Calendar';
+												}
+												var relatedController = thisInstance.getRelatedController(relatedModuleName);
+												relatedController.loadRelatedList();
+											} else {
+												app.event.trigger('post.save.failed', err);
+											}
+										});
+										editViewForm.submit();
+										return false;
+									},
+									function (error) {
+										editViewForm.removeData('submit');
+										return false;
+									});
+							}
+						}
 					}
 				});
 
