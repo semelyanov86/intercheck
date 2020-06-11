@@ -23,7 +23,8 @@ class Vtiger_Phone_UIType extends Vtiger_Base_UIType {
         global $restrictedFieldRoles;
         if (in_array($user->getRole(), $restrictedFieldRoles)) {
             $value = strip_tags($value);
-            return substr($value, 0, 2) . '****' . substr($value, -1, 2);
+//            return substr($value, 0, 2) . '****' . substr($value, -1, 2);
+            return '****';
         } else {
             return $value;
         }

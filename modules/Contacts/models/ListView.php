@@ -16,7 +16,8 @@ class Contacts_ListView_Model extends Vtiger_ListView_Model {
         if ($field->getFieldDataType() == 'email' || $field->getFieldDataType() == 'phone') {
             if (in_array($user->getRole(), $restrictedFieldRoles)) {
                 $value = strip_tags($value);
-                return substr($value, 0, 2) . '****' . substr($value, -1, 2);
+//                return substr($value, 0, 2) . '****' . substr($value, -1, 2);
+                return '****';
             }
         }
         return $value;
