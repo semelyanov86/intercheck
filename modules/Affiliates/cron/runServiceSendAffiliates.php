@@ -34,6 +34,7 @@ function runServiceSendAffiliates() {
                 $headers = array('Content-Type' => 'application/json', 'Authorization' => 'Bearer ' . $platformToken, 'Accept' => 'application/json');
                 $httpClient->setHeaders($headers);
                 $response = $httpClient->doPost(json_encode($params));
+                $log->debug('Affiliates: ' . $response);
                 $result = json_decode($response, true);
                 if ($result) {
                     $previousBulkSaveMode = $VTIGER_BULK_SAVE_MODE;
