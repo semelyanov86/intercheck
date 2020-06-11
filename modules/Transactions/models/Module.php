@@ -18,6 +18,11 @@ class Transactions_Module_Model extends Vtiger_Module_Model {
         return false;
     }
 
+    public function isQuickCreateSupported()
+    {
+        return false;
+    }
+
     public function getModuleIcon() {
         $moduleName = $this->getName();
         $lowerModuleName = strtolower($moduleName);
