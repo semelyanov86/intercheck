@@ -58,7 +58,7 @@
                                                 {foreach item=EMAIL_FIELD  key=EMAIL_VALUE from=$EMAIL_FIELDS}
                                                     <label class="checkbox" style="{if $RECORDS_COUNT > 1}padding-left: 7%;{/if} font-weight:normal">
                                                         <input type="checkbox" class="emailField" name="selectedFields[{$count}]" data-moduleName="{$EMAIL_MODULE}" value='{Vtiger_Functions::jsonEncode(['record'=>$RECORD_ID,'field_value'=>$EMAIL_VALUE,'record_label'=>$RECORD_LABEL,'field_id'=> $EMAIL_FIELD->getId(),'module_id'=>$EMAIL_FIELD->getModule()->getId()])}' {if $EMAIL_FIELD->get('isPreferred')}checked="true"{/if}/>
-                                                        &nbsp;&nbsp;&nbsp;{$EMAIL_VALUE}<span class="muted">&nbsp;-{vtranslate($EMAIL_FIELD->get('label'), $SOURCE_MODULE)}</span>
+                                                        &nbsp;&nbsp;&nbsp;{Emails_Record_Model::getPermissionValue($EMAIL_VALUE, $USER_MODEL)}<span class="muted">&nbsp;-{vtranslate($EMAIL_FIELD->get('label'), $SOURCE_MODULE)}</span>
                                                     </label>
                                                     {counter}
                                                 {/foreach}
