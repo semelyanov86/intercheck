@@ -25,6 +25,10 @@
 							<td class="fieldValue {$WIDTHTYPE}">{$RECORD->get('templatename')}</td>
 						</tr>
 						<tr>
+							<td class="fieldLabel {$WIDTHTYPE}"><label class="muted marginRight10px">{vtranslate('LBL_ASSIGNED_USER', $MODULE_NAME)}</label></td>
+							<td class="fieldValue {$WIDTHTYPE}">{$OWNER_FIELD->getDisplayValue($RECORD->get('user_id'))}</td>
+						</tr>
+						<tr>
 							<td class="fieldLabel {$WIDTHTYPE}"><label class="muted marginRight10px">{vtranslate('Description', $MODULE_NAME)}</label></td>
 							<td class="fieldValue {$WIDTHTYPE}">{nl2br($RECORD->get('description'))}</td>
 						</tr>

@@ -10,8 +10,8 @@
 
 class EmailTemplates_ListView_Model extends Vtiger_ListView_Model {
 
-	private $querySelectColumns = array('templatename, foldername, subject', 'systemtemplate', 'module', 'description');
-	private $listViewColumns = array('templatename', 'subject', 'description', 'module');
+	private $querySelectColumns = array('templatename, foldername, subject', 'systemtemplate', 'module', 'description', 'user_id');
+	private $listViewColumns = array('templatename', 'subject', 'description', 'module', 'user_id');
 
 	public function addColumnToSelectClause($columName) {
 		if (!is_array($columName))
@@ -68,13 +68,22 @@ class EmailTemplates_ListView_Model extends Vtiger_ListView_Model {
 	 */
 	public function getListViewHeaders() {
 		$fieldObjects = array();
-		$listViewHeaders = array('Template Name' => 'templatename', 'Subject' => 'subject', 'Description' => 'description', 'Module Name' => 'module');
+		$listViewHeaders = array('Template Name' => 'templatename', 'Subject' => 'subject', 'Description' => 'description', 'Module Name' => 'module', vtranslate('LBL_ASSIGNED_USER_SELECTED', 'EmailTemplates') => 'user_id');
 		foreach ($listViewHeaders as $key => $fieldName) {
-			$fieldModel = new EmailTemplates_Field_Model();
-			$fieldModel->set('name', $fieldName);
-			$fieldModel->set('label', $key);
-			$fieldModel->set('column', $fieldName);
-			$fieldObjects[] = $fieldModel;
+		    if ($fieldName == 'user_id') {
+		        $fieldModel = new Vtiger_Field_Model();
+                $fieldModel->set('name', $fieldName);
+                $fieldModel->set('label', $key);
+                $fieldModel->set('column', $fieldName);
+                $fieldModel->set('uitype', 53);
+                $fieldModel->set('info_type', 'BAS');
+            } else {
+                $fieldModel = new EmailTemplates_Field_Model();
+                $fieldModel->set('name', $fieldName);
+                $fieldModel->set('label', $key);
+                $fieldModel->set('column', $fieldName);
+            }
+            $fieldObjects[] = $fieldModel;
 		}
 		return $fieldObjects;
 	}
@@ -86,6 +95,7 @@ class EmailTemplates_ListView_Model extends Vtiger_ListView_Model {
 	 */
 
 	public function getListViewEntries($pagingModel) {
+	    $userModel = Users_Record_Model::getCurrentUserModel();
 		$db = PearDatabase::getInstance();
 		$startIndex = $pagingModel->getStartIndex();
 		$pageLimit = $pagingModel->getPageLimit();
@@ -108,6 +118,12 @@ class EmailTemplates_ListView_Model extends Vtiger_ListView_Model {
 		//module should be enabled or module should be empty then allow
 		$moduleActiveCheck = '(vtiger_tab.presence IN (0,2) OR vtiger_emailtemplates.module IS NULL OR vtiger_emailtemplates.module = "")';
 		$listQuery .= $whereQuery. $moduleActiveCheck;
+		if (!$userModel->isAdminUser()) {
+		    $groupsArr = array_keys($userModel->getAccessibleGroups());
+            $groupsArr[] = $userModel->getId();
+            $groupsFilter = implode(',', $groupsArr);
+            $listQuery .= " AND vtiger_emailtemplates.user_id IN ($groupsFilter) ";
+        }
 		//To retrieve only selected module records
 		if ($sourceModule) {
 			$listQuery .= " AND vtiger_emailtemplates.module = ?";
@@ -124,7 +140,7 @@ class EmailTemplates_ListView_Model extends Vtiger_ListView_Model {
 		$params[] = $pageLimit + 1;
 		$result = $db->pquery($listQuery, $params);
 		$num_rows = $db->num_rows($result);
-
+        $fieldOwnerModel = new Vtiger_Owner_UIType();
 		$listViewRecordModels = array();
 		for ($i = 0; $i < $num_rows; $i++) {
 			$recordModel = new EmailTemplates_Record_Model();
@@ -138,7 +154,11 @@ class EmailTemplates_ListView_Model extends Vtiger_ListView_Model {
 				if(in_array($key,$this->listViewColumns)){
 					$value = textlength_check($value);
 				}
-				$row[$key] = $value;
+				if ($key == 'user_id' || $key == '8') {
+				    $row[$key] = $fieldOwnerModel->getDisplayValue($value);
+                } else {
+                    $row[$key] = $value;
+                }
 			}
 			$listViewRecordModels[$row['templateid']] = $recordModel->setData($row);
 		}

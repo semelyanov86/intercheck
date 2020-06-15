@@ -41,21 +41,21 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 		}
 		if(empty($templateid)){
 			$templateid = $db->getUniqueID('vtiger_emailtemplates');
-			$sql = "INSERT INTO vtiger_emailtemplates(templatename, subject, description, module, body, deleted, systemtemplate, templateid) VALUES (?,?,?,?,?,?,?,?)";
+			$sql = "INSERT INTO vtiger_emailtemplates(templatename, subject, description, module, body, deleted, systemtemplate, user_id, templateid) VALUES (?,?,?,?,?,?,?,?)";
 		}else{
 			if($systemtemplate) {
-				$sql = "UPDATE vtiger_emailtemplates SET templatename=?, description=?, module=?, body=?, deleted=?, systemtemplate=? WHERE templateid = ?";
+				$sql = "UPDATE vtiger_emailtemplates SET templatename=?, description=?, module=?, body=?, deleted=?, systemtemplate=?, user_id=? WHERE templateid = ?";
 			} else {
-				$sql = "UPDATE vtiger_emailtemplates SET templatename=?, subject=?, description=?, module=?, body=?, deleted=?, systemtemplate=? WHERE templateid = ?";
+				$sql = "UPDATE vtiger_emailtemplates SET templatename=?, subject=?, description=?, module=?, body=?, deleted=?, systemtemplate=?, user_id=? WHERE templateid = ?";
 			}
 		}
 		if(!empty($recordId) && $systemtemplate) {
 			$params = array(decode_html($recordModel->get('templatename')), decode_html($recordModel->get('description')),
-				$recordModel->get('module'),$recordModel->get('body'), 0, $systemtemplate, $templateid);
+				$recordModel->get('module'),$recordModel->get('body'), 0, $systemtemplate, $recordModel->get('user_id'), $templateid);
 		} else {
 			$params = array(decode_html($recordModel->get('templatename')), decode_html($recordModel->get('subject')),
 				decode_html($recordModel->get('description')), $recordModel->get('module'),$recordModel->get('body'), 0, 
-				$systemtemplate, $templateid);
+				$systemtemplate, $recordModel->get('user_id'), $templateid);
 		}
 		$db->pquery($sql, $params);
 		return $recordModel->setId($templateid);

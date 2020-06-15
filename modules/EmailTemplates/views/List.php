@@ -172,7 +172,7 @@ class EmailTemplates_List_View extends Vtiger_Index_View {
 		if(empty($viewType)){
 			$viewType = 'list';
 		}
-
+        $listViewModel->addColumnToSelectClause('user_id');
 		$listViewModel->set('viewType',$viewType);
 
 		if (!$this->listViewHeaders) {
