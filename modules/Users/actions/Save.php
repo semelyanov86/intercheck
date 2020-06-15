@@ -121,6 +121,13 @@ class Users_Save_Action extends Vtiger_Save_Action {
 		$result = Vtiger_Util_Helper::transformUploadedFiles($_FILES, true);
 		$_FILES = $result['imagename'];
         $currentUser = Users_Record_Model::getCurrentUserModel();
+        if ($request->get('is_admin') && $currentUser->getId() != '1') {
+            throw new AppException('Only Super Admin can create new admin users');
+        }
+        if ($request->get('roleid') == 'H2' && $currentUser->getId() != '1') {
+            throw new AppException('Only Super Admin can create users with admin role');
+        }
+
 		$recordId = $request->get('record');
 		if (!$recordId) {
 			$module = $request->getModule();
