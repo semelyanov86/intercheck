@@ -1,0 +1,520 @@
+<?xml version='1.0'?>
+<schema>
+	<tables>
+		<table>
+			<name>its4you_reports4you</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you` (
+                  `reports4youid` int(11) NOT NULL DEFAULT '0',
+                  `reports4youname` varchar(255) DEFAULT NULL,
+                  `description` text NOT NULL,
+                  `folderid` int(11) NOT NULL,
+                  `reporttype` varchar(255) NOT NULL DEFAULT 'tabular',
+                  `deleted` int(1) NOT NULL DEFAULT '0',
+                  `columns_limit` int(11) NOT NULL DEFAULT '0',
+                  `summaries_limit` int(11) NOT NULL DEFAULT '0',
+                  PRIMARY KEY (`reports4youid`),
+                  KEY `folderid` (`folderid`),
+                  KEY `reporttype` (`reporttype`),
+                  KEY `deleted` (`deleted`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_cc_columns</name>
+			<sql><![CDATA[
+              
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_cc_columns` (
+                  `reportid` int(19) NOT NULL,
+                  `columnindex` int(11) NOT NULL DEFAULT '0',
+                  `columnname` varchar(250) DEFAULT '',
+                  PRIMARY KEY (`reportid`,`columnindex`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+              
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_charts</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_charts` (
+                      `reports4youid` int(11) NOT NULL,
+                      `charttype` varchar(255) NOT NULL,
+                      `dataseries` varchar(255) NOT NULL,
+                      `charttitle` text NOT NULL,
+                      `chart_seq` int(11) NOT NULL,
+                      `x_group` varchar(255) NOT NULL,
+                      `chart_position` VARCHAR(10) NOT NULL DEFAULT 'bottom',
+                      `collapse_data_block` INT(1) NOT NULL DEFAULT '0'
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_customsql</name>
+			<sql><![CDATA[
+                
+                    CREATE TABLE IF NOT EXISTS `its4you_reports4you_customsql` (
+                      `reports4youid` int(11) NOT NULL,
+                      `custom_sql` text NOT NULL,
+                      PRIMARY KEY (`reports4youid`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+                    
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_custom_calculations</name>
+			<sql><![CDATA[
+              
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_custom_calculations` (
+                  `reportid` int(19) NOT NULL,
+                  `calculationid` int(11) NOT NULL DEFAULT '0',
+                  `calculation_label` varchar(250) DEFAULT '',
+                  `calculation_expression` text DEFAULT '',
+                  `calculation_totals` varchar(250) DEFAULT '',
+                  PRIMARY KEY (`reportid`,`calculationid`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+              
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_datefilter</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_datefilter` (
+                  `datefilterid` int(19) NOT NULL,
+                  `datecolumnname` varchar(250) DEFAULT '',
+                  `datefilter` varchar(250) DEFAULT '',
+                  `startdate` date DEFAULT NULL,
+                  `enddate` date DEFAULT NULL,
+                  PRIMARY KEY (`datefilterid`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_folder</name>
+			<sql><![CDATA[
+            CREATE TABLE IF NOT EXISTS `its4you_reports4you_folder` (
+                  `folderid` int(11) NOT NULL AUTO_INCREMENT,
+                  `foldername` varchar(255) NOT NULL,
+                  `description` varchar(250) DEFAULT '',
+                  `state` varchar(50) DEFAULT 'SAVED',
+                  `ownerid` int(11) NOT NULL,
+                  PRIMARY KEY (`folderid`)
+                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_generatefor</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_generatefor` (
+                  `reportid` int(11) NOT NULL,
+                  `user_column_str` varchar(255) DEFAULT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_key_metrics</name>
+			<sql><![CDATA[
+              
+              CREATE TABLE IF NOT EXISTS `its4you_reports4you_key_metrics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `smcreatorid` int(19) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  `deleted` int(1) NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+              
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_key_metrics_rows</name>
+			<sql><![CDATA[
+              
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_key_metrics_rows` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `km_id` int(11) NOT NULL,
+  `smcreatorid` int(19) NOT NULL,
+  `label` varchar(255) NOT NULL,
+  `reportid` int(11) NOT NULL,
+  `metrics_type` varchar(50) NOT NULL DEFAULT 'report',
+  `column_str` varchar(255) NOT NULL,
+  `sequence` int(11) DEFAULT NULL,
+  `deleted` int(1) NOT NULL DEFAULT '0',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+              
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_labels</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_labels` (
+                  `reportid` int(19) NOT NULL,
+                  `type` varchar(50) NOT NULL DEFAULT 'SC',
+                  `columnname` text NOT NULL,
+                  `columnlabel` text NOT NULL,
+                  KEY `type` (`type`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_modules</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_modules` (
+                          `reportmodulesid` int(19) NOT NULL,
+                          `primarymodule` varchar(50) NOT NULL DEFAULT '',
+                          `secondarymodules` varchar(250) DEFAULT '',
+                          PRIMARY KEY (`reportmodulesid`),
+                          KEY `primarymodule` (`primarymodule`),
+                          KEY `reportmodulesid` (`reportmodulesid`,`primarymodule`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_profilespermissions</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_profilespermissions` (
+                          `profileid` int(11) NOT NULL,
+                          `operation` int(11) NOT NULL,
+                          `permissions` int(1) NOT NULL,
+                          PRIMARY KEY (`profileid`,`operation`),
+                          KEY `operation` (`operation`),
+                          KEY `permissions` (`permissions`),
+                          KEY `profileid` (`profileid`,`operation`,`permissions`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_relcriteria</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_relcriteria` (
+                          `queryid` int(19) NOT NULL,
+                          `columnindex` int(11) NOT NULL,
+                          `columnname` varchar(250) DEFAULT '',
+                          `comparator` varchar(10) DEFAULT '',
+                          `value` TEXT DEFAULT '',
+                          `valuehdn` VARCHAR( 255 ) NULL DEFAULT NULL,
+                          `groupid` int(11) DEFAULT '1',
+                          `column_condition` varchar(256) DEFAULT 'and',
+                          PRIMARY KEY (`queryid`,`columnindex`),
+                          KEY `relcriteria_queryid_idx` (`queryid`),
+                          KEY `groupid` (`groupid`),
+                          KEY `columnindex` (`columnindex`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_relcriteria_grouping</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_relcriteria_grouping` (
+                          `groupid` int(11) NOT NULL,
+                          `queryid` int(19) NOT NULL,
+                          `group_condition` varchar(256) DEFAULT NULL,
+                          `condition_expression` text,
+                          PRIMARY KEY (`groupid`,`queryid`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_relcriteria_summaries</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_relcriteria_summaries` (
+                          `reportid` int(19) NOT NULL,
+                          `columnindex` int(11) NOT NULL,
+                          `columnname` varchar(250) DEFAULT '',
+                          `comparator` varchar(10) DEFAULT '',
+                          `value` varchar(200) DEFAULT '',
+                          `groupid` int(11) DEFAULT '1',
+                          `column_condition` varchar(256) DEFAULT 'and',
+                          PRIMARY KEY (`reportid`,`columnindex`),
+                          KEY `relcriteria_reportid_idx` (`reportid`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_reportfilters</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_reportfilters` (
+                      `filterid` int(19) NOT NULL,
+                      `name` varchar(200) NOT NULL,
+                      PRIMARY KEY (`filterid`),
+                      KEY `filterid` (`filterid`,`name`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_scheduled_reports</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_scheduled_reports` (
+                      `reportid` int(11) NOT NULL,
+                      `is_active` INT( 1 ) NOT NULL DEFAULT '0',
+                      `recipients` text,
+                      `schedule` text,
+                      `format` text,
+                      `next_trigger_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                      `generate_subject` varchar(255) DEFAULT NULL,
+                      `generate_text` text,
+                      `generate_other` text,
+                      `schedule_all_records` INT( 1 ) NOT NULL DEFAULT '0',                      
+                      PRIMARY KEY (`reportid`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_selectcolumn</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_selectcolumn` (
+                      `queryid` int(19) NOT NULL,
+                      `columnindex` int(11) NOT NULL DEFAULT '0',
+                      `columnname` varchar(250) DEFAULT '',
+                      PRIMARY KEY (`queryid`,`columnindex`),
+                      KEY `selectcolumn_queryid_idx` (`queryid`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_selectqfcolumn</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_selectqfcolumn` (
+                  `queryid` int(19) NOT NULL,
+                  `columnindex` int(11) NOT NULL DEFAULT '0',
+                  `columnname` varchar(250) DEFAULT '',
+                  PRIMARY KEY (`queryid`,`columnindex`),
+                  KEY `selectqfcolumn_queryid_idx` (`queryid`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_selectquery</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_selectquery` (
+                  `queryid` int(19) NOT NULL,
+                  `startindex` int(19) DEFAULT '0',
+                  `numofobjects` int(19) DEFAULT '0',
+                  PRIMARY KEY (`queryid`),
+                  KEY `queryid` (`queryid`,`startindex`,`numofobjects`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_selectquery_seq</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_selectquery_seq` (
+                      `id` int(11) NOT NULL
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_settings</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_settings` (
+                      `reportid` int(11) NOT NULL,
+                      `owner` int(11) NOT NULL DEFAULT '1',
+                      `sharingtype` char(7) NOT NULL DEFAULT 'public',
+                      PRIMARY KEY (`reportid`),
+                      KEY `owner` (`owner`),
+                      KEY `sharingtype` (`sharingtype`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_sharing</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_sharing` (
+                          `reports4youid` int(11) NOT NULL,
+                          `shareid` varchar(10) NOT NULL,
+                          `setype` varchar(200) NOT NULL,
+                          PRIMARY KEY (`reports4youid`,`shareid`,`setype`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_sortcol</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_sortcol` (
+                          `sortcolid` int(19) NOT NULL,
+                          `sortcolsequence` int(11) NOT NULL DEFAULT '0',
+                          `reportid` int(19) NOT NULL,
+                          `columnname` varchar(250) DEFAULT '',
+                          `sortorder` varchar(250) DEFAULT 'Asc',
+                          `timeline_type` varchar(255) DEFAULT 'rows',
+                          `timeline_columnstr` varchar(255) DEFAULT NULL,
+                          `timeline_columnfreq` varchar(255) DEFAULT NULL,
+                          PRIMARY KEY (`sortcolid`,`reportid`),
+                          KEY `fk_1_vtiger_reportsortcol` (`reportid`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_summaries</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_summaries` (
+                      `reportsummaryid` int(19) NOT NULL,
+                      `summarytype` int(19) NOT NULL,
+                      `columnname` varchar(250) NOT NULL DEFAULT '',
+                      PRIMARY KEY (`reportsummaryid`,`summarytype`,`columnname`),
+                      KEY `summarytype` (`summarytype`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_summaries_orderby</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_summaries_orderby` (
+                          `reportid` int(19) NOT NULL,
+                          `columnindex` int(19) NOT NULL,
+                          `summaries_orderby` varchar(250) NOT NULL DEFAULT '',
+                          `summaries_orderby_type` varchar(250) NOT NULL DEFAULT '',
+                          PRIMARY KEY (`reportid`,`columnindex`,`summaries_orderby`,`summaries_orderby_type`),
+                          KEY `columnindex` (`columnindex`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_summary</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_summary` (
+                          `reportsummaryid` int(19) NOT NULL,
+                          `summarytype` int(19) NOT NULL,
+                          `columnname` varchar(250) NOT NULL DEFAULT '',
+                          PRIMARY KEY (`reportsummaryid`,`summarytype`,`columnname`),
+                          KEY `reportsummary_reportsummaryid_idx` (`reportsummaryid`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_updates</name>
+			<sql><![CDATA[
+                
+                    CREATE TABLE IF NOT EXISTS `its4you_reports4you_updates` (
+                      `id` int(11) NOT NULL AUTO_INCREMENT,
+                      `name` varchar(255) NOT NULL,
+                      `status` int(1) NOT NULL DEFAULT '0',
+                      PRIMARY KEY (`id`),
+                      UNIQUE KEY `id` (`id`),
+                      UNIQUE KEY `name` (`name`)
+                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+                    
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_updates</name>
+			<sql><![CDATA[
+              INSERT INTO its4you_reports4you_updates (name,status) VALUES ('recalculate',0);
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_userstatus</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_userstatus` (
+                          `reportid` int(11) NOT NULL,
+                          `userid` int(11) NOT NULL,
+                          `is_active` tinyint(1) NOT NULL,
+                          `is_default` tinyint(1) NOT NULL,
+                          `sequence` int(6) NOT NULL DEFAULT '1',
+                          PRIMARY KEY (`reportid`,`userid`),
+                          KEY `is_active` (`is_active`),
+                          KEY `is_default` (`is_default`),
+                          KEY `sequence` (`sequence`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_version</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_version` (
+                          `version` varchar(30) NOT NULL,
+                          `license` varchar(255) NOT NULL,
+                          UNIQUE KEY `version` (`version`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_widget_search</name>
+			<sql><![CDATA[
+              
+                CREATE TABLE IF NOT EXISTS `its4you_reports4you_widget_search` (
+  `reportid` int(11) NOT NULL,
+  `primary_search` varchar(255) DEFAULT NULL,
+  `allow_in_modules` text,
+  PRIMARY KEY (`reportid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+              
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_reportfilters</name>
+			<sql><![CDATA[
+                INSERT INTO `its4you_reports4you_reportfilters` (`filterid`, `name`) VALUES (1, 'Private'), (2, 'Public'), (3, 'Shared');
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_folder</name>
+			<sql><![CDATA[
+                INSERT INTO `its4you_reports4you_folder` (`folderid`, `foldername`) VALUES (1, 'Default'),(2, 'Leads'),(3, 'Organization'),(4, 'Products and Services'),
+                (5, 'Quotes'),(6, 'Invoices'),(7, 'Tickets'),(8, 'Calendar'),(9, 'Projects'),(10, 'Campaigns'),(11, 'Opportunities'),(12, 'Sales Order'),(13, 'Vendors');
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_selectquery</name>
+			<sql><![CDATA[
+                DELETE FROM its4you_reports4you_selectquery_seq;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_selectquery</name>
+			<sql><![CDATA[
+                SELECT @max_reportid:=(max(reports4youid)+1) AS reports4youid FROM `its4you_reports4you`;
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_selectquery</name>
+			<sql><![CDATA[
+                INSERT INTO its4you_reports4you_selectquery_seq (id) VALUES (@max_reportid);
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_error_log</name>
+			<sql><![CDATA[
+              
+                 CREATE TABLE IF NOT EXISTS its4you_error_log (
+                      `logid` int(11) NOT NULL AUTO_INCREMENT,
+                      `modulename` varchar(255) NOT NULL,
+                      `userid` int(19) NOT NULL DEFAULT '0',
+                      `error_log_time` datetime NOT NULL,
+                      `log_text` longtext,
+                      PRIMARY KEY (`logid`),
+                      UNIQUE `logid` ( `logid` , `error_log_time` ) 
+                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+              
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports4you_osm_maps</name>
+			<sql><![CDATA[
+                
+                 CREATE TABLE IF NOT EXISTS `its4you_reports4you_osm_maps` (
+                    `reportid` int(11) NOT NULL,
+                    `maps_json` longtext,
+                    PRIMARY KEY (`reportid`),
+                    UNIQUE KEY `reportid` (`reportid`)
+                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+                
+            ]]></sql>
+		</table>
+		<table>
+			<name>its4you_reports_geolocations</name>
+			<sql><![CDATA[
+                CREATE TABLE IF NOT EXISTS `its4you_reports_geolocations` (
+                      `id` int(11) NOT NULL AUTO_INCREMENT,
+                      `location_text` varchar(255) NOT NULL,
+                      `latitude` varchar(10) NOT NULL DEFAULT '',
+                      `longitude` varchar(10) NOT NULL DEFAULT '',
+                      PRIMARY KEY (`id`),
+                      UNIQUE KEY `id` (`id`),
+                      UNIQUE KEY `location_text` (`location_text`)
+                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+                    
+            ]]></sql>
+		</table>
+	</tables>
+</schema>

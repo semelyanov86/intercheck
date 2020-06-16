@@ -1,0 +1,359 @@
+/*+********************************************************************************
+ * The content of this file is subject to the Reports 4 You license.
+ * ("License"); You may not use this file except in compliance with the License
+ * The Initial Developer of the Original Code is IT-Solutions4You s.r.o.
+ * Portions created by IT-Solutions4You s.r.o. are Copyright(C) IT-Solutions4You s.r.o.
+ * All Rights Reserved.
+ ********************************************************************************/
+
+/* For Report HTML Generation*/
+
+.rpt4youCellLabel {
+    background-color:#f6f6f6;
+    padding-right:10px;
+    /*border-right: 1px solid #DDDDDD;
+    border-bottom:1px solid #fff;*/
+
+    color:#737373;
+    font-weight: bold;
+    white-space:nowrap;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    /* ITS4YOU-CR SlOl 28. 7. 2016 10:51:38 MPDF 6.0 DESIGN UPDATE */
+    border:1px solid;
+}
+
+.rpt4youTableContent {
+    border-collapse: collapse;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    border:1px solid #DDDDDD;
+    border-color: #DDDDDD;
+    max-width: 1200px;
+    /*border: 1px solid blue;*/
+}
+
+.rpt4youTableContent td{
+    border-color: #DDDDDD;
+}
+
+#rpt4youTable .table {
+    width:auto;
+}
+
+#rpt4youTotals .table {
+    width:auto;
+}
+
+.rpt4youTable {
+    border-collapse: collapse;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    border:1px solid #DDDDDD;
+    border-color: #DDDDDD;
+}
+
+.rpt4youTable td{
+    border-color: #DDDDDD;
+}
+
+.rpt4youTableGraph {
+    border-collapse: collapse;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    border:0px;
+}
+
+.rpt4youTableDetail {
+    border: 0px;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+}
+
+.rpt4youTableDetailPdf {
+    width: 100%;
+    border: 0px;
+    padding:0px;
+    margin:0px;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+}
+
+.rpt4youTitle, .rpt4youHead, .rpt4youData, .rpt4youGrpHead, rpt4youGrpHead_1, rpt4youGrpHead_2 {
+    font-family: Verdana, Arial, Helvetica, Sans-serif;
+    font-size: 11px;
+    text-align:left;
+    font-weight: normal;
+    height: 20px;
+    padding: 4px;
+    background: #DDDDDD;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+}
+
+.rpt4youGrp1Total, .rpt4youGrp2Total, .rpt4youTotal {
+    font-family: Verdana, Arial, Helvetica, Sans-serif;
+    font-size: 11px;
+    text-align:center;
+    font-weight: normal;
+    background: #FFF;
+    height: 20px;
+    padding: 4px;
+}
+
+.rpt4youGrpHead {
+    background: #FFF;
+    font-weight: normal;
+    /* ITS4YOU-CR SlOl 28. 7. 2016 10:51:38 MPDF 6.0 DESIGN UPDATE */
+    border:1px solid;
+}
+
+.rpt4youGrpHead_1 {
+    padding-left: 15px;
+}
+
+.rpt4youGrpHead_2 {
+    padding-left: 30px;
+}
+
+.rpt4youGrpHeadInfo {
+    background: #FFF;
+    border: 0px;
+    font-weight: normal;
+    margin:0px 0px 0px 0px;
+    font-size: 11px;
+    font-family: Verdana, Arial, Helvetica, Sans-serif;
+    text-align:left;
+    height: 20px;
+    padding: 4px;
+}
+
+.rpt4youTableText {
+    border-collapse: collapse;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    border:none;
+}
+
+.rpt4youGrpHeadInfoText {
+    /*background: #FFF;*/
+    font-weight:bold;
+	margin:0px 0px 0px 0px;
+	font-size:22px;
+	font-family: Verdana, Arial, Helvetica, Sans-serif;
+    text-align:center;
+    height: 20px;
+    padding-bottom:10px;
+	width:100%;
+}
+
+/* CHANGE BACKGROUND IN GenerateObj Class */
+
+.rpt4youGrpHeadGroupTotals {
+    font-family: Verdana, Arial, Helvetica, Sans-serif;
+    text-align:left;
+    font-weight:bold;
+    font-size: 13px;
+    height: 20px;
+    padding: 4px;
+    background-color: #CCCCCC;
+    /* ITS4YOU-CR SlOl 28. 7. 2016 10:51:38 MPDF 6.0 DESIGN UPDATE */
+    border:1px solid;
+}
+
+.rpt4youData {
+    background: #FFF;
+    font-weight: normal;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+}
+
+.rpt4youEmptyGrp {
+    background: #FFF;
+    /*border-right: 1px solid #DDDDDD;*/
+
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+}
+
+.statechange {
+    position:absolute;
+    visibility:hidden;
+    left:10px;
+    top:20px;
+    width:300px;
+    border:3px solid #CCCCCC;
+    background-color:#FFFFFF;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+}
+
+#PopupLay{
+    position:absolute;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:11px;
+    text-align:left;
+    width:500px;
+    border:3px solid #CCCCCC;
+    background-color:#FFFFFF;
+    padding:5px;
+    display:none;
+    left:100px;
+    top:100px;
+}
+
+#folderLay{
+    width:175px;
+    background-color:#CCCCCC;
+    border:1px solid #DDDDDD;
+    padding-top:5px;
+    position:absolute;
+    display:none;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+}
+
+/* EDIT/CREATE MODE BUTTONS STYLE START /* ITS4YOU-CR SlOl | */
+
+.classBtnR4You {
+        -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        box-shadow:inset 0px 1px 0px 0px #ffffff;
+        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+        background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+        background-color:#ededed;
+        -webkit-border-top-left-radius:10px;
+        -moz-border-radius-topleft:10px;
+        border-top-left-radius:10px;
+        -webkit-border-top-right-radius:10px;
+        -moz-border-radius-topright:10px;
+        border-top-right-radius:10px;
+        -webkit-border-bottom-right-radius:10px;
+        -moz-border-radius-bottomright:10px;
+        border-bottom-right-radius:10px;
+        -webkit-border-bottom-left-radius:10px;
+        -moz-border-radius-bottomleft:10px;
+        border-bottom-left-radius:10px;
+        text-indent:0;
+        border:2px solid #dcdcdc;
+        display:inline-block;
+        color:#777777;
+        font-family:Arial;
+        font-size:18px;
+        font-weight:bold;
+        font-style:normal;
+        height:34px;
+        line-height:28px;
+        width:79px;
+        text-decoration:none;
+        text-align:center;
+        text-shadow:1px 1px 0px #ffffff;
+}
+.classBtnR4You:hover {
+        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+        background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+        background-color:#dfdfdf;
+}.classBtnR4You:active {
+        position:relative;
+        top:1px;
+}
+
+.addButtonR4You {
+        -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        box-shadow:inset 0px 1px 0px 0px #ffffff;
+        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+        background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+        background-color:#ededed;
+        -webkit-border-top-left-radius:10px;
+        -moz-border-radius-topleft:10px;
+        border-top-left-radius:10px;
+        -webkit-border-top-right-radius:10px;
+        -moz-border-radius-topright:10px;
+        border-top-right-radius:10px;
+        -webkit-border-bottom-right-radius:10px;
+        -moz-border-radius-bottomright:10px;
+        border-bottom-right-radius:10px;
+        -webkit-border-bottom-left-radius:10px;
+        -moz-border-radius-bottomleft:10px;
+        border-bottom-left-radius:10px;
+        text-indent:0;
+        border:2px solid #dcdcdc;
+        display:inline-block;
+        color:#777777;
+        font-family:Arial;
+        font-size:18px;
+        font-weight:bold;
+        font-style:normal;
+        height:21px;
+        line-height:21px;
+        width:35px;
+        text-decoration:none;
+        text-align:center;
+        text-shadow:1px 1px 0px #ffffff;
+}
+.addButtonR4You:hover {
+        text-decoration: none;
+        background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+        background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+        background-color:#dfdfdf;
+}
+.addButtonR4You:active {
+        position:relative;
+        top:1px;
+
+
+}
+/* EDIT/CREATE MODE BUTTONS STYLE END /* ITS4YOU-END */
+.txtBoxR4You{
+    min-width:20%;
+    max-width:30%;
+    border:1px solid #666666;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:11px;
+}
+.txtBoxR4YouG{
+    width:100%;
+    border:1px solid #666666;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:11px;
+}
+.genHeaderGray{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 16px;
+    color: #888888;
+    font-weight:bold;
+}
+.genInfoText{
+    font-size: 12px;
+    line-height: 14px;
+}
+
+@media print {
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+    
+    .showPanelBg {
+        background:none;
+    }
+    
+    .settingsSelectedUI {
+        display: none !important;
+    }
+
+    a[href]:after {
+        display: none;
+        visibility: hidden;
+    }
+}
+
+.limitsAreaInfoColored {
+	color: orange;
+}
