@@ -10,12 +10,12 @@
 
 class Reports_ExportReport_View extends Vtiger_View_Controller {
 
-	function __construct() {
-		parent::__construct();
-		$this->exposeMethod('GetPrintReport');
-		$this->exposeMethod('GetXLS');
-		$this->exposeMethod('GetCSV');
-	}
+    function __construct() {
+        parent::__construct();
+        $this->exposeMethod('GetPrintReport');
+        $this->exposeMethod('GetXLS');
+        $this->exposeMethod('GetCSV');
+    }
 
 	public function requiresPermission(\Vtiger_Request $request) {
 		$permissions = parent::requiresPermission($request);
@@ -23,64 +23,97 @@ class Reports_ExportReport_View extends Vtiger_View_Controller {
 		return $permissions;
 	}
 
-	function preProcess(Vtiger_Request $request) {
-		return false;
-	}
+    function preProcess(Vtiger_Request $request) {
+        return false;
+    }
 
-	function postProcess(Vtiger_Request $request) {
-		return false;
-	}
+    function postProcess(Vtiger_Request $request) {
+        return false;
+    }
 
-	function process(Vtiger_request $request) {
-		$mode = $request->getMode();
-		if(!empty($mode)) {
-			$this->invokeExposedMethod($mode, $request);
-		}
-	}
+    function process(Vtiger_request $request) {
+        $mode = $request->getMode();
+        if(!empty($mode)) {
+            $this->invokeExposedMethod($mode, $request);
+        }
+    }
 
-	/**
-	 * Function exports the report in a Excel sheet
-	 * @param Vtiger_Request $request
-	 */
-	function GetXLS(Vtiger_Request $request) {
+    /**
+     * Function exports the report in a Excel sheet
+     * @param Vtiger_Request $request
+     */
+    function GetXLS(Vtiger_Request $request) {
+        $recordId = $request->get('record');
+        $reportModel = Reports_Record_Model::getInstanceById($recordId);
+        //SalesPlatform.ru begin #4177
+        if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+            $customReport = AbstractCustomReportModel::getInstance($reportModel);
+            $viewTypeDetails = new ViewTypeDetails($request->get('displayType'),
+                $request->get('groupBy'),
+                $request->get('agregateBy')
+            );
+            $viewTypeDetails->setCustomControlData($request->get('customControls', array()));
+            $customReport->setViewTypeDetails($viewTypeDetails);
+        }
+        //SalesPlatform.ru end #4177
+        $reportModel->set('advancedFilter', $request->get('advanced_filter'));
+        $reportModel->getReportXLS($request->get('source'));
+    }
+
+    /**
+     * Function exports report in a CSV file
+     * @param Vtiger_Request $request
+     */
+    function GetCSV(Vtiger_Request $request) {
+        $recordId = $request->get('record');
+        $reportModel = Reports_Record_Model::getInstanceById($recordId);
+        //SalesPlatform.ru begin #4177
+        if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+            $customReport = AbstractCustomReportModel::getInstance($reportModel);
+            $viewTypeDetails = new ViewTypeDetails($request->get('displayType'),
+                $request->get('groupBy'),
+                $request->get('agregateBy')
+            );
+            $viewTypeDetails->setCustomControlData($request->get('customControls', array()));
+            $customReport->setViewTypeDetails($viewTypeDetails);
+        }
+        //SalesPlatform.ru end #4177
+        $reportModel->set('advancedFilter', $request->get('advanced_filter'));
+        $reportModel->getReportCSV($request->get('source'));
+    }
+
+    /**
+     * Function displays the report in printable format
+     * @param Vtiger_Request $request
+     */
+    function GetPrintReport(Vtiger_Request $request) {
+        $viewer = $this->getViewer($request);
+        $moduleName = $request->getModule();
+
 		$recordId = $request->get('record');
 		$reportModel = Reports_Record_Model::getInstanceById($recordId);
         $this->checkReportModulePermission($request);
         $reportModel->set('advancedFilter', $request->get('advanced_filter'));
-		$reportModel->getReportXLS($request->get('source'));
-	}
 
-	/**
-	 * Function exports report in a CSV file
-	 * @param Vtiger_Request $request
-	 */
-	function GetCSV(Vtiger_Request $request) {
-		$recordId = $request->get('record');
-		$reportModel = Reports_Record_Model::getInstanceById($recordId);
-        $this->checkReportModulePermission($request);
-        $reportModel->set('advancedFilter', $request->get('advanced_filter'));
-		$reportModel->getReportCSV($request->get('source'));
-	}
+        //SalesPlatform.ru begin #4395
+        if(AbstractCustomReportModel::isCustomReport($reportModel)) {
+            $customReport = AbstractCustomReportModel::getInstance($reportModel);
+            $viewTypeDetails = new ViewTypeDetails($request->get('displayType'),
+                $request->get('groupBy'),
+                $request->get('agregateBy')
+            );
+            $viewTypeDetails->setCustomControlData($request->get('customControls', array()));
+            $customReport->setViewTypeDetails($viewTypeDetails);
+        }
+        //SalesPlatform.ru end #4395
 
-	/**
-	 * Function displays the report in printable format
-	 * @param Vtiger_Request $request
-	 */
-	function GetPrintReport(Vtiger_Request $request) {
-		$viewer = $this->getViewer($request);
-		$moduleName = $request->getModule();
+        $printData = $reportModel->getReportPrint();
 
-		$recordId = $request->get('record');
-		$reportModel = Reports_Record_Model::getInstanceById($recordId);
-        $this->checkReportModulePermission($request);
-        $reportModel->set('advancedFilter', $request->get('advanced_filter'));
-		$printData = $reportModel->getReportPrint();
-
-		$viewer->assign('REPORT_NAME', $reportModel->getName());
-		$viewer->assign('PRINT_DATA', $printData['data'][0]);
-		$viewer->assign('TOTAL', $printData['total']);
-		$viewer->assign('MODULE', $moduleName);
-		$viewer->assign('ROW', $printData['data'][1]);
+        $viewer->assign('REPORT_NAME', $reportModel->getName());
+        $viewer->assign('PRINT_DATA', $printData['data'][0]);
+        $viewer->assign('TOTAL', $printData['total']);
+        $viewer->assign('MODULE', $moduleName);
+        $viewer->assign('ROW', $printData['data'][1]);
 
 		$viewer->view('PrintReport.tpl', $moduleName);
 	}

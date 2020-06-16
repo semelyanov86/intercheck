@@ -228,129 +228,137 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 		$viewer->view('step2.tpl', $moduleName);
 	}
 
-	function step3(Vtiger_Request $request) {
-		$viewer = $this->getViewer($request);
-		$moduleName = $request->getModule();
-		$record = $request->get('record');
+    function step3(Vtiger_Request $request) {
+        $viewer = $this->getViewer($request);
+        $moduleName = $request->getModule();
+        $record = $request->get('record');
 
-		$reportModel = Reports_Record_Model::getCleanInstance($record);
-		if (!empty($record)) {
-			$viewer->assign('SELECTED_STANDARD_FILTER_FIELDS', $reportModel->getSelectedStandardFilter());
-			$viewer->assign('SELECTED_ADVANCED_FILTER_FIELDS', $reportModel->transformToNewAdvancedFilter());
-		}
-		$data = $request->getAll();
-		foreach ($data as $name => $value) {
-			if($name == 'schdayoftheweek' || $name == 'schdayofthemonth' || $name == 'schannualdates' || $name == 'recipients' || $name == 'members') {
-				$value = Zend_Json::decode($value);
-				if(!is_array($value)) {	// need to save these as json data
-					$value = array($value);
-				}
-			}
-			$reportModel->set($name, $value);
-		}
-		$primaryModule = $request->get('primary_module');
-		$secondaryModules = $request->get('secondary_modules');
-		$reportModel->setPrimaryModule($primaryModule);
-		if(!empty($secondaryModules)){
-			$secondaryModules = implode(':', $secondaryModules);
-			$reportModel->setSecondaryModule($secondaryModules);
+        $reportModel = Reports_Record_Model::getCleanInstance($record);
+        //SalesPlatform.ru begin
+        if (!empty($record) && $reportModel->getPrimaryModule() == $request->get('primary_module')) {
+            //if (!empty($record)) {
+            //SalesPlatform.ru end
+            $viewer->assign('SELECTED_STANDARD_FILTER_FIELDS', $reportModel->getSelectedStandardFilter());
+            $viewer->assign('SELECTED_ADVANCED_FILTER_FIELDS', $reportModel->transformToNewAdvancedFilter());
+        }
+        $data = $request->getAll();
+        foreach ($data as $name => $value) {
+            if($name == 'schdayoftheweek' || $name == 'schdayofthemonth' || $name == 'schannualdates' || $name == 'recipients' || $name == 'members') {
+                $value = Zend_Json::decode($value);
+                if(!is_array($value)) {	// need to save these as json data
+                    $value = array($value);
+                }
+            }
+            $reportModel->set($name, $value);
+        }
+        $primaryModule = $request->get('primary_module');
+        $secondaryModules = $request->get('secondary_modules');
+        $reportModel->setPrimaryModule($primaryModule);
+        if(!empty($secondaryModules)){
+            $secondaryModules = implode(':', $secondaryModules);
+            $reportModel->setSecondaryModule($secondaryModules);
 
-			$secondaryModules = explode(':',$secondaryModules);
-		}else{
-			$secondaryModules = array();
-		}
+            $secondaryModules = explode(':',$secondaryModules);
+        }else{
+            $secondaryModules = array();
+        }
 
-		$viewer->assign('RECORD_ID', $record);
-		$viewer->assign('REPORT_MODEL', $reportModel);
-		$viewer->assign('PRIMARY_MODULE',$primaryModule);
+        $viewer->assign('RECORD_ID', $record);
+        $viewer->assign('REPORT_MODEL', $reportModel);
+        $viewer->assign('PRIMARY_MODULE',$primaryModule);
 
-		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($reportModel);
-		$primaryModuleRecordStructure = $recordStructureInstance->getPrimaryModuleRecordStructure();
-		/** With out checking whether secondary is removed from related module field we should not send  
-		*  secondary module info to next step 
-		*/ 
-		if($secondaryModules){ 
-			$secondaryModuleRecordStructures = $recordStructureInstance->getSecondaryModuleRecordStructure(); 
-		} 
-		//TODO : We need to remove "update_log" field from "HelpDesk" module in New Look
-		// after removing old look we need to remove this field from crm
-		if($primaryModule == 'HelpDesk'){
-			foreach($primaryModuleRecordStructure as $blockLabel => $blockFields){
-				foreach($blockFields as $field => $object){
-					if($field == 'update_log'){
-						unset($primaryModuleRecordStructure[$blockLabel][$field]);
-					}
-				}
-			}
-		}
+        $recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($reportModel);
+        $primaryModuleRecordStructure = $recordStructureInstance->getPrimaryModuleRecordStructure();
+        /** With out checking whether secondary is removed from related module field we should not send
+         *  secondary module info to next step
+         */
+        if($secondaryModules){
+            $secondaryModuleRecordStructures = $recordStructureInstance->getSecondaryModuleRecordStructure();
+        }
+        //TODO : We need to remove "update_log" field from "HelpDesk" module in New Look
+        // after removing old look we need to remove this field from crm
+        if($primaryModule == 'HelpDesk'){
+            foreach($primaryModuleRecordStructure as $blockLabel => $blockFields){
+                foreach($blockFields as $field => $object){
+                    if($field == 'update_log'){
+                        unset($primaryModuleRecordStructure[$blockLabel][$field]);
+                    }
+                }
+            }
+        }
 
-		if(!empty($secondaryModuleRecordStructures)){
-			foreach($secondaryModuleRecordStructures as $module => $structure){
-				if($module == 'HelpDesk'){
-					foreach($structure as $blockLabel => $blockFields){
-						foreach($blockFields as $field => $object){
-							if($field == 'update_log'){
-								unset($secondaryModuleRecordStructures[$module][$blockLabel][$field]);
-							}
-						}
-					}
-				}
-			}
-		}
-		// End
+        if(!empty($secondaryModuleRecordStructures)){
+            foreach($secondaryModuleRecordStructures as $module => $structure){
+                if($module == 'HelpDesk'){
+                    foreach($structure as $blockLabel => $blockFields){
+                        foreach($blockFields as $field => $object){
+                            if($field == 'update_log'){
+                                unset($secondaryModuleRecordStructures[$module][$blockLabel][$field]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // End
 
-		$viewer->assign('SECONDARY_MODULES',$secondaryModules);
-		$viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $primaryModuleRecordStructure);
-		$viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $secondaryModuleRecordStructures);
-		$dateFilters = Vtiger_Field_Model::getDateFilterTypes();
-		foreach($dateFilters as $comparatorKey => $comparatorInfo) {
-			$comparatorInfo['startdate'] = DateTimeField::convertToUserFormat($comparatorInfo['startdate']);
-			$comparatorInfo['enddate'] = DateTimeField::convertToUserFormat($comparatorInfo['enddate']);
-			$comparatorInfo['label'] = vtranslate($comparatorInfo['label'],$moduleName);
-			$dateFilters[$comparatorKey] = $comparatorInfo;
-		}
-		$viewer->assign('DATE_FILTERS', $dateFilters);
+        $viewer->assign('SECONDARY_MODULES',$secondaryModules);
+        $viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $primaryModuleRecordStructure);
+        $viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $secondaryModuleRecordStructures);
+        $dateFilters = Vtiger_Field_Model::getDateFilterTypes();
+        foreach($dateFilters as $comparatorKey => $comparatorInfo) {
+            $comparatorInfo['startdate'] = DateTimeField::convertToUserFormat($comparatorInfo['startdate']);
+            $comparatorInfo['enddate'] = DateTimeField::convertToUserFormat($comparatorInfo['enddate']);
+            $comparatorInfo['label'] = vtranslate($comparatorInfo['label'],$moduleName);
+            $dateFilters[$comparatorKey] = $comparatorInfo;
+        }
+        $viewer->assign('DATE_FILTERS', $dateFilters);
 
-		if(($primaryModule == 'Calendar') || (in_array('Calendar', $secondaryModules))){
-			$advanceFilterOpsByFieldType = Calendar_Field_Model::getAdvancedFilterOpsByFieldType();
-		} else{
-			$advanceFilterOpsByFieldType = Vtiger_Field_Model::getAdvancedFilterOpsByFieldType();
-		}
-		$viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
-		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', $advanceFilterOpsByFieldType);
-		$viewer->assign('MODULE', $moduleName);
+        if(($primaryModule == 'Calendar') || (in_array('Calendar', $secondaryModules))){
+            $advanceFilterOpsByFieldType = Calendar_Field_Model::getAdvancedFilterOpsByFieldType();
+        } else{
+            $advanceFilterOpsByFieldType = Vtiger_Field_Model::getAdvancedFilterOpsByFieldType();
+        }
+        $viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
+        $viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', $advanceFilterOpsByFieldType);
+        $viewer->assign('MODULE', $moduleName);
 
-		$calculationFields = $reportModel->get('calculation_fields');
-		if($calculationFields) {
-			$calculationFields = Zend_Json::decode($calculationFields);
-			$viewer->assign('LINEITEM_FIELD_IN_CALCULATION', $reportModel->showLineItemFieldsInFilter($calculationFields));
-		}
-		if ($request->get('isDuplicate')) {
-			$viewer->assign('IS_DUPLICATE', true);
-		}
-		$viewer->view('step3.tpl', $moduleName);
-	}
+        $calculationFields = $reportModel->get('calculation_fields');
+        if($calculationFields) {
+            $calculationFields = Zend_Json::decode($calculationFields);
+            $viewer->assign('LINEITEM_FIELD_IN_CALCULATION', $reportModel->showLineItemFieldsInFilter($calculationFields));
+        }
+        if ($request->get('isDuplicate')) {
+            $viewer->assign('IS_DUPLICATE', true);
+        }
+        $viewer->view('step3.tpl', $moduleName);
+    }
 
-	/**
-	 * Function to get the list of Script models to be included
-	 * @param Vtiger_Request $request
-	 * @return <Array> - List of Vtiger_JsScript_Model instances
-	 */
-	function getHeaderScripts(Vtiger_Request $request) {
-		$headerScriptInstances = parent::getHeaderScripts($request);
-		$moduleName = $request->getModule();
+    /**
+     * Function to get the list of Script models to be included
+     * @param Vtiger_Request $request
+     * @return <Array> - List of Vtiger_JsScript_Model instances
+     */
+    function getHeaderScripts(Vtiger_Request $request) {
+        $headerScriptInstances = parent::getHeaderScripts($request);
+        $moduleName = $request->getModule();
 
-		$jsFileNames = array(
-			"modules.$moduleName.resources.Edit1",
-			"modules.$moduleName.resources.Edit2",
-			"modules.$moduleName.resources.Edit3",
-			'~libraries/jquery/jquery.datepick.package-4.1.0/jquery.datepick.js',
-		);
+        $jsFileNames = array(
+            "modules.$moduleName.resources.Edit1",
+            "modules.$moduleName.resources.Edit2",
+            "modules.$moduleName.resources.Edit3",
+            '~libraries/jquery/jquery.datepick.package-4.1.0/jquery.datepick.js',
+        );
 
-		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
-		return $headerScriptInstances;
-	}
+        //SalesPlatform.ru begin add current locale for datepicker
+        global $current_language;
+        $jsFileNames[] = "~libraries/jquery/jquery.datepick.package-4.1.0/jquery.datepick-" .substr($current_language, 0, 2). ".js";
+        //SalesPLatform.ru end
+
+        $jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
+        $headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
+        return $headerScriptInstances;
+    }
 
 	function getHeaderCss(Vtiger_Request $request) {
 		$headerCssInstances = parent::getHeaderCss($request);
