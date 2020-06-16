@@ -157,8 +157,8 @@ class Contacts_ListView_Model extends Vtiger_ListView_Model {
             if($orderBy == 'roleid' && $moduleName == 'Users'){
                 $listQuery .= ' ORDER BY vtiger_role.rolename '.' '. $sortOrder;
             } else {
-                $listQuery .= ' ORDER BY ? '.$sortOrder;
-                array_push($paramArray, $queryGenerator->getOrderByColumn($orderBy));
+                $listQuery .= ' ORDER BY ' . $queryGenerator->getOrderByColumn($orderBy) . ' ' . $sortOrder;
+                array_push($paramArray);
             }
 
             if ($orderBy == 'first_name' && $moduleName == 'Users') {
