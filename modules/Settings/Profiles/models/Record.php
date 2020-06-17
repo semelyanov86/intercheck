@@ -199,6 +199,9 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 
 	public function isModuleFieldLocked($module, $field) {
 		$fieldModel = $this->getProfileTabFieldModel($module, $field);
+		if ($fieldModel->getName() === 'assigned_user_id') {
+		    return false;
+        }
         if(!$fieldModel->isEditable() || $fieldModel->isMandatory()
 				|| in_array($fieldModel->get('uitype'),self::$fieldLockedUiTypes) || $fieldModel->hasCustomLock()) {
 			return true;
