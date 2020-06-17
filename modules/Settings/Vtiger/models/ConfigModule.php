@@ -94,6 +94,7 @@ class Settings_Vtiger_ConfigModule_Model extends Settings_Vtiger_Module_Model {
 	 * @return <Array> list of module names
 	 */
 	public function getPicklistValues($fieldName) {
+	    global $restrictedFieldRoles;
 		if ($fieldName === 'default_module') {
 			$db = PearDatabase::getInstance();
 
@@ -110,7 +111,13 @@ class Settings_Vtiger_ConfigModule_Model extends Settings_Vtiger_Module_Model {
 				$moduleData[$db->query_result($result, $i, 'name')] = $db->query_result($result, $i, 'tablabel');
 			}
 			return $moduleData;
-		}
+		} elseif ($fieldName == 'restrictedFieldRoles') {
+		    $rolesData = array();
+            foreach (Settings_Roles_Record_Model::getAll() as $fieldRole) {
+                $rolesData[$fieldRole->getId()] = $fieldRole->getName();
+		    }
+		    return $rolesData;
+        }
 		return array('true', 'false');
 	}
 
@@ -125,7 +132,8 @@ class Settings_Vtiger_ConfigModule_Model extends Settings_Vtiger_Module_Model {
 			'upload_maxsize'				=> array('label' => 'LBL_MAX_UPLOAD_SIZE',					'fieldType' => 'input'),
 			'default_module'				=> array('label' => 'LBL_DEFAULT_MODULE',					'fieldType' => 'picklist'),
 			'listview_max_textlength'		=> array('label' => 'LBL_MAX_TEXT_LENGTH_IN_LISTVIEW',		'fieldType' => 'input'),
-			'list_max_entries_per_page'		=> array('label' => 'LBL_MAX_ENTRIES_PER_PAGE_IN_LISTVIEW',	'fieldType' => 'input')
+			'list_max_entries_per_page'		=> array('label' => 'LBL_MAX_ENTRIES_PER_PAGE_IN_LISTVIEW',	'fieldType' => 'input'),
+            'restrictedFieldRoles'          => array('label' => 'LBL_RESTRICTED_FIELD_ROLES', 'fieldType' => 'picklist')
 		);
 	}
 
@@ -150,6 +158,9 @@ class Settings_Vtiger_ConfigModule_Model extends Settings_Vtiger_Module_Model {
 				if($fieldName==='list_max_entries_per_page' || $fieldName ==='listview_max_textlength'){
 					$fieldValue= intval($fieldValue);
 				}
+				if ($fieldName === 'restrictedFieldRoles') {
+				    $fieldValue = implode('||', $fieldValue);
+                }
 				$pattern = '/\$' . $fieldName . '[\s]+=([^;]+);/';
 				$replacement = sprintf($patternString, $fieldName, ltrim($fieldValue, '0'));
 				$fileContent = preg_replace($pattern, $replacement, $fileContent);

@@ -21,7 +21,8 @@ class Vtiger_Phone_UIType extends Vtiger_Base_UIType {
     private function getPermissionValue($value, $user)
     {
         global $restrictedFieldRoles;
-        if (in_array($user->getRole(), $restrictedFieldRoles)) {
+        $restrictedArr = explode('||', $restrictedFieldRoles);
+        if (in_array($user->getRole(), $restrictedArr)) {
             $value = strip_tags($value);
 //            return substr($value, 0, 2) . '****' . substr($value, -1, 2);
             return '****';
