@@ -56,7 +56,6 @@ function runServiceSendToPlatform() {
         $httpClient->setHeaders($headers);
         $response = $httpClient->doPost(json_encode($params));
         $log->debug('DocumentApprovals: getting response: ' . $response);
-        print_r($response);
         if ($response) {
             $docModel = Vtiger_Record_Model::getInstanceById($docId, 'DocumentApprovals');
             $docModel->set('mode', 'edit');
