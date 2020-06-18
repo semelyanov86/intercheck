@@ -5,6 +5,7 @@ function runServiceSendToPlatform() {
     global $platformUrl;
     global $platformToken;
     global $log;
+    global $VTIGER_BULK_SAVE_MODE;
     $query = "SELECT document_approvalsid FROM vtiger_document_approvalscf INNER JOIN vtiger_crmentity ON vtiger_document_approvalscf.document_approvalsid = vtiger_crmentity.crmid WHERE vtiger_crmentity.deleted = ? AND vtiger_document_approvalscf.cf_sync_to_platformintegration = ? AND cf_platform_id IS NOT NULL";
     $result = $adb->pquery($query, array(0, 1));
     $ids = array();
@@ -40,6 +41,8 @@ function runServiceSendToPlatform() {
             $docResult[$id]['platform_id'] = $platformUserId;
         }
     }
+    $previousBulkSaveMode = $VTIGER_BULK_SAVE_MODE;
+    $VTIGER_BULK_SAVE_MODE = true;
     foreach ($docResult as $docId=>$docData) {
         $httpClient = new Vtiger_Net_Client($platformUrl . '/api/v1/users/docs/' . $docData['platform_id']);
         $params = array(
@@ -52,6 +55,8 @@ function runServiceSendToPlatform() {
         $headers = array('Content-Type' => 'application/json', 'Authorization' => 'Bearer ' . $platformToken, 'Accept' => 'application/json');
         $httpClient->setHeaders($headers);
         $response = $httpClient->doPost(json_encode($params));
+        $log->debug('DocumentApprovals: getting response: ' . $response);
+        print_r($response);
         if ($response) {
             $docModel = Vtiger_Record_Model::getInstanceById($docId, 'DocumentApprovals');
             $docModel->set('mode', 'edit');
@@ -61,4 +66,5 @@ function runServiceSendToPlatform() {
         }
         $log->debug('DocumentApprovals: received response data ' . $response);
     }
+    $VTIGER_BULK_SAVE_MODE = $previousBulkSaveMode;
 }
