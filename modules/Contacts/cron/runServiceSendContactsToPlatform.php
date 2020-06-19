@@ -26,7 +26,16 @@ function runServiceSendContactsToPlatform()
             $httpClient = new Vtiger_Net_Client($platformUrl . '/api/v1/users/change-status/' . $contactModel->get('cf_platform_id'));
             $params = array(
                 'cf_contacttype' => $contactModel->get('cf_contacttype'),
-                'cf_sale_status' => $contactModel->get('cf_sale_status')
+                'cf_sale_status' => $contactModel->get('cf_sale_status'),
+                "cf_pd_status" => $contactModel->get('cf_pd_status'),
+	            "cf_pd_notes" => $contactModel->get('cf_pd_notes'),
+	            "cf_ec_status" => $contactModel->get('cf_ec_status'),
+	            "cf_ec_notes" => $contactModel->get('cf_ec_notes'),
+	            "cf_pe_status" => $contactModel->get('cf_pe_status'),
+	            "cf_pe_notes" => $contactModel->get('cf_pe_notes'),
+	            "cf_lp_status" => $contactModel->get('cf_lp_status'),
+	            "cf_lp_notes" => $contactModel->get('cf_lp_notes'),
+	            "cf_adaptability_status" => $contactModel->get('cf_adaptability_status')
             );
             $log->debug('ContactPlatform: sending params data: ' . json_encode($params));
             $headers = array('Content-Type' => 'application/json', 'Authorization' => 'Bearer ' . $platformToken, 'Accept' => 'application/json');
