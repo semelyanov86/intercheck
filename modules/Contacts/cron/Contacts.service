@@ -1,0 +1,21 @@
+<?php
+//ini_set('display_errors','off');
+ini_set('display_errors', 1);error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
+ini_set('max_execution_time', 60000);
+require_once("includes/runtime/BaseModel.php");
+require_once("modules/Vtiger/models/Record.php");
+require_once("modules/Users/models/Record.php");
+require_once("includes/runtime/Globals.php");
+require_once("include/utils/utils.php");
+require_once("includes/runtime/LanguageHandler.php");
+require_once("includes/Loader.php");
+require_once("modules/Contacts/cron/runServiceSendContactsToPlatform.php");
+
+echo '<br />\n Start sending contacts to platform.';
+ob_flush(); flush();
+
+runServiceSendContactsToPlatform();
+
+echo '<br />\n End sending contacts to platform.<br />\n ';
+ob_flush(); flush();
+ini_set('display_errors','on');
