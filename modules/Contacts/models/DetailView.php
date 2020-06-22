@@ -47,7 +47,7 @@ class Contacts_DetailView_Model extends Accounts_DetailView_Model {
             $basicActionLink = array(
                 'linktype' => 'DETAILVIEWBASIC',
                 'linklabel' => 'LBL_OPEN_PLATFORM',
-                'linkurl' => 'javascript:Contacts_Detail_Js.openPlatform("' . $platformUrl . '/auth/' . $recordModel->get('cf_platform_id') . '/' . $recordModel->get('cf_token') . '");',
+                'linkurl' => 'javascript:Contacts_Detail_Js.openPlatform("' . $platformUrl . '/authentificate/' . $recordModel->get('cf_platform_id') . '/' . $recordModel->get('cf_token') . '");',
                 'linkicon' => ''
             );
             $linkModelList['DETAILVIEWBASIC'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
