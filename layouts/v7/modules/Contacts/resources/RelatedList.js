@@ -1,5 +1,6 @@
 Vtiger_RelatedList_Js("Contacts_RelatedList_Js", {}, {
     registerAddExternalPaymentEvent: function () {
+        var self = this;
         var btn = jQuery('#addExternalPayments');
         var params = {
             module: 'Transactions',
@@ -23,12 +24,17 @@ Vtiger_RelatedList_Js("Contacts_RelatedList_Js", {}, {
                         if( $('#PopupReminder').hasClass('in') != true) {
                             $('#PopupReminder').modal('show');
                         }
-
+                        self.registerClosePaymentModal();
                     } else {
                         alert('Contact has no platform ID');
                     }
                 }
             });
+        });
+    },
+    registerClosePaymentModal : function() {
+        jQuery('#closeModalReload').on('click', function(e) {
+            jQuery('.related-tabs').find('.vicon-transactions').click();
         });
     },
     init : function(parentId, parentModule, selectedRelatedTabElement, relatedModuleName) {
