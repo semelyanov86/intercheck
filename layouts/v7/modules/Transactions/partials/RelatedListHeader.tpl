@@ -45,7 +45,7 @@
 						{/if}
 					</div>
 				{/foreach}
-				<button id="addExternalPayments" type="button" module="{$RELATED_MODULE_NAME}" class="btn btn-outline">Add External Payments</button>
+				<button id="addExternalPayments" type="button" module="{$RELATED_MODULE_NAME}" class="btn btn-outline">Terminal</button>
 				&nbsp;
 			</div>
 			{assign var=CLASS_VIEW_ACTION value='relatedViewActions'}
