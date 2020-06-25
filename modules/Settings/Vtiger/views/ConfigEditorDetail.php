@@ -34,8 +34,10 @@ class Settings_Vtiger_ConfigEditorDetail_View extends Settings_Vtiger_Index_View
         $rolesArr = explode('||', $roles);
         foreach ($rolesArr as $roleId) {
             $roleModel = Settings_Roles_Record_Model::getInstanceById($roleId);
-            $res .= $roleModel->getName();
-            $res .= ', ';
+            if ($roleModel) {
+                $res .= $roleModel->getName();
+                $res .= ', ';
+            }
         }
         $res = trim($res);
         return trim($res, ',');
