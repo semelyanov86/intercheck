@@ -10,6 +10,16 @@
 
 class Transactions_Edit_View extends Vtiger_Edit_View {
 
+    public function checkPermission(Vtiger_Request $request) {
+        global $current_user;
+        $moduleName = $request->getModule();
+        $record = $request->get('record');
+        if (!$record && $current_user->id != '1') {
+            throw new AppException(vtranslate('LBL_PERMISSION_DENIED'));
+        }
+        return parent::checkPermission($request);
+    }
+
 	public function process(Vtiger_Request $request) {
 		$isRelationOperation = $request->get('relationOperation');
         $record = $request->get('record');
