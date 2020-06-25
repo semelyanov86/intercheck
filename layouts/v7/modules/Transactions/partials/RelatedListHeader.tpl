@@ -32,10 +32,10 @@
 							{elseif $RELATED_LINK->get('_linklabel') === '_add_task'}
 								{assign var=RELATED_MODULE_NAME value='Calendar'}
 							{/if}
-							{if $IS_SELECT_BUTTON || $IS_CREATE_PERMITTED || true}
+{*							{if $IS_SELECT_BUTTON || $IS_CREATE_PERMITTED}*}
 								<button id="addExternalPayments" type="button" module="{$RELATED_MODULE_NAME}" class="btn btn-outline"
 									>{if $IS_SELECT_BUTTON eq false}<i class="fa fa-plus"></i>&nbsp;{/if}&nbsp;Terminal</button>
-							{/if}
+{*							{/if}*}
 						{/if}
 					</div>
 				{/foreach}
