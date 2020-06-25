@@ -111,7 +111,7 @@ class Settings_Vtiger_ConfigModule_Model extends Settings_Vtiger_Module_Model {
 				$moduleData[$db->query_result($result, $i, 'name')] = $db->query_result($result, $i, 'tablabel');
 			}
 			return $moduleData;
-		} elseif ($fieldName == 'restrictedFieldRoles') {
+		} elseif ($fieldName == 'restrictedFieldRoles' || $fieldName == 'restrictedFieldRolesPhones') {
 		    $rolesData = array();
             foreach (Settings_Roles_Record_Model::getAll() as $fieldRole) {
                 $rolesData[$fieldRole->getId()] = $fieldRole->getName();
@@ -133,7 +133,8 @@ class Settings_Vtiger_ConfigModule_Model extends Settings_Vtiger_Module_Model {
 			'default_module'				=> array('label' => 'LBL_DEFAULT_MODULE',					'fieldType' => 'picklist'),
 			'listview_max_textlength'		=> array('label' => 'LBL_MAX_TEXT_LENGTH_IN_LISTVIEW',		'fieldType' => 'input'),
 			'list_max_entries_per_page'		=> array('label' => 'LBL_MAX_ENTRIES_PER_PAGE_IN_LISTVIEW',	'fieldType' => 'input'),
-            'restrictedFieldRoles'          => array('label' => 'LBL_RESTRICTED_FIELD_ROLES', 'fieldType' => 'picklist')
+            'restrictedFieldRoles'          => array('label' => 'LBL_RESTRICTED_FIELD_ROLES', 'fieldType' => 'picklist'),
+            'restrictedFieldRolesPhones'          => array('label' => 'LBL_RESTRICTED_FIELD_PHONES', 'fieldType' => 'picklist')
 		);
 	}
 
@@ -158,7 +159,7 @@ class Settings_Vtiger_ConfigModule_Model extends Settings_Vtiger_Module_Model {
 				if($fieldName==='list_max_entries_per_page' || $fieldName ==='listview_max_textlength'){
 					$fieldValue= intval($fieldValue);
 				}
-				if ($fieldName === 'restrictedFieldRoles') {
+				if ($fieldName === 'restrictedFieldRoles' || $fieldName === 'restrictedFieldRolesPhones') {
 				    $fieldValue = implode('||', $fieldValue);
                 }
 				$pattern = '/\$' . $fieldName . '[\s]+=([^;]+);/';

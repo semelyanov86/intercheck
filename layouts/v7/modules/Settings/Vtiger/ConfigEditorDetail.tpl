@@ -40,6 +40,8 @@
                                             <div class="input-info-addon"><a class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="{vtranslate('LBL_DEFAULT_REPLY_TO_INFO',$QUALIFIED_MODULE)}"></a></div>
                                         {else if $FIELD_NAME == 'restrictedFieldRoles'}
                                             {$ROLE_NAMES}
+                                        {else if $FIELD_NAME == 'restrictedFieldRolesPhones'}
+                                            {$ROLE_NAMES_PHONES}
                                         {else}
                                             {$FIELD_DATA[$FIELD_NAME]}
                                         {/if}

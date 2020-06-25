@@ -12,13 +12,16 @@ class Settings_Vtiger_ConfigEditorDetail_View extends Settings_Vtiger_Index_View
 
 	public function process(Vtiger_Request $request) {
 	    global $restrictedFieldRoles;
+	    global $restrictedFieldRolesPhones;
 		$qualifiedName = $request->getModule(false);
 		$moduleModel = Settings_Vtiger_ConfigModule_Model::getInstance();
         $restrictedRoles = $this->getRestrictedRoles($restrictedFieldRoles);
+        $restrictedRolesPhones = $this->getRestrictedRoles($restrictedFieldRolesPhones);
 		$viewer = $this->getViewer($request);
 		$viewer->assign('MODEL', $moduleModel);
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedName);
 		$viewer->assign('ROLE_NAMES', $restrictedRoles);
+		$viewer->assign('ROLE_NAMES_PHONES', $restrictedRolesPhones);
 		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
 
 		$viewer->view('ConfigEditorDetail.tpl', $qualifiedName);

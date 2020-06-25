@@ -39,7 +39,7 @@
 											{foreach key=optionName item=optionLabel from=$MODEL->getPicklistValues($FIELD_NAME)}
 
 													{if $FIELD_NAME != 'default_module' && $FIELD_NAME != 'default_reply_to'}
-														{if $FIELD_NAME eq 'restrictedFieldRoles'}
+														{if $FIELD_NAME eq 'restrictedFieldRoles' or $FIELD_NAME eq 'restrictedFieldRolesPhones'}
 															<option value="{$optionName}" {if in_array($optionName, $FIELD_VALUE)} selected {/if}>{vtranslate($optionLabel, $QUALIFIED_MODULE)}</option>
 														{else}
 															<option {if $optionLabel == $FIELD_DATA[$FIELD_NAME]} selected {/if}>{vtranslate($optionLabel, $QUALIFIED_MODULE)}</option>

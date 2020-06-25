@@ -38,7 +38,7 @@ class MailManager_Folder_Action extends Vtiger_Action_Controller {
 		foreach ($mailIds as $msgNo) {
 			$message = $connector->openMail($msgNo, $folderName);
 			$msg = $message->getInlineBody();
-			if (Users_Record_Model::isEmailAndPhoneViewPermitted()) {
+			if (Users_Record_Model::isEmailViewPermitted()) {
                 $mailContents[$msgNo] = Vtiger_Util_Helper::hidePhoneAndEmails($msg);
             } else {
                 $mailContents[$msgNo] = $msg;

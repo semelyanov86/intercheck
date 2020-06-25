@@ -12,10 +12,12 @@ class Settings_Vtiger_ConfigEditorEdit_View extends Settings_Vtiger_Index_View {
 
 	public function process(Vtiger_Request $request) {
 	    global $restrictedFieldRoles;
+	    global $restrictedFieldRolesPhones;
 		$qualifiedName = $request->getModule(false);
 		$moduleModel = Settings_Vtiger_ConfigModule_Model::getInstance();
 		$fieldData = array();
 		$fieldData['restrictedFieldRoles'] = explode('||', $restrictedFieldRoles);
+		$fieldData['restrictedFieldRolesPhones'] = explode('||', $restrictedFieldRolesPhones);
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('MODEL', $moduleModel);
