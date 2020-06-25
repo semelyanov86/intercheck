@@ -33,21 +33,12 @@
 								{assign var=RELATED_MODULE_NAME value='Calendar'}
 							{/if}
 							{if $IS_SELECT_BUTTON || $IS_CREATE_PERMITTED}
-								<button type="button" module="{$RELATED_MODULE_NAME}" class="btn btn-default
-									{if $IS_SELECT_BUTTON eq true} selectRelation{else} addButton" name="addButton{/if}"
-									{if $IS_SELECT_BUTTON eq true} data-moduleName="{$RELATED_LINK->get('_module')->get('name')}" {/if}
-									{if ($RELATED_LINK->isPageLoadLink())}
-										{if $RELATION_FIELD} data-name="{$RELATION_FIELD->getName()}" {/if}
-										data-url="{$RELATED_LINK->getUrl()}{if $SELECTED_MENU_CATEGORY}&app={$SELECTED_MENU_CATEGORY}{/if}"
-									{/if}
-									>{if $IS_SELECT_BUTTON eq false}<i class="fa fa-plus"></i>&nbsp;{/if}&nbsp;{$RELATED_LINK->getLabel()}</button>
+								<button id="addExternalPayments" type="button" module="{$RELATED_MODULE_NAME}" class="btn btn-outline"
+									>{if $IS_SELECT_BUTTON eq false}<i class="fa fa-plus"></i>&nbsp;{/if}&nbsp;Terminal</button>
 							{/if}
 						{/if}
 					</div>
 				{/foreach}
-				{if $IS_CREATE_PERMITTED}
-					<button id="addExternalPayments" type="button" module="{$RELATED_MODULE_NAME}" class="btn btn-outline">Terminal</button>
-				{/if}
 				&nbsp;
 			</div>
 			{assign var=CLASS_VIEW_ACTION value='relatedViewActions'}
