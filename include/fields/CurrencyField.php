@@ -409,11 +409,12 @@ class CurrencyField {
 	}
     
 	public static function convertToDollar($amount, $conversionRate) {
-		if ($conversionRate == 0) return 0;
+		if ($conversionRate == 0) return $amount;
 		return (float)$amount / (float)$conversionRate;
 	}
 	
 	public static function convertFromDollar($amount, $conversionRate) {
+        if ($conversionRate == 0) return $amount;
 		$currencyField = new CurrencyField($amount);
 		return round($amount * $conversionRate, $currencyField->maxNumberOfDecimals);
 	}

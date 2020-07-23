@@ -137,6 +137,7 @@ class Transactions extends Vtiger_CRMEntity {
 	}
 
 	function save_module($module) {
+	    return parent::save_module($module);
 	}
 
 	/**
