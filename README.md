@@ -1,4 +1,5 @@
 Vtiger CRM for HarlyBarly company
+This is instruction for installation
 ==========
 To implement functionality with adding user for sharing rules, first of all you need to execute following queries:
 - "CREATE TABLE `vtiger_datashare_grp2user` (
