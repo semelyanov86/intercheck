@@ -13,3 +13,5 @@ config.performance.php
 config.db.php
 /portal/vue-app/node_modules
 tabdata.php
+test/logo/vtiger-cut.png
+layouts/v7/resources/Images/vtiger.png
