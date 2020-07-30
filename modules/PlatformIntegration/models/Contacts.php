@@ -192,7 +192,7 @@ class PlatformIntegration_Contacts_Model extends PlatformIntegration_Engine_Mode
             } else {
                 $changedData['is_ftd'] = 0;
             }
-            $changedData['vtiger_crm_id'] = vtws_getWebserviceEntityId('Contacts', $changedData['record_id']);
+            $changedData['vtiger_crm_id'] = vtws_getWebserviceEntityId('Contacts',  $recordModel->getId());
             // TODO: add sale_status_id
             $changedData = $this->removeBlankFields($changedData, $mappedFields);
             $changedData = $this->trimFieldsWithMaxLength($changedData, $mappedFields);
