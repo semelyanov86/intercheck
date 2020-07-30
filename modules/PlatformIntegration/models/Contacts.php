@@ -1,6 +1,8 @@
 <?php
 
 require_once "modules/PlatformIntegration/models/PlatformCustomer.php";
+include_once 'include/Webservices/Utils.php';
+
 class PlatformIntegration_Contacts_Model extends PlatformIntegration_Engine_Model
 {
     public function __construct()
@@ -190,6 +192,7 @@ class PlatformIntegration_Contacts_Model extends PlatformIntegration_Engine_Mode
             } else {
                 $changedData['is_ftd'] = 0;
             }
+            $changedData['vtiger_crm_id'] = vtws_getWebserviceEntityId('Contacts', $changedData['record_id']);
             // TODO: add sale_status_id
             $changedData = $this->removeBlankFields($changedData, $mappedFields);
             $changedData = $this->trimFieldsWithMaxLength($changedData, $mappedFields);
