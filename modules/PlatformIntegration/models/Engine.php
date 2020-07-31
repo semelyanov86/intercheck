@@ -6,9 +6,9 @@ require_once "vtlib/Vtiger/Net/Client.php";
 use GuzzleHttp\Client;
 class PlatformIntegration_Engine_Model extends PlatformIntegration_Base_Model
 {
-    protected $baseUrl = "http://feature-64108.adssupply.ln6.tempurl.info/";
+    protected $baseUrl = "http://client.crystalead.com/";
     protected $scope = "*";
-    protected $RedirectURI = "https://www.vtexperts.com/files/OAuth_2/OAuth2PHPExample.php";
+    protected $RedirectURI = "http://client.crystalead.com";
     public function syncAllPicklists()
     {
         try {
