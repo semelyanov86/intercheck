@@ -21,6 +21,13 @@ class Users_PreferenceDetail_View extends Vtiger_Detail_View {
 		if($currentUserModel->isAdminUser() == true || $currentUserModel->get('id') == $record) {
 			return true;
 		} else {
+		    $vdUsersModel = Vtiger_Module_Model::getInstance('VDUsers');
+		    if ($vdUsersModel && $vdUsersModel->isActive()) {
+                ob_start();
+                header('Location: '.$vdUsersModel->getListViewUrl());
+                ob_end_flush();
+                die();
+            }
 			throw new AppException(vtranslate('LBL_PERMISSION_DENIED'));
 		}
 	}
