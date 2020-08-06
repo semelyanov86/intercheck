@@ -1,0 +1,163 @@
+<div class="quoting_tool-tool-items">
+    <div class="quoting_tool-tool-items-main">
+        <ul class="list list--tabs list--justified m--bottom">
+            <li ng-class="" class="active">
+                <a href="">{{ 'Custom Functions' | translate }}</a>
+            </li>
+        </ul>
+
+        <div class="quoting_tool-tool-items-container" resize>
+            <div class="block-section quoting_tool-block-section-container"
+                 ng-class="{'block-section--expanded': sectionVisible && blockSectionId == SECTIONS.GENERAL_THEME, 'block-section__disabled': sectionDisabled}"
+                 data-section-id="{{SECTIONS.GENERAL_THEME}}">
+
+                <!-- Head -->
+                <div class="block-section__hd clearfix prevent-selection">
+                    <!-- Arrow -->
+                    <div class="block-section__toggle" ng-click="toggleSection($event)">
+                        <i class="icon icon--arrow-expand"></i>
+                    </div>
+
+                    <!-- Title -->
+                    <h4 style="display: inline-block" class="block-section__name ellipsis"
+                        ng-click="toggleSection($event)">{{ 'Conditional Logic' | translate }}</h4><span
+                        class="icon-helptext hide" id="success_content_helptext"
+                        style="top: 0px;position: inherit;margin-left: 5px;left: 0px;margin-top: -8px;">i</span>
+                    <!--<a data-toggle="tooltip" style="top: 12px; right: 150px" data-placement="top" title="{{ 'You can send forms to external people as well as existing customers. Filled out forms will be created as new records. Please refer to the user guide for instructions' | translate }}" class="quoting_tool-pencil-change-label">-->
+                    <!---->
+                    <!--</a>-->
+                </div>
+
+                <!-- Content -->
+                <div class="block-section__bd anim--fadein clearfix"
+                     ng-class="{'block-section__bd--open': sectionVisible && blockSectionId == SECTIONS.GENERAL_THEME}">
+                    <div>
+                        <table>
+                            <!--TASKID:12912 - DEV: tiennguyen - DATE: 2018-10-08 - START-->
+                            <!--
+                            NOTES: change view for custom function, add 2 new tag "a" for add function start or end to any position
+                            -->
+                            <tr class="conditional_logic" ng-repeat="customFunctionData in app.data.customFunctionData track by $index"
+                                ng-if="customFunctionData.id>=0">
+                                <td style="padding-top: 12px" valign="top" width="20%">
+                                    <span style="font-size: 12px">ID:{{(customFunctionData.id-0)+1}}</span>
+                                </td>
+                                <td>
+                                    <table width="100%">
+                                        <tr>
+                                            <td valign="top" width="70%">
+                                                 <span style="text-align: left" ng-if="customFunctionData.name==undefined">
+                                                     Custom function {{(customFunctionData.id-0)+1}}
+                                                 </span>
+                                                <span style="text-align: left" ng-if="customFunctionData.name==''">
+                                                    Custom function {{(customFunctionData.id-0)+1}}
+                                                </span>
+                                                <span style="text-align: left" ng-if="customFunctionData.name!=undefined">
+                                                    {{customFunctionData.name}}
+                                                </span>
+                                            </td>
+                                            <td valign="top" style="text-align: right">
+                                                <!--<button ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id =='custom_functions'" class="btn btn-primary" ng-click="settingCustomFunctions(widget,$event,customFunctionData.id)">{{ 'edit' | translate }}</button>-->
+                                                <a ng-repeat="widget in app.data.widgets"
+                                                   ng-if="widget.layout.id =='custom_functions'" href=""
+                                                   ng-click="settingCustomFunctions(widget,$event,customFunctionData.id)">
+                                                    <i title="Edit"
+                                                       class="icon-pencil glyphicon glyphicon-pencil alignMiddle"></i>
+                                                </a>
+                                                <!--<button class="btn btn-primary" ng-click="removeCustomFunctions(customFunctionData.id)">{{ 'delete' | translate }}</button>-->
+                                                <a href="" ng-click="removeCustomFunctions(customFunctionData.id)">
+                                                    <i title="Delete"
+                                                       class="icon-trash glyphicon glyphicon-trash alignMiddle"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <a style="color: darkgray;" href=""
+                                                       ng-click="addStartCustomFunction($event,customFunctionData.id)">
+                                                        <i title="Add Start" class="fa fa-plus alignMiddle"></i>&nbsp;{{
+                                                        'insert' | translate }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <span class="custom_fucntion_css custom_function_{{(customFunctionData.id-0)}}" style="color: red;font-size: 10px">#CF_{{(customFunctionData.id-0)+1}}_START#</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a style="color: darkgray;" href=""
+                                                       ng-click="addEndCustomFunction($event,customFunctionData.id)">
+                                                        <i title="Add End" class="fa fa-plus alignMiddle"></i>&nbsp;{{
+                                                        'insert' | translate }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <span class="custom_fucntion_css custom_function_{{(customFunctionData.id-0)}}" style="color: red;font-size: 10px">#CF_{{(customFunctionData.id-0)+1}}_END#</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        </table>
+                        <!--TASKID:12912 - DEV: tiennguyen - DATE: 2018-10-08 -END-->
+                    </div>
+                    <div class="m--bottom">
+                        <button ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id =='custom_functions'"
+                                class="btn btn-primary" ng-click="settingCustomFunctions(widget,$event)">{{ 'Add' |
+                            translate }}
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="block-section quoting_tool-block-section-container"
+                 ng-class="{'block-section--expanded': sectionVisible && blockSectionId == SECTIONS.GENERAL_LAYOUT, 'block-section__disabled': sectionDisabled}"
+                 data-section-id="{{SECTIONS.GENERAL_LAYOUT}}">
+
+                <!-- Head -->
+                <div class="block-section__hd clearfix prevent-selection">
+                    <!-- Arrow -->
+                    <div class="block-section__toggle" ng-click="toggleSection($event)">
+                        <i class="icon icon--arrow-expand"></i>
+                    </div>
+
+                    <!-- Title -->
+                    <h4 style="display: inline-block" class="block-section__name ellipsis"
+                        ng-click="toggleSection($event)">{{ 'Text/Data Formatting' | translate }}</h4><span
+                        class="icon-helptext hide" id="custom-functions-helptext"
+                        style="top: 0px;position: inherit;margin-left: 5px;left: 0px;margin-top: -8px;">i</span>
+                    <!--<a data-toggle="tooltip" style="top: 12px; right: 150px" data-placement="top" title="{{ 'You can send forms to external people as well as existing customers. Filled out forms will be created as new records. Please refer to the user guide for instructions' | translate }}" class="quoting_tool-pencil-change-label">-->
+                    <!---->
+                    <!--</a>-->
+                </div>
+
+                <!-- Content -->
+                <div class="block-section__bd anim--fadein clearfix"
+                     ng-class="{'block-section__bd--open': sectionVisible && blockSectionId == SECTIONS.GENERAL_LAYOUT}">
+                    <div>
+                        <div class="m--bottom">
+                            <select id="custom_functions" class="quoting_tool-selector" select2
+                                    ng-model="app.data.selectedCustomFunction"
+                                    ng-options="custom_function as custom_function.label for custom_function in app.data.customFunctions">
+                                <option>-- {{ 'Select' | translate }} --</option>
+                            </select>
+                        </div>
+
+                        <div class="m--bottom text-right">
+                            <button class="btn btn-primary quoting_tool-btn-insert"
+                                    ng-disabled="app.data.customFunctions.length == 0"
+                                    ng-click="insertCustomFunctionToken($event)">{{ 'Insert' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

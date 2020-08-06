@@ -1,0 +1,25 @@
+<h4 style="color: #59b671; text-decoration: underline;padding-left: 28%">{{ 'BASIC ELEMENTS' | translate }}</h4>
+<div class="btn btn--sq-icon block-handle quoting_tool-drag-component-to-content block-custom"
+     ng-repeat="block in app.data.blocksOrder" ng-if="(block.layout.id != 'init' && block.layout.id !='settings_product_image' && block.layout.id != 'line_break' ) && block.layout.is_design_elements == true "
+     ng-click="addBlock(block)" data-id="{{block.layout.id}}" on-finish-render-item="ngRepeatBlockFinished">
+    <span class="btn--sq-icon__bd" title="{{ block.layout.name | translate}}">
+        <i ng-if="block.layout.icon_name==null" class="icon icon--xbig icon--clear-background-image {{block.layout.icon}}"></i>
+        <i ng-if="block.layout.icon_name" class="{{block.layout.icon}}">{{block.layout.icon_name}}</i>
+        <span ng-if="block.layout.icon_supplement" class="icon-supplement">{{ block.layout.icon_supplement }}</span>
+        <div><span ng-if="block.layout.icon_helptext" ng-click="showIconHelpText(block.layout.id);$event.stopPropagation()" class="icon-helptext hide">{{ block.layout.icon_helptext }}</span></div>
+        <span ng-if="block.layout.wide_width" class="wide_width btn--sq-icon__text">{{ block.layout.name | translate}}</span>
+        <span ng-if="!block.layout.wide_width" class="btn--sq-icon__text">{{ block.layout.name | translate}}</span>
+    </span>
+</div>
+<h4 style="color: #59b671; text-decoration: underline;padding-left: 28%">{{ 'FANCY ELEMENTS' | translate }}</h4>
+<div class="btn btn--sq-icon block-handle quoting_tool-drag-component-to-content block-custom"
+     ng-repeat="block in app.data.blocksOrder" ng-if="block.layout.id != 'init' && block.layout.is_fancy_elements == true"
+     ng-click="addBlock(block)" data-id="{{block.layout.id}}" on-finish-render-item="ngRepeatBlockFinished">
+    <span class="btn--sq-icon__bd" title="{{ block.layout.name | translate}}">
+        <i ng-if="block.layout.icon_name==null" class="icon icon--xbig icon--clear-background-image {{block.layout.icon}}"></i>
+        <i ng-if="block.layout.icon_name" class="{{block.layout.icon}}">{{block.layout.icon_name}}</i>
+        <span ng-if="block.layout.icon_supplement" class="icon-supplement">{{ block.layout.icon_supplement }}</span>
+        <div><span ng-if="block.layout.icon_helptext" ng-click="showIconHelpText(block.layout.id);$event.stopPropagation()" class="icon-helptext hide">{{ block.layout.icon_helptext }}</span></div>
+        <span class="btn--sq-icon__text">{{ block.layout.name | translate}}</span>
+    </span>
+</div>

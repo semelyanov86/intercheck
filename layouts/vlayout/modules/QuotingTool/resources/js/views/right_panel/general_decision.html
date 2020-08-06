@@ -1,0 +1,585 @@
+<style>
+    .quoting_tool-tool-items-main .tooltip-inner{
+        text-align: left;
+    }
+</style>
+<div id="layout-tokensTemplate">
+    <div class="block-section quoting_tool-block-section-container"
+         ng-class="{'block-section--expanded': sectionVisible && blockSectionId == SECTIONS.GENERAL_OTHERS, 'block-section__disabled': sectionDisabled}"
+         data-section-id="{{SECTIONS.GENERAL_OTHERS}}">
+
+        <!-- Head -->
+        <div class="block-section__hd clearfix prevent-selection">
+            <!-- Arrow -->
+            <div class="block-section__toggle" ng-click="toggleSection($event)">
+                <i class="icon icon--arrow-expand"></i>
+            </div>
+
+            <!-- Title -->
+            <h4 style="display: inline" class="block-section__name ellipsis" ng-click="toggleSection($event)">{{ 'Settings' | translate }}</h4>
+
+        </div>
+
+        <!-- Content -->
+        <div class="block-section__bd anim--fadein clearfix"
+             ng-class="{'block-section__bd--open': sectionVisible && blockSectionId == SECTIONS.GENERAL_OTHERS}">
+
+            <div>
+                <!--Description-->
+
+                <!--<div>-->
+                    <!--<div class="doctool-subhead m&#45;&#45;bottom-sm">-->
+                        <!--{{ 'Notes' | translate }}-->
+                        <!--<span class="icon-helptext hide" id="notes-helptext">i</span>-->
+                    <!--</div>-->
+
+                    <!--<div id="quoting_tool-notes-field">-->
+                        <!--<textarea name="tmp_description" rows="6" maxlength="255" placeholder="{{ 'Note in here...' | translate }}"-->
+                                  <!--class="quoting_tool-description"-->
+                                  <!--ng-model="app.model.description"></textarea>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--Attachments-->
+
+                <!--<div>-->
+                    <!--<div class="m&#45;&#45;bottom"></div>-->
+
+                    <!--<div class="doctool-subhead m&#45;&#45;bottom-sm">-->
+                        <!--{{ 'Attachments' | translate }}-->
+                        <!--<span class="icon-helptext hide" id="attachments-helptext">i</span>-->
+                    <!--</div>-->
+
+                    <!--<div id="quoting_tool-attachments-fields" class="quoting_tool-accept-decline-fields">-->
+                        <!--<div class="m&#45;&#45;bottom general_accept_decline_attachment"-->
+                             <!--ng-repeat="attachment in app.model.attachments">-->
+                            <!--<i class="fa fa-trash quoting_tool-other-item-remove"-->
+                               <!--ng-click="removeAttachment(attachment)"></i>-->
+                            <!--<a href="{{attachment.full_path}}" target="_blank" class="quoting_tool-other-item">{{attachment.name}}</a>-->
+
+                            <!--<div class="hr block-text m&#45;&#45;none"></div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="m&#45;&#45;bottom">-->
+                        <!--<button class="btn btn-primary"-->
+                                <!--ng-click="addAttachment($event)">{{ 'Add' | translate }}-->
+                        <!--</button>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--Expire in Days-->
+
+                <div>
+                    <div class="doctool-subhead m--bottom-sm">
+                        <span>{{ 'Expire in Days' | translate }}<span class="icon-helptext hide" id="expire-in-days-helptext">i</span></span>
+
+                    </div>
+
+                    <div class="m--bottom">
+                        <input type="number" min="0"  style="width: 96%"  name="tmp_expireindays"
+                               class="quoting_tool-expire_in_days text-right"
+                               ng-model="app.model.settings.expire_in_days">
+                        </select>
+                    </div>
+                </div>
+
+                <!--Status template-->
+                <div>
+                    <div class="doctool-subhead m--bottom-sm">
+                        <span>{{ 'Status' | translate }}<span class="icon-helptext hide" id="status-helptext">i</span></span>
+
+                    </div>
+
+                    <div class="m--bottom">
+                        <select name="is_active" select2 ng-model="app.model.is_active" style="width: 250px">
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="doctool-subhead m--bottom-sm">
+                        <span>{{ 'Track Opens?' | translate }}</span><span class="icon-helptext hide" id="track-open-helptext" style="top: 0px;position: inherit;margin-left: 5px;left: 0px;margin-top: 0;" >i</span>
+                        <select name="tmp_trackopen" select2 ng-model="app.model.settings.track_open" style="width: 250px">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+
+                    </div>
+                </div>
+
+                <div>
+                    <div class="doctool-subhead m--bottom-sm">
+                        <span>{{ 'Ignore page size/margins on email' | translate }}</span>
+                    </div>
+                    <div class="m--bottom">
+                        <select name="tmp_ignore_border_email" select2 ng-model="app.model.settings.ignore_border_email" style="width: 250px">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block-section quoting_tool-block-section-container"
+         ng-class="{'block-section--expanded': sectionVisible && blockSectionId == SECTIONS.GENERAL_SUCCESSCONTENT, 'block-section__disabled': sectionDisabled}"
+         data-section-id="{{SECTIONS.GENERAL_SUCCESSCONTENT}}">
+
+        <!-- Head -->
+        <div class="block-section__hd clearfix prevent-selection">
+            <!-- Arrow -->
+            <div class="block-section__toggle" ng-click="toggleSection($event)">
+                <i class="icon icon--arrow-expand"></i>
+            </div>
+
+            <!-- Title -->
+            <h4 style="display: inline-block" class="block-section__name ellipsis" ng-click="toggleSection($event)">{{ 'Success Message' | translate }}</h4><span class="icon-helptext hide" id="success_content_helptext" style="top: 0px;position: inherit;margin-left: 5px;left: 0px;margin-top: -8px;" >i</span>
+        </div>
+
+        <!-- Content -->
+        <div class="block-section__bd anim--fadein clearfix"
+             ng-class="{'block-section__bd--open': sectionVisible && blockSectionId == SECTIONS.GENERAL_SUCCESSCONTENT}">
+            <div>
+                <!--Description-->
+
+                <div>
+                <div id="quoting_tool-notes-field">
+                <textarea name="tmp_success_content" rows="6" style="font-size: 18px" maxlength="255" placeholder="{{ 'Note in here...' | translate }}"
+                class="quoting_tool-description"
+                ng-model="app.model.settings.success_content">
+                </textarea>
+                </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="block-section quoting_tool-block-section-container"-->
+         <!--ng-class="{'block-section&#45;&#45;expanded': sectionVisible && blockSectionId == SECTIONS.GENERAL_ANWIDGET, 'block-section__disabled': sectionDisabled}"-->
+         <!--data-section-id="{{SECTIONS.GENERAL_ANWIDGET}}">-->
+
+        <!--&lt;!&ndash; Head &ndash;&gt;-->
+        <!--<div class="block-section__hd clearfix prevent-selection">-->
+            <!--&lt;!&ndash; Arrow &ndash;&gt;-->
+            <!--<div class="block-section__toggle" ng-click="toggleSection($event)">-->
+                <!--<i class="icon icon&#45;&#45;arrow-expand"></i>-->
+            <!--</div>-->
+
+            <!--&lt;!&ndash; Title &ndash;&gt;-->
+            <!--<h4 style="display: inline" class="block-section__name ellipsis" ng-click="toggleSection($event)">{{ 'Auth.net Integration' | translate }}</h4>-->
+            <!--<span class="icon-helptext hide" id="auth-integration-helptext">i</span>-->
+        <!--</div>-->
+
+        <!--&lt;!&ndash; Content &ndash;&gt;-->
+        <!--<div class="block-section__bd anim&#45;&#45;fadein clearfix"-->
+             <!--ng-class="{'block-section__bd&#45;&#45;open': sectionVisible && blockSectionId == SECTIONS.GENERAL_ANWIDGET}">-->
+
+            <!--<div>-->
+                <!--&lt;!&ndash;AN Widget&ndash;&gt;-->
+                <!--<div>-->
+                    <!--<div id="quoting_tool-anwidget-field">-->
+                        <!--<input type="checkbox" name="tmp_anwidget" class="quoting_tool-anwidget" ng-model="app.model.anwidget">{{ 'Pay Online Widget' | translate }}-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <div class="block-section quoting_tool-block-section-container"
+         ng-class="{'block-section--expanded': sectionVisible && blockSectionId == SECTIONS.GENERAL_CREATENEWRECORDS, 'block-section__disabled': sectionDisabled}"
+         data-section-id="{{SECTIONS.GENERAL_CREATENEWRECORDS}}">
+
+        <!-- Head -->
+        <div class="block-section__hd clearfix prevent-selection">
+            <!-- Arrow -->
+            <div class="block-section__toggle" ng-click="toggleSection($event)">
+                <i class="icon icon--arrow-expand"></i>
+            </div>
+
+            <!-- Title -->
+            <h4 class="block-section__name ellipsis" ng-click="toggleSection($event)" >{{ 'Form Details' | translate }} </h4>
+            <!--<a data-toggle="tooltip" style="top: 12px; right: 150px" data-placement="top" title="{{ 'You can send forms to external people as well as existing customers. Filled out forms will be created as new records. Please refer to the user guide for instructions' | translate }}" class="quoting_tool-pencil-change-label">-->
+               <!---->
+            <!--</a>-->
+        </div>
+
+        <!-- Content -->
+        <div class="block-section__bd anim--fadein clearfix"
+             ng-class="{'block-section__bd--open': sectionVisible && blockSectionId == SECTIONS.GENERAL_CREATENEWRECORDS}">
+
+            <div>
+                <!--AN Widget-->
+                <div>
+                    <div id="quoting_tool-createnewrecords-field">
+                        <input type="checkbox" name="tmp_createnewrecords" class="quoting_tool-createnewrecords" ng-model="app.model.createnewrecords"> {{ 'Display on parent record (+create)' | translate }}<span class="icon-helptext hide" id="create_new_record" style="top: 0px;position: inherit;margin-left: 5px;left: 0px;margin-top: 2px;" >i</span>
+                    </div>
+                </div>
+            </div>
+            <input type="text" id="link-proposal" name="tmp_linkproposal" class="quoting_tool-linkproposal" ng-model="app.model.linkproposal" style="width: 100%" readonly="readonly" value="1111">
+        </div>
+    </div>
+    <div class="block-section quoting_tool-block-section-container"
+         ng-class="{'block-section--expanded': sectionVisible && blockSectionId == SECTIONS.GENERAL_LAYOUT, 'block-section__disabled': sectionDisabled}"
+         data-section-id="{{SECTIONS.GENERAL_LAYOUT}}">
+
+        <!-- Head -->
+        <div class="block-section__hd clearfix prevent-selection">
+            <!-- Arrow -->
+            <div class="block-section__toggle" ng-click="toggleSection($event);registerEventChangeLayout() ">
+                <i class="icon icon--arrow-expand"></i>
+            </div>
+
+            <!-- Title -->
+            <h4 class="block-section__name ellipsis" ng-click="toggleSection($event);registerEventChangeLayout() " >{{ 'Page Format & Margins' | translate }} </h4>
+            <!--<a data-toggle="tooltip" style="top: 12px; right: 150px" data-placement="top" title="{{ 'You can send forms to external people as well as existing customers. Filled out forms will be created as new records. Please refer to the user guide for instructions' | translate }}" class="quoting_tool-pencil-change-label">-->
+            <!---->
+            <!--</a>-->
+        </div>
+
+        <!-- Content -->
+        <div class="block-section__bd anim--fadein clearfix"
+             ng-class="{'block-section__bd--open': sectionVisible && blockSectionId == SECTIONS.GENERAL_LAYOUT}">
+            <div>
+                <!--AN Widget-->
+                <div>
+                    Layout format:
+                    <select style="width: 200px" id="settings_page_layout" class="quoting_tool-selector" name="page_layout"
+                            vtiger-select2='{"sortable": true}'
+                            ng-model="app.model.page_layout"
+                            ng-options="page_layout as page_layout.name for page_layout in app.data.orientation track by page_layout.id">
+                        <option>-- {{ 'Select' | translate }} --</option>
+                    </select>
+
+                </div>
+                <div>
+                    Page format:
+                    <select style="width: 200px" id="settings_page_format" class="quoting_tool-selector" name="page_format"
+                            vtiger-select2='{"sortable": true}'
+                            ng-model="app.model.page_format"
+                            ng-options="page_format as page_format.name for page_format in app.data.page_format track by page_format.id">
+                        <option>-- {{ 'Select' | translate }} --</option>
+                    </select>
+                    <div ng-init="registerEventChangeLayout()" ng-if="app.model.page_format.id=='Custom'">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td>width(mm):</td>
+                                <td><input id="settings_page_width" style="width: 50px" type="number" ng-model="app.model.page_width"></td>
+                            </tr>
+                            <tr>
+                                <td>height(mm):</td>
+                                <td><input id="settings_page_height" style="width: 50px" type="number" ng-model="app.model.page_height"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    Page margin:
+                    <table class="col-sm-9">
+                        <tbody>
+                        <tr>
+                            <td>top:</td>
+                            <td><input id="settings_page_margin_top" style="width: 50px" type="number" ng-model="app.model.margin_top"></td>
+                        </tr>
+                        <tr>
+                            <td>bottom:</td>
+                            <td><input id="settings_page_margin_bottom" style="width: 50px" type="number" ng-model="app.model.margin_bottom"></td>
+                        </tr>
+                        <tr>
+                            <td>left:</td>
+                            <td><input id="settings_page_margin_left" style="width: 50px" type="number" ng-model="app.model.margin_left"></td>
+                        </tr>
+                        <tr>
+                            <td>right:</td>
+                            <td><input id="settings_page_margin_right"style="width: 50px" type="number" ng-model="app.model.margin_right"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+           </div>
+    </div>
+    <div class="block-section quoting_tool-block-section-container"
+         ng-class="{'block-section--expanded': sectionVisible && blockSectionId == SECTIONS.GENERAL_SHARING, 'block-section__disabled': sectionDisabled}"
+         data-section-id="{{SECTIONS.GENERAL_SHARING}}">
+
+        <!-- Head -->
+        <div class="block-section__hd clearfix prevent-selection">
+            <!-- Arrow -->
+            <div class="block-section__toggle" ng-click="toggleSection($event)">
+                <i class="icon icon--arrow-expand"></i>
+            </div>
+
+            <!-- Title -->
+            <h4 class="block-section__name ellipsis" ng-click="toggleSection($event)" >{{ 'Sharing' | translate }} </h4>
+            <!--<a data-toggle="tooltip" style="top: 12px; right: 150px" data-placement="top" title="{{ 'You can send forms to external people as well as existing customers. Filled out forms will be created as new records. Please refer to the user guide for instructions' | translate }}" class="quoting_tool-pencil-change-label">-->
+            <!---->
+            <!--</a>-->
+        </div>
+
+        <!-- Content -->
+        <div class="block-section__bd anim--fadein clearfix"
+             ng-class="{'block-section__bd--open': sectionVisible && blockSectionId == SECTIONS.GENERAL_SHARING}">
+            <div>
+                <!-- blocks sections-->
+                <div class="btn-sq-holder m--bottom">
+                    <h4 style="color: #59b671; text-decoration: underline;padding-left: 35%">{{ 'Owner' | translate}}</h4>
+                    <div style="text-align: center">
+                        <select style="width: 200px" id="settings_owner" class="quoting_tool-selector" name="owner"
+                                vtiger-select2='{"sortable": true}'
+                                ng-model="app.model.owner"
+                                ng-options="member as member.name group by member.role for member in app.data.owner track by member.id">
+                            <option>-- {{ 'Select' | translate }} --</option>
+                        </select>
+                    </div>
+
+                    <h4 style="color: #59b671; text-decoration: underline;padding-left: 35%">{{ 'Sharing' | translate}}</h4>
+                    <div style="text-align: center">
+                        <select style="width: 200px" vtiger-select2='{"sortable": true}' class="quoting_tool-selector" ng-model="app.model.share_status" name="share_status" id="share_status">
+                            <option value="private">private</option>
+                            <option value="public">public</option>
+                            <option value="share">share</option>
+                        </select>
+                    </div>
+
+                    <div ng-if="app.model.share_status=='share'"  style="text-align: center">
+                        <select style="width: 200px" id="share_to" class="quoting_tool-selector" name="share_to"
+                                vtiger-select2='{"sortable": true}' multiple
+                                ng-model="app.model.share_to"
+                                ng-options="member as member.name group by member.role for member in app.data.sharing track by member.id">
+                            <option>-- {{ 'Select' | translate }} --</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block-section quoting_tool-block-section-container"
+         ng-class="{'block-section--expanded': sectionVisible && blockSectionId == SECTIONS.GENERAL_THEME, 'block-section__disabled': sectionDisabled}"
+         data-section-id="{{SECTIONS.GENERAL_THEME}}">
+
+        <!-- Head -->
+        <div class="block-section__hd clearfix prevent-selection">
+            <!-- Arrow -->
+            <div class="block-section__toggle" ng-click="toggleSection($event)">
+                <i class="icon icon--arrow-expand"></i>
+            </div>
+
+            <!-- Title -->
+            <h4 class="block-section__name ellipsis" ng-click="toggleSection($event)" >{{ 'Theme' | translate }} </h4>
+            <!--<a data-toggle="tooltip" style="top: 12px; right: 150px" data-placement="top" title="{{ 'You can send forms to external people as well as existing customers. Filled out forms will be created as new records. Please refer to the user guide for instructions' | translate }}" class="quoting_tool-pencil-change-label">-->
+            <!---->
+            <!--</a>-->
+        </div>
+
+        <!-- Content -->
+        <div class="block-section__bd anim--fadein clearfix"
+             ng-class="{'block-section__bd--open': sectionVisible && blockSectionId == SECTIONS.GENERAL_THEME}">
+            <div class="m--bottom">
+                <img class="quoting_tool-background-image-preview"
+                     ng-src="{{app.model.settings.background.image ? app.model.settings.background.image : previewBackground}}"
+                     alt=""
+                     ng-click="changeBackgroundImage($event)">
+            </div>
+
+            <div class="m--bottom">
+                <button class="btn btn-primary" ng-click="changeBackgroundImage($event)">{{ 'Change' | translate }}</button>
+                <button class="btn" ng-click="resetBackgroundImage($event)">{{ 'Reset' | translate }}</button>
+                <button class="btn btn-danger" ng-click="removeBackgroundImage($event)">{{ 'Remove' | translate }}</button>
+            </div>
+
+            <div class="m--bottom">
+                <div class="doctool-subhead m--bottom-sm">
+                    <span>{{ 'Background Size' | translate }}</span>
+                </div>
+
+                <ul class="unstyled" style="padding-left: 24px;">
+
+                    <li>
+                        <label class="radio">
+                            <input type="radio" name="backgroundSize" value="auto" checked
+                                   ng-model="app.model.settings.background.size"
+                                   ng-change="changeBackgroundSize(app.model.settings.background.size)">
+                            <span>{{ 'Auto' | translate }}</span>
+                        </label>
+                    </li>
+
+                    <li>
+                        <label class="radio">
+                            <input type="radio" name="backgroundSize" value="100%"
+                                   ng-model="app.model.settings.background.size"
+                                   ng-change="changeBackgroundSize(app.model.settings.background.size)">
+                            <span>100%</span>
+                        </label>
+                    </li>
+
+                    <li>
+                        <label class="radio">
+                            <input type="radio" name="backgroundSize" value="cover"
+                                   ng-model="app.model.settings.background.size"
+                                   ng-change="changeBackgroundSize(app.model.settings.background.size)">
+                            <span>{{ 'Cover' | translate }}</span>
+                        </label>
+                    </li>
+
+                    <li>
+                        <label class="radio">
+                            <input type="radio" name="backgroundSize" value="contain"
+                                   ng-model="app.model.settings.background.size"
+                                   ng-change="changeBackgroundSize(app.model.settings.background.size)">
+                            <span>{{ 'Contain' | translate }}</span>
+                        </label>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--//TASKID:13087 - DEV: tiennguyen - DATE: 2018-10-22 - START-->
+    <!--NOTE:add section File Name-->
+    <div class="block-section quoting_tool-block-section-container"
+         ng-class="{'block-section--expanded': sectionVisible && blockSectionId == SECTIONS.GENERAL_FILENAME, 'block-section__disabled': sectionDisabled}"
+         data-section-id="{{SECTIONS.GENERAL_FILENAME}}">
+
+        <!-- Head -->
+        <div class="block-section__hd clearfix prevent-selection">
+            <!-- Arrow -->
+            <div class="block-section__toggle" ng-click="toggleSection($event);fileNameValid()">
+                <i class="icon icon--arrow-expand"></i>
+            </div>
+
+            <!-- Title -->
+            <h4 class="block-section__name ellipsis" ng-click="toggleSection($event);fileNameValid()" >{{ 'File Name' | translate }} </h4>
+            <!--<a data-toggle="tooltip" style="top: 12px; right: 150px" data-placement="top" title="{{ 'You can send forms to external people as well as existing customers. Filled out forms will be created as new records. Please refer to the user guide for instructions' | translate }}" class="quoting_tool-pencil-change-label">-->
+            <!---->
+            <!--</a>-->
+        </div>
+
+        <!-- Content -->
+        <div class="block-section__bd anim--fadein clearfix"
+             ng-class="{'block-section__bd--open': sectionVisible && blockSectionId == SECTIONS.GENERAL_FILENAME}">
+            <div>
+                <!-- blocks sections-->
+                <div class="btn-sq-holder m--bottom">
+                    <input name="file_name" ng-model="app.model.file_name" type="text">
+                    <div style="font-size: 10px">
+                        <div>
+                            $record_no$ - record number (INV1002)
+                        </div>
+                        <div>
+                            $record_name$ - record title/name/subject
+                        </div>
+                        <div>
+                            $template_name$ - document template name
+                        </div>
+                        <div>
+                            $day$ - day number (01, 12, 30..)
+                        </div>
+                        <div>
+                            $month$ - month number (01, 06, 12..)
+                        </div>
+                        <div>
+                            $year$ - year number (2016, 2020, 2025)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--//TASKID:13087 - DEV: tiennguyen - DATE: 2018-10-22 - END-->
+
+    <div class="block-section quoting_tool-block-section-container"
+         ng-class="{'block-section--expanded': sectionVisible && blockSectionId == SECTIONS.GENERAL_EMAIL_SIGNED, 'block-section__disabled': sectionDisabled}"
+         data-section-id="{{SECTIONS.GENERAL_EMAIL_SIGNED}}">
+
+        <!-- Head -->
+        <div class="block-section__hd clearfix prevent-selection">
+            <!-- Arrow -->
+            <div class="block-section__toggle" ng-click="toggleSection($event)">
+                <i class="icon icon--arrow-expand"></i>
+            </div>
+
+            <!-- Title -->
+            <h4 style="display: inline-block" class="block-section__name ellipsis" ng-click="toggleSection($event)">{{ 'Email Signed Document Copy' | translate }}</h4><span class="icon-helptext hide" id="email_signed_helptext" style="top: 0px;position: inherit;margin-left: 5px;left: 0px;margin-top: -8px;" >i</span>
+        </div>
+
+        <!-- Content -->
+        <div class="block-section__bd anim--fadein clearfix"
+             ng-class="{'block-section__bd--open': sectionVisible && blockSectionId == SECTIONS.GENERAL_EMAIL_SIGNED}">
+            <div>
+                <div class="doctool-subhead m--bottom-sm">
+                    {{ 'Enable Automated Email?' | translate }}
+                </div>
+
+                <div class="m--bottom">
+                    <select name="is_active" select2 ng-model="app.model.settings.email_signed" style="width: 250px">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <div class="doctool-subhead m--bottom-sm">
+                    {{ 'From:' | translate }}
+                </div>
+
+                <div class="m--bottom">
+                    <input type="text" style="width: 96%"  name="email_from_copy"
+                           class="quoting_tool-email_from_copy"
+                           ng-model="app.model.settings.email_from_copy">
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <div class="doctool-subhead m--bottom-sm">
+                    {{ 'BCC:' | translate }}
+                </div>
+
+                <div class="m--bottom">
+                    <input type="text" style="width: 96%"  name="email_bcc_copy"
+                           class="quoting_tool-email_bcc_copy "
+                           ng-model="app.model.settings.email_bcc_copy">
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <div class="doctool-subhead m--bottom-sm">
+                    {{ 'Subject:' | translate }}
+                </div>
+
+                <div class="m--bottom">
+                    <input type="text" style="width: 96%"  name="email_subject_copy"
+                           class="quoting_tool-email_subject_copy "
+                           ng-model="app.model.settings.email_subject_copy">
+                </div>
+            </div>
+
+            <div>
+                <div class="doctool-subhead m--bottom-sm">
+                    {{ 'Body:' | translate }}
+                </div>
+
+                <div class="m--bottom">
+                    <textarea name="email_body_copy" rows="6" style="font-size: 12px; width: 100%"  placeholder="{{ 'Note in here...' | translate }}"
+                              class="quoting_tool-description"
+                              ng-model="app.model.settings.email_body_copy">
+                </textarea>
+                </div>
+            </div>
+           </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>

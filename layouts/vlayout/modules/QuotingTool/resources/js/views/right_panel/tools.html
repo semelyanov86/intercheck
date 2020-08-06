@@ -1,0 +1,70 @@
+<ul class="quoting_tool-tools-draggable navpanel--light" resize="nicescroll: true;">
+    <li class="btn--navpanel btn--navpanel-green">
+        <a href="javascript:;" ng-click="saveTemplate($event)">
+            <i class="icon icon--clear-background-image icon--doc-accepted"></i>
+            <span style="color: #fff;">{{ 'Save' | translate }}</span>
+        </a>
+    </li>
+    <li class="btn--navpanel" ui-sref-active="is--active">
+        <a ui-sref="base.content">
+            <i class="icon icon--clear-background-image icon--block"></i>
+            <span>{{ 'Content' | translate }}</span>
+        </a>
+    </li>
+    <li class="btn--navpanel" ui-sref-active="is--active">
+        <a ui-sref="base.dataObjects">
+            <i class="material-icons icon--clear-background-image " style="display: block;width: 32px;height: 24px;margin: 0 auto 5px;">photo_filter</i>
+            <span>{{ 'Data Objects' | translate }}</span>
+        </a>
+    </li>
+    <li class="btn--navpanel" ui-sref-active="is--active">
+        <a ui-sref="base.mergeFields">
+            <i class="icon icon--clear-background-image icon--merge-fields"></i>
+            <span>{{ 'Merge Fields' | translate }}</span>
+        </a>
+    </li>
+    <li class="btn--navpanel">
+        <input type="hidden" name=""/>
+        <a href="javascript:;" ng-click="showEmailForm($event);">
+            <i class="material-icons icon--clear-background-image" style="display: block;width: 32px;height: 24px;margin: 0 auto 5px;">email_outline</i>
+            <span>{{ 'Email' | translate }}</span>
+        </a>
+    </li>
+    <li class="btn--navpanel" ui-sref-active="is--active">
+        <a ui-sref="base.general">
+            <i class="material-icons icon--clear-background-image" style="display: block;width: 32px;height: 24px;margin: 0 auto 5px;">settings</i>
+            <span>{{ 'General' | translate }}</span>
+        </a>
+    </li>
+    <li class="btn--navpanel" ui-sref-active="is--active">
+        <a ui-sref="base.accept">
+            <i class="material-icons icon--clear-background-image" style="display: block;width: 32px;height: 24px;margin: 0 auto 5px;">vertical_split_outline</i>
+            <span>{{ 'Sidebar' | translate }}</span>
+        </a>
+    </li>
+    <!--<li class="btn&#45;&#45;navpanel" ui-sref-active="is&#45;&#45;active">-->
+        <!--<a ui-sref="base.background">-->
+            <!--<i class="icon icon&#45;&#45;clear-background-image icon&#45;&#45;block-image"></i>-->
+            <!--<span style="font-size: 12px">{{ 'Theme' | translate }}</span>-->
+        <!--</a>-->
+    <!--</li>-->
+    <li class="btn--navpanel" ui-sref-active="is--active">
+        <a ui-sref="base.sharing">
+            <i class="material-icons icon--clear-background-image" style="display: block;width: 32px;height: 24px;margin: 0 auto 5px;">share</i>
+            <span>{{ 'Custom Functions' | translate }}</span>
+        </a>
+    </li>
+    <li class="btn--navpanel" ui-sref-active="is--active">
+        <a ui-sref="base.history">
+            <i class="icon icon--clear-background-image fa fa-history force-fa"></i>
+            <span>{{ 'History' | translate }}</span>
+        </a>
+    </li>
+
+    <!--<li class="btn&#45;&#45;navpanel">-->
+        <!--<a href="javascript:;" ng-click="downloadPDF($event);">-->
+            <!--<i class="icon icon&#45;&#45;clear-background-image icon&#45;&#45;download"></i>-->
+            <!--<span>{{ 'Download' | translate }}</span>-->
+        <!--</a>-->
+    <!--</li>-->
+</ul>

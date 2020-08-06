@@ -1,0 +1,37 @@
+<div class="content-container quoting_tool-draggable ui-resizable"
+     data-id="layouts/vlayout/modules/QuotingTool/resources/js/views/widgets/secondary_signature.html">
+    <div class="content-editable widget__ui">
+        <div class="quoting_tool-draggable-object quoting_tool-widget-secondary_signature-container">
+            <div contenteditable="true">
+                <div class="quoting_tool-widget-secondary_signature-main">
+                    <a href="javascript:;">
+                        <img src="modules/QuotingTool/resources/images/secondary-signature.png"
+                             title="Secondary Signature" alt="" class="quoting_tool-widget-secondary_signature-image"
+                             style="width: 130px; height: 40px;">
+                    </a>
+                </div>
+            </div>
+            <div class="clear">&nbsp;</div>
+        </div>
+    </div>
+
+    <div class="quoting_tool-btn-options quoting_tool-btn-left-options">
+        <div class="doc-block__control btn--block-control quoting_tool-btn-options-item"
+             ng-show="app.data.widgets.secondary_signature.layout.enable_move">
+            <i class="icon-align-justify"></i>
+        </div>
+    </div>
+
+    <div class="quoting_tool-btn-options quoting_tool-btn-right-options">
+        <!--<div class="doc-block__control btn--block-control btn--block-control-settings quoting_tool-btn-options-item"-->
+        <!--ng-show="app.data.widgets.secondary_signature.layout.enable_setting"-->
+        <!--ng-click="setting($event, app.data.widgets.secondary_signature)">-->
+        <!--<i class="icon-cog"></i>-->
+        <!--</div>-->
+        <div class="doc-block__control btn--block-control btn--block-control-del quoting_tool-btn-options-item"
+             ng-show="app.data.widgets.secondary_signature.layout.enable_remove"
+             ng-click="remove($event)">
+            <i class="icon-trash"></i>
+        </div>
+    </div>
+</div>

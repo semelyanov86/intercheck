@@ -1,0 +1,59 @@
+<div class="content-container block-handle"
+     data-id="layouts/vlayout/modules/QuotingTool/resources/js/views/blocks/team_member.html">
+    <div class="content-editable">
+        <div contenteditable="true">
+            <div class="quoting_tool-cke-keep-element">
+                <table  style="margin-left: 5%;width: 90%" data-info="1" class="quoting_tool-cke-keep-element">
+                    <tbody>
+                    <tr>
+                        <td style="text-align: center;max-width: 191px">
+                            <table class="quoting_tool-cke-keep-element" style="width: 100%">
+                                <tbody>
+                                <tr class="tr-last">
+                                    <td valign="top" class="td-last" style="text-align: center;max-width: 191px;max-height: 150px">
+                                        <table class="quoting_tool-cke-keep-element" style="width: 100%">
+                                            <tr>
+                                                <td><img class="quoting_tool-cke-keep-element" style="width: 191px;height: 150px;max-height: 150px;max-width: 191px"
+                                                         src="modules/QuotingTool/resources/images/avatar.png" alt=""><br></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="max-width: 100%;padding-top: 20px"><p style="max-width: 100%"> Text goes here!</p></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+        <div class="clear">&nbsp;</div>
+    </div>
+
+    <div class="quoting_tool-btn-options quoting_tool-btn-left-options">
+        <div class="doc-block__control btn--block-control doc-block__control--drag quoting_tool-btn-options-item"
+             ng-show="app.data.blocks.team_member.layout.enable_move">
+            <i class="icon-align-justify"></i>
+        </div>
+    </div>
+
+    <div class="quoting_tool-btn-options quoting_tool-btn-right-options">
+        <div class="doc-block__control btn--block-control btn--block-control-settings quoting_tool-btn-options-item"
+             ng-show="app.data.blocks.team_member.layout.enable_setting"
+             ng-click="setting($event, app.data.blocks.team_member)">
+            <i class="icon-cog"></i>
+        </div>
+        <div class="doc-block__control btn--block-control btn--block-control-del quoting_tool-btn-options-item"
+             ng-show="app.data.blocks.team_member.layout.enable_remove"
+             ng-click="remove($event)">
+            <i class="icon-trash"></i>
+        </div>
+    </div>
+</div>

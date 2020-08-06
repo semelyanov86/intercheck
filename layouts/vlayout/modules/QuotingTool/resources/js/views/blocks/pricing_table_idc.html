@@ -1,0 +1,86 @@
+<div class="content-container block-handle"
+     data-id="layouts/vlayout/modules/QuotingTool/resources/js/views/blocks/pricing_table_idc.html">
+    <div class="content-editable">
+        <div contenteditable="true">
+            <div class="quoting_tool-cke-keep-element" style="overflow: hidden; overflow-x: auto;">
+                <table border="1" cellspacing="0" cellpadding="6"
+                       class="quoting_tool-cke-keep-element" data-table-type="pricing_table_idc"
+                       style="width: 100%; border-collapse: collapse; font-size: 10px;">
+                     <thead title="Header">
+                    <tr style="background-color: #f4f4f4;">
+                        <th style="background-color: rgb(0, 0, 0); color: rgb(255, 255, 255); border: 1px solid rgb(102, 100, 96); text-align: center;">#</th>
+                        <th style="background-color: rgb(0, 0, 0); color: rgb(255, 255, 255); border: 1px solid rgb(102, 100, 96); text-align: center;">Item Name</th>
+                        <th style="background-color: rgb(0, 0, 0); color: rgb(255, 255, 255); border: 1px solid rgb(102, 100, 96); text-align: center;">Quantity</th>
+                        <th style="background-color: rgb(0, 0, 0); color: rgb(255, 255, 255); border: 1px solid rgb(102, 100, 96); text-align: center;">Price</th>
+                        <th style="background-color: rgb(0, 0, 0); color: rgb(255, 255, 255); border: 1px solid rgb(102, 100, 96); text-align: center;">Discount</th>
+                        <th style="background-color: rgb(0, 0, 0); color: rgb(255, 255, 255); border: 1px solid rgb(102, 100, 96); text-align: center;" data-info="isTax">Tax</th>
+                        <th style="background-color: rgb(0, 0, 0); color: rgb(255, 255, 255); border: 1px solid rgb(102, 100, 96); text-align: center;">Net Price</th>
+                    </tr>
+                    </thead>
+                    <tbody title="Body"  data-odd-style="{&quot;background-color&quot;:&quot;#D0CCC7&quot;}" data-even-style="{&quot;background-color&quot;:&quot;#FFFFFF&quot;}">
+                    <tr>
+                        <td colspan="7" style="background-color: rgb(208, 204, 199); border: 1px solid rgb(102, 100, 96);">#PRODUCTBLOC_START#</td>
+                    </tr>
+                    <tr class="tbody-content" valign="top">
+                        <td style="text-align: center;" width="4%">$VTEItems__sequence$</td>
+                        <td style="text-align: left;min-width: 37%">
+                            <b>$VTEItems__productid$</b><br>
+                            $VTEItems__comment$
+                        </td>
+                        <td style="text-align: right;" width="8%">$VTEItems__quantity$</td>
+                        <td style="text-align: right;" width="13%">\$ $VTEItems__listprice$</td>
+                        <td style="text-align: right;" width="13%">\$ $VTEItems__discount_amount$</td>
+                        <td style="text-align: right;" width="13%" data-info="isTax">\$ $VTEItems__tax_total$</td>
+                        <td style="text-align: right;"  width="12%">\$ $VTEItems__net_price$</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" style="background-color: rgb(208, 204, 199); border: 1px solid rgb(102, 100, 96);">#PRODUCTBLOC_END#</td>
+                    </tr>
+                    </tbody>
+                    <tfoot title="Footer">
+                    <tr>
+                        <td colspan="6" style="text-align: right;">Items Total</td>
+                        <td style="text-align: right;" class="item-total" width="12%">\$ $VTEItems__subtotal$</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: right; ">Discount Amount</td>
+                        <td style="text-align: right;" class="item-total" width="12%">\$ $VTEItems__discount_amount$</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: right; ">Pre Tax Total</td>
+                        <td style="text-align: right;" class="item-total" width="12%">\$ $VTEItems__pre_tax_total$</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: right; ">Tax</td>
+                        <td style="text-align: right;" class="item-total" width="12%">\$ $VTEItems__tax$</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: right; ">Grand Total</td>
+                        <td style="text-align: right;" class="item-total" width="12%">\$ $VTEItems__total$</td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="quoting_tool-btn-options quoting_tool-btn-left-options">
+        <div class="doc-block__control btn--block-control doc-block__control--drag quoting_tool-btn-options-item"
+             ng-show="app.data.blocks.pricing_table_idc.layout.enable_move">
+            <i class="icon-align-justify"></i>
+        </div>
+    </div>
+
+    <div class="quoting_tool-btn-options quoting_tool-btn-right-options">
+        <div class="doc-block__control btn--block-control btn--block-control-settings quoting_tool-btn-options-item"
+             ng-show="app.data.blocks.pricing_table_idc.layout.enable_setting"
+             ng-click="setting($event, app.data.blocks.pricing_table_idc)">
+            <i class="icon-cog"></i>
+        </div>
+        <div class="doc-block__control btn--block-control btn--block-control-del quoting_tool-btn-options-item"
+             ng-show="app.data.blocks.pricing_table_idc.layout.enable_remove"
+             ng-click="remove($event)">
+            <i class="icon-trash"></i>
+        </div>
+    </div>
+</div>

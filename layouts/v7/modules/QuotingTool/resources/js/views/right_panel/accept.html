@@ -1,0 +1,19 @@
+<div class="quoting_tool-tool-items">
+    <div class="quoting_tool-tool-items-main">
+        <ul class="list list--tabs list--justified m--bottom">
+            <li ng-class="{'active': section == SECTIONS.DECISION}">
+                <a href="" ng-click="showSection(SECTIONS.DECISION)">{{ 'Online Document' | translate }} <span class="icon-helptext hide" id="" style="top: 0px;margin-left: 5px;position: inherit;left: 0px;margin-top: 2px;">i</span></a>
+            </li>
+        </ul>
+        <div class="quoting_tool-tool-items-container" resize>
+            <!-- decision sections-->
+            <div class="btn-sq-holder m--bottom" style="margin-right: 0;"
+                 ng-if="section == SECTIONS.DECISION">
+                <div ng-include="'layouts/v7/modules/QuotingTool/resources/js/views/right_panel/accept_decision.html'"
+                     onload="load_decision()"></div>
+            </div>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+</div>

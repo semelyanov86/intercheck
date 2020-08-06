@@ -1,0 +1,73 @@
+<div class="modal-dialog modal-lg modal-emailtemp" style="position: fixed">
+    <div class="modal-content">
+        <form class="form-horizontal" action="#">
+            <div class="modal-header">
+                <div class="clearfix">
+                    <div class="pull-right ">
+                        <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                            <span aria-hidden="true" class='fa fa-close'></span>
+                        </button>
+                    </div>
+                    <h4 class="modal-title">{{ 'Email Template' | translate }}</h4>
+                </div>
+            </div>
+
+            <div class="modal-body" style="margin: 10px; text-align: center">
+                <a href="javascript:void(0);"> <span class="icon-helptext hide" id="email-helptext" style="font-size: 9px">i</span></a>
+                <div class="form-group">
+                    <input type="text" class="form-control input-large" name="tmp_email_subject"
+                           placeholder="{{ 'Subject' | translate }}"
+                           ng-model="app.model.email_subject"/>
+                </div>
+
+                <div class="form-group">
+                    <textarea name="tmp_email_content" class="form-control"
+                              placeholder="{{ 'Content in here...' | translate }}"
+                              ng-model="app.model.email_content"
+                              ckeditor="emailTemplateSettings"></textarea>
+                </div>
+                <div class="form-group">
+                    <table class="table-email-popup">
+                        <tr>
+                            <td style="padding-right: 5px">{{ 'Merge Fields' | translate }}</td>
+                            <td><select id="tokens_modules_fields" class="quoting_tool-selector" select2 style="width: 170px"
+                                        ng-init="app.data.selectedModuleField = app.data.selectedModule.fields[0]"
+                                        ng-model="app.data.selectedModuleField"
+                                        ng-options="field as field.label group by field.block.label for field in app.data.selectedModule.fields | filter:skipItemDetailsFields(app.data.selectedModule.name)">
+                                <option>-- {{ 'Select' | translate }} --</option>
+                            </select></td>
+                            <td>
+                                <a href="javascript:void(0);"><span class="icon-helptext" id="email-dataField" style="float: right; margin: 7px 7px 7px 3px;  font-size: 9px">i</span></a>
+                                <button class="btn btn-primary quoting_tool-btn-insert pull-right" type="button" style="margin-left: 5px"
+                                        ng-click="insertModuleFieldTokenForEmailPopup($event)">{{ 'Insert' | translate }}</button>
+                            </td>
+                            <td>  <a href="javascript:void(0);"><span class="icon-helptext" id="email-accessibleLink" style="float: right; margin: 7px 7px 7px 3px; font-size: 9px">i</span></a>
+                                <button class="btn btn-primary quoting_tool-btn-insert pull-right" type="button"
+                                        ng-click="insertCustomerAccessibleLink($event)">{{ 'Insert Customer Accessible Link' | translate }}</button>
+                            </td>
+                            <td> <a href="javascript:void(0);"><span class="icon-helptext" id="email-signature" style="float: right; margin: 7px 7px 7px 3px;  font-size: 9px">i</span></a>
+                                <button class="btn btn-primary quoting_tool-btn-insert pull-right" type="button"
+                                        ng-click="insertSignature($event)">{{ 'Insert User Email Signature' | translate }}</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="form-group">
+                    <label class="check_attach_file text-left" style="display: block; float: left">
+                        <input style="top: 2px;margin-top: 0px;" type="checkbox" name="check_attach_file"
+                               ng-model="app.model.check_attach_file"/>
+                        <span style="padding-left: 10px">{{ 'Attach PDF Copy' | translate }}</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-right cancelLinkContainer">
+                    <a class="cancelLink" type="reset" data-dismiss="modal">{{ 'Cancel' | translate }}</a>
+                </div>
+                <button class="btn btn-success" type="button" name="saveButton" ng-click="saveEmailTemplate()">
+                    <strong>{{ 'Save' | translate }}</strong>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
