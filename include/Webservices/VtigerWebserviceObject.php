@@ -83,15 +83,15 @@ class VtigerWebserviceObject{
 				}
 			}
 		}
-		
+
 		$rowData = self::$_fromIdCache[$entityId];
-		
+
 		if($rowData) {
 			return new VtigerWebserviceObject($rowData['id'],$rowData['name'],
 					$rowData['handler_path'],$rowData['handler_class']);
 		}
 		
-		throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied for id - $entityId");
+		throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied in fromid for id - $entityId");
 	}
 	
 	static function fromQuery($adb,$query){
