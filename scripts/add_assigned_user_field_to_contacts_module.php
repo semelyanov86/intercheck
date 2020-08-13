@@ -17,7 +17,7 @@ if ($module) {
             $field->column       = 'trx_owner_id';
             $field->columntype   = 'VARCHAR(255)';
             $field->uitype       = 53;
-            $field->displaytype = 3;
+            $field->displaytype = 1;
             $field->typeofdata   = 'V~M';
             $block->addField($field);
         }
@@ -30,7 +30,7 @@ if ($module) {
             $field->column       = 'ftd_owner_id';
             $field->columntype   = 'VARCHAR(255)';
             $field->uitype       = 53;
-            $field->displaytype = 3;
+            $field->displaytype = 1;
             $field->typeofdata   = 'V~M';
             $block->addField($field);
         }
