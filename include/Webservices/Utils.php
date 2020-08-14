@@ -124,6 +124,38 @@ function vtws_getId($objId, $elemId){
 	return $objId."x".$elemId;
 }
 
+function vtws_getEntityId($entityName) {
+    global $adb;
+    $wsrs=$adb->pquery('select id from vtiger_ws_entity where name=?', array($entityName));
+    if ($wsrs && $adb->num_rows($wsrs)==1) {
+        $wsid = $adb->query_result($wsrs, 0, 0);
+    } else {
+        $wsid = 0;
+    }
+    return $wsid;
+}
+
+function vtws_getEntityName($entityId) {
+    global $adb;
+    $result = $adb->pquery('select name from vtiger_ws_entity where id=?', array($entityId));
+    if ($result && $adb->num_rows($result)>0) {
+        return $result->fields['name'];
+    }
+    return '';
+}
+
+function vtws_getWSID($id) {
+    if (strlen($id)==40) {
+        return CRMEntity::getWSIDfromUUID($id);
+    } elseif (preg_match('/^[0-9]+x[0-9]+$/', $id)) {
+        return $id;
+    } elseif (is_numeric($id)) {
+        return vtws_getEntityId(getSalesEntityType($id)).'x'.$id;
+    } else {
+        return '0x0';
+    }
+}
+
 function getEmailFieldId($meta, $entityId){
 	global $adb;
 	//no email field accessible in the module. since its only association pick up the field any way.
@@ -1288,6 +1320,19 @@ function vtws_isDuplicatesAllowed($webserviceObject){
 		$allowed = ($db->query_result($result, 'allowduplicates')) ? true : false;
 	}
 	return $allowed;
+}
+
+function vtws_getWsIdForFilteredRecord($moduleName, $conditions, $user) {
+    global $adb;
+    $queryGenerator = new QueryGenerator($moduleName, $user);
+    $queryGenerator->setFields(array('id'));
+    $queryGenerator->addUserSearchConditions($queryGenerator->constructAdvancedSearchConditions($moduleName, $conditions));
+    $query = $queryGenerator->getQuery(false, 1);
+    $result = $adb->pquery($query, array());
+    if ($adb->num_rows($result) == 0) {
+        return null;
+    }
+    return vtws_getEntityId($moduleName).'x'.$adb->query_result($result, 0, 0);
 }
 
 ?>

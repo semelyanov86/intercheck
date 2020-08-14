@@ -5,4 +5,7 @@ $languageStrings = array(
 'payment_failed'	=>	'payment_failed',
 'requires_action'	=>	'requires_action',
 'card'	=>	'card',
+'Currency direct'	=>	'Currency direct',
+'Bendura'	=>	'Bendura',
+'Isracard'	=>	'Isracard',
 );
