@@ -8,4 +8,8 @@ $languageStrings = array(
 'Currency direct'	=>	'Currency direct',
 'Bendura'	=>	'Bendura',
 'Isracard'	=>	'Isracard',
+'Completed'	=>	'Completed',
+'Bid'	=>	'Bid',
+'Balance'	=>	'Balance',
+'Stripe'	=>	'Stripe',
 );

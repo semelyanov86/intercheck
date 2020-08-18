@@ -25,6 +25,7 @@ $THIS_DIR = dirname(__FILE__);
 if (file_exists($THIS_DIR.'/config_override.php')) {
 	include_once $THIS_DIR.'/config_override.php';
 }
+require 'includes/kint.phar';
 
 class VtigerConfig {
 
