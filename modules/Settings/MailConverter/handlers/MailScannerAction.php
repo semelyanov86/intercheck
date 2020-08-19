@@ -432,7 +432,13 @@ class Vtiger_MailScannerAction {
 		$focus->column_fields['assigned_user_id'] = $assignedToId;
 		$focus->column_fields["date_start"] = date('Y-m-d', $mailrecord->_date);
 		$focus->column_fields["time_start"] = date('H:i:s', $mailrecord->_date);
-		$focus->column_fields["email_flag"] = 'MAILSCANNER';
+		if ($this->lookup === 'FROM') {
+			$focus->column_fields["email_flag"] = 'RECEIVED';
+		} elseif ($this->lookup === 'TO') {
+			$focus->column_fields["email_flag"] = 'SENT';
+		} else {
+			$focus->column_fields["email_flag"] = 'MAILSCANNER';
+		}
 
 		$from=$mailrecord->_from[0];
 		$to = $mailrecord->_to[0];
