@@ -44,7 +44,7 @@ function vtws_create($elementType, $element, $user) {
             $elemTypeId = $ids[0];
             $elemId = $ids[1];
             $referenceObject = VtigerWebserviceObject::fromId($adb, $elemTypeId);
-            if (!in_array($referenceObject->getEntityName(), $details)) {
+            if (!in_array($referenceObject->getEntityName(), $details) && $referenceObject->getEntityName() != 'Users') {
                 throw new WebServiceException(WebServiceErrorCode::$REFERENCEINVALID,
                     "Invalid reference specified for $fieldName");
             }
