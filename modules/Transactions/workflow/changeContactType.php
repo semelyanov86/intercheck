@@ -38,6 +38,7 @@ function changeContactType($ws_entity){
         $contactInstance->set('cf_contacttype', 'Upsale');
     } elseif ($total >= 1) {
         $contactInstance->set('cf_contacttype', 'FTD');
+        $contactInstance->set('ftd_owner_id', $contactInstance->get('assigned_user_id'));
     }
     if ($total > 0) {
         $contactInstance->save();
