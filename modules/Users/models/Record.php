@@ -9,7 +9,7 @@
  *************************************************************************************/
 
 class Users_Record_Model extends Vtiger_Record_Model {
-	
+	const EXCLUDED_GROUP_ID = 24;
 	/**
 	 * Checks if the key is in property or data.
 	 */
@@ -24,6 +24,9 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	 * @return <object>
 	 */
 	public function get($key) {
+	    if ($key === 'signature') {
+	        return $this->getSignature();
+        }
 		if(property_exists($this, $key)) {
 			return $this->$key;
 		}
@@ -42,6 +45,31 @@ class Users_Record_Model extends Vtiger_Record_Model {
         }
         parent::set($key, $value);
         return $this;
+    }
+
+    public function getSignature()
+    {
+        $grouplist = getUserProfile($this->getId());
+        if (empty($grouplist)) {
+            return $this->signature;
+        } else {
+            $groupId = $this->getFirstGroupId($grouplist);
+            $groupModel = Settings_Profiles_Record_Model::getInstanceById($groupId);
+            if ($groupModel) {
+                return $groupModel->getSignature();
+            } else {
+                return $this->signature;
+            }
+        }
+    }
+
+    private function getFirstGroupId(array $grouplist)
+    {
+        if ($grouplist[0] != self::EXCLUDED_GROUP_ID) {
+            return $grouplist[0];
+        } else {
+            return $grouplist[1];
+        }
     }
 
 	/**

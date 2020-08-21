@@ -28,6 +28,18 @@
 		</div>
 	</div>
 {/if}
+<div class="form-group row">
+	<label class="col-lg-3 col-md-3 col-sm-3 fieldLabel control-label">
+		{vtranslate('Signature', $QUALIFIED_MODULE)}
+	</label>
+	<div class="fieldValue col-lg-9 col-md-9 col-sm-9">
+		<div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-12">
+				<textarea name="signature" id="signature" cols="30" rows="10">{$RECORD_MODEL->getSignature()}</textarea>
+			</div>
+		</div>
+	</div>
+</div>
 <input type="hidden" name="viewall" value="0" />
 <input type="hidden" name="editall" value="0" />
 {if $RECORD_MODEL && $RECORD_MODEL->getId() && empty($IS_DUPLICATE_RECORD)}

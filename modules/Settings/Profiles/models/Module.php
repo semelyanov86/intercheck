@@ -15,7 +15,7 @@ class Settings_Profiles_Module_Model extends Settings_Vtiger_Module_Model {
 
 	var $baseTable = 'vtiger_profile';
 	var $baseIndex = 'profileid';
-	var $listFields = array('profilename' => 'Name', 'description' => 'Description');
+	var $listFields = array('profilename' => 'Name', 'description' => 'Description', 'signature' => 'Signature');
 
 	const GLOBAL_ACTION_VIEW = 1;
 	const GLOBAL_ACTION_EDIT = 2;
