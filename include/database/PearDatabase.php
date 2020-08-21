@@ -94,11 +94,11 @@ class PearDatabase{
 	 * See the constructor for initialization
 	 */
 	var $isdb_default_utf8_charset = false;
-/*
+
     public function __destruct()
     {
         $this->disconnect();
-	}*/
+	}
 
 	/**
 	 * Manage instance usage of this class
@@ -871,20 +871,18 @@ class PearDatabase{
 		return $this->database->qstr($string);
 	}
 
-	function disconnect($flag = false) {
+	function disconnect() {
 		$this->println("ADODB disconnect");
-		if(isset($this->database) || $flag){
+		if($this->database){
 			if($this->dbType == "mysql"){
 				mysql_close($this->database->_connectionID);
 			}else if($this->dbType=="mysqli"){
-			    $this->database->Disconnect();
-                $this->database->disconnect();
 				mysqli_close($this->database->_connectionID);
 			}
 			else {
 				$this->database->disconnect();
 			}
-			unset($this->database);
+//			unset($this->database);
 		}
 	}
 

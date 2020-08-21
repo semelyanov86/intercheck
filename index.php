@@ -19,8 +19,8 @@ global $adb;
 //$result = $adb->pquery('SELECT @@SESSION.sql_mode AS sql_mode');
 //$sql_mode = $adb->query_result($result, 0, 'sql_mode');
 //$sql_mode = trim(preg_replace('/,+/', ',', str_replace(array('ONLY_FULL_GROUP_BY', 'STRICT_TRANS_TABLES'), '', $sql_mode)), ',');
-$adb->pquery('SET SESSION sql_mode = ?', array(''));
+//$adb->pquery('SET SESSION sql_mode = ?', array(''));
 
 $webUI = new Vtiger_WebUI();
 $webUI->process(new Vtiger_Request($_REQUEST, $_REQUEST));
-$adb->disconnect(true);
+//$adb->disconnect();
