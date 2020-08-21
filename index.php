@@ -23,3 +23,4 @@ $adb->pquery('SET SESSION sql_mode = ?', array(''));
 
 $webUI = new Vtiger_WebUI();
 $webUI->process(new Vtiger_Request($_REQUEST, $_REQUEST));
+$adb->disconnect(true);
