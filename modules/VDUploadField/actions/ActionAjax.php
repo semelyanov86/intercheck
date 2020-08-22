@@ -136,7 +136,7 @@ class VDUploadField_ActionAjax_Action  extends Vtiger_Action_Controller
             $module = $request->get('parent');
             $record = $request->get('record');
             $fieldid = $request->get('fieldid');
-            $parentInstance = Vtiger_Record_Model::getInstanceById($record, $module);
+            $parentInstance = Vtiger_Record_Model::getInstanceById($record);
             $filePath = $parentInstance->get('cf_vd_ulf_' . $fieldid);
         }
 

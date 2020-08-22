@@ -12,43 +12,46 @@
  * Function to get the field information from module name and field label
  */
 function getFieldByReportLabel($module, $label, $mode = 'label') {
-	$cacheLabel = VTCacheUtils::getReportFieldByLabel($module, $label);
-	if($cacheLabel) return $cacheLabel;
+    $cacheLabel = VTCacheUtils::getReportFieldByLabel($module, $label);
+    if($cacheLabel) return $cacheLabel;
 
-	// this is required so the internal cache is populated or reused.
-	getColumnFields($module);
-	//lookup all the accessible fields
-	$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
-	$label = decode_html($label);
-	
-	if($module == 'Calendar') {
-		$cachedEventsFields = VTCacheUtils::lookupFieldInfo_Module('Events');
-		if ($cachedEventsFields) {
-			if(empty($cachedModuleFields)) $cachedModuleFields = $cachedEventsFields;
-			else $cachedModuleFields = array_merge($cachedModuleFields, $cachedEventsFields);
-		}
-		if($label == 'Start_Date_and_Time') {
-			$label = 'Start_Date_&_Time';
-		}
-	}
-	
-	if(empty($cachedModuleFields)) {
-		return null;
-	}
-    
-	foreach ($cachedModuleFields as $fieldInfo) {
+    // this is required so the internal cache is populated or reused.
+    getColumnFields($module);
+    //lookup all the accessible fields
+    $cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
+    $label = decode_html($label);
+
+    if($module == 'Calendar') {
+        $cachedEventsFields = VTCacheUtils::lookupFieldInfo_Module('Events');
+        if ($cachedEventsFields) {
+            if(empty($cachedModuleFields)) $cachedModuleFields = $cachedEventsFields;
+            else $cachedModuleFields = array_merge($cachedModuleFields, $cachedEventsFields);
+        }
+        if($label == 'Start_Date_and_Time') {
+            $label = 'Start_Date_&_Time';
+        }
+    }
+
+    if(empty($cachedModuleFields)) {
+        return null;
+    }
+
+    foreach ($cachedModuleFields as $fieldInfo) {
         if($mode == 'name') {
             $fieldLabel = $fieldInfo['fieldname'];
         } else {
             $fieldLabel = str_replace(' ', '_', $fieldInfo['fieldlabel']);
         }
         $fieldLabel = decode_html($fieldLabel);
-		if($label == $fieldLabel) {
-			VTCacheUtils::setReportFieldByLabel($module, $label, $fieldInfo);
-			return $fieldInfo;
-		}
-	}
-	return null;
+        //SalesPlatform.ru begin fix get field info by label
+        if($label == $fieldLabel || $label == getTranslatedString($fieldLabel, $module)) {
+            //if($label == $fieldLabel) {
+            //SalesPlatform.ru end
+            VTCacheUtils::setReportFieldByLabel($module, $label, $fieldInfo);
+            return $fieldInfo;
+        }
+    }
+    return null;
 }
 
 function isReferenceUIType($uitype) {
@@ -64,12 +67,15 @@ function isReferenceUIType($uitype) {
 }
 
 function IsDateField($reportColDetails) {
-	list($tablename, $colname, $module_field, $fieldname, $typeOfData) = split(":", $reportColDetails);
-	if ($typeOfData == "D") {
-		return true;
-	} else {
-		return false;
-	}
+    //SalesPlatform.ru begin
+    //list($tablename, $colname, $module_field, $fieldname, $typeOfData) = split(":", $reportColDetails);
+    list($tablename, $colname, $module_field, $fieldname, $typeOfData) = explode(":", $reportColDetails);
+    //SalesPlatform.ru end
+    if ($typeOfData == "D") {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**

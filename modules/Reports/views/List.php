@@ -56,46 +56,49 @@ class Reports_List_View extends Vtiger_Index_View {
 		parent::postProcess($request);
 	}
 
-	/**
-	 * Function to get the list of Script models to be included
-	 * @param Vtiger_Request $request
-	 * @return <Array> - List of Vtiger_JsScript_Model instances
-	 */
-	function getHeaderScripts(Vtiger_Request $request) {
-		$headerScriptInstances = parent::getHeaderScripts($request);
-		$moduleName = $request->getModule();
+    /**
+     * Function to get the list of Script models to be included
+     * @param Vtiger_Request $request
+     * @return <Array> - List of Vtiger_JsScript_Model instances
+     */
+    function getHeaderScripts(Vtiger_Request $request) {
+        $headerScriptInstances = parent::getHeaderScripts($request);
+        $moduleName = $request->getModule();
 
-		$jsFileNames = array(
-			"modules.Vtiger.resources.Detail",
-			"modules.$moduleName.resources.Detail",
-			"modules.Vtiger.resources.dashboards.Widget",
-			'modules.Vtiger.resources.List',
-			"modules.$moduleName.resources.List",
-			"modules.$moduleName.resources.ChartDetail",
-			"modules.Vtiger.resources.ListSidebar",
-			"~layouts/v7/lib/jquery/sadropdown.js",
-			"~layouts/" .Vtiger_Viewer::getDefaultLayoutName(). "/lib/jquery/floatThead/jquery.floatThead.js",
-			"~layouts/" .Vtiger_Viewer::getDefaultLayoutName(). "/lib/jquery/perfect-scrollbar/js/perfect-scrollbar.jquery.js",
+        $jsFileNames = array(
+            "modules.Vtiger.resources.Detail",
+            "modules.$moduleName.resources.Detail",
+            "modules.Vtiger.resources.dashboards.Widget",
+            'modules.Vtiger.resources.List',
+            "modules.$moduleName.resources.List",
+            "modules.$moduleName.resources.ChartDetail",
+            "modules.Vtiger.resources.ListSidebar",
+            '~/libraries/jquery/vtchart.js',
+            "~layouts/v7/lib/jquery/sadropdown.js",
+            "~layouts/" .Vtiger_Viewer::getDefaultLayoutName(). "/lib/jquery/floatThead/jquery.floatThead.js",
+            "~layouts/" .Vtiger_Viewer::getDefaultLayoutName(). "/lib/jquery/perfect-scrollbar/js/perfect-scrollbar.jquery.js",
+            //SalesPlatform.ru begin drawing reports QuickPreview
             '~/libraries/jquery/gridster/jquery.gridster.min.js',
-			'~/libraries/jquery/jqplot/jquery.jqplot.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.canvasTextRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.pieRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.barRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.categoryAxisRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.pointLabels.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.funnelRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.barRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.logAxisRenderer.min.js',
-			'~/libraries/jquery/VtJqplotInterface.js',
-			'~/libraries/jquery/vtchart.js',
-		);
+            '~/libraries/jquery/jqplot/jquery.jqplot.min.js',
+            '~/libraries/jquery/jqplot/plugins/jqplot.canvasTextRenderer.min.js',
+            '~/libraries/jquery/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js',
+            '~/libraries/jquery/jqplot/plugins/jqplot.pieRenderer.min.js',
+            '~/libraries/jquery/jqplot/plugins/jqplot.barRenderer.min.js',
+            '~/libraries/jquery/jqplot/plugins/jqplot.categoryAxisRenderer.min.js',
+            '~/libraries/jquery/jqplot/plugins/jqplot.pointLabels.min.js',
+            '~/libraries/jquery/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js',
+            '~/libraries/jquery/jqplot/plugins/jqplot.funnelRenderer.min.js',
+            '~/libraries/jquery/jqplot/plugins/jqplot.barRenderer.min.js',
+            '~/libraries/jquery/jqplot/plugins/jqplot.logAxisRenderer.min.js',
+            '~/libraries/jquery/VtJqplotInterface.js',
+            '~/libraries/jquery/vtchart.js',
+            //SalesPlatform.ru end drawing reports QuickPreview
+        );
 
-		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
-		return $headerScriptInstances;
-	}
+        $jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
+        $headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
+        return $headerScriptInstances;
+    }
 
 	public function initializeListViewContents(Vtiger_Request $request) {
 		$moduleName = $request->getModule();

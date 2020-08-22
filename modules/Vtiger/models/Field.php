@@ -276,7 +276,9 @@ class Vtiger_Field_Model extends Vtiger_Field {
             $profiles = Settings_Profiles_Record_Model::getAll();
             $profilesArr = array();
             foreach($profiles as $key=>$profile) {
-                $profilesArr[$key] = $profile->getName();
+                if (!$profile->get('directly_related_to_role')) {
+                    $profilesArr[$key] = $profile->getName();
+                }
             }
             return $profilesArr;
         }

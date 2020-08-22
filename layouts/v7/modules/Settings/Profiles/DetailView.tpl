@@ -38,6 +38,14 @@
 						</div>
 						<div class="fieldValue col-lg-6 col-md-6 col-sm-12" name="description" id="description"><strong>{$RECORD_MODEL->getDescription()}</strong></div>
 					</div>
+					<div class="row form-group">
+						<span class="col-lg-2 col-md-2 col-sm-2 control-label fieldLabel">
+							{vtranslate('Signature', $QUALIFIED_MODULE)}
+						</span>
+						<div class="fieldValue  col-lg-6 col-md-6 col-sm-12">
+							<b>{$RECORD_MODEL->getSignature()}</b>
+						</div>
+					</div>
 					<br>
 					{assign var="ENABLE_IMAGE_PATH" value="{vimage_path('Enable.png')}"}
 					{assign var="DISABLE_IMAGE_PATH" value="{vimage_path('Disable.png')}"}

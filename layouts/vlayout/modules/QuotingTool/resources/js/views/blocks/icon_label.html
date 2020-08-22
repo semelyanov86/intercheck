@@ -1,0 +1,40 @@
+<div class="content-container block-handle"
+     data-id="layouts/vlayout/modules/QuotingTool/resources/js/views/blocks/icon_label.html">
+    <div class="content-editable">
+        <div contenteditable="true" >
+            <table border="0" cellspacing="0" cellpadding="6"
+                   style="width: 100%; border-collapse: collapse;" class="table-icon-label">
+                <tbody>
+                <tr>
+                    <td width="7%" style="padding: 0">
+                        <img class="image-icon-label" data-info="" src="/modules/QuotingTool/html_icons_iconlabel/angle-right.png"></td>
+                    <td width="93%" style="padding: 0">
+                        <p>This is your icon label...</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="clear">&nbsp;</div>
+    </div>
+
+    <div class="quoting_tool-btn-options quoting_tool-btn-left-options">
+        <div class="doc-block__control btn--block-control doc-block__control--drag quoting_tool-btn-options-item"
+             ng-show="app.data.blocks.icon_label.layout.enable_move">
+            <i class="icon-align-justify"></i>
+        </div>
+    </div>
+
+    <div class="quoting_tool-btn-options quoting_tool-btn-right-options">
+        <div class="doc-block__control btn--block-control btn--block-control-settings quoting_tool-btn-options-item"
+             ng-show="app.data.blocks.icon_label.layout.enable_setting"
+             ng-click="setting($event, app.data.blocks.icon_label)">
+            <i class="icon-cog"></i>
+        </div>
+        <div class="doc-block__control btn--block-control btn--block-control-del quoting_tool-btn-options-item"
+             ng-show="app.data.blocks.icon_label.layout.enable_remove"
+             ng-click="remove($event)">
+            <i class="icon-trash"></i>
+        </div>
+    </div>
+</div>

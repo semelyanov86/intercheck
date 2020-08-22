@@ -76,6 +76,16 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	setMailerProperties($mail,$subject,$contents,$from_email,$from_name,trim($to_email,","),$attachment,$emailid,$module,$logo);
 	setCCAddress($mail,'cc',$cc);
 	setCCAddress($mail,'bcc',$bcc);
+	$mail->SMTPAutoTLS = false;
+	$mail->SMTPSecure = 'tls';
+	$mail->SMTPOptions = array(
+		'ssl' => array(
+			'verify_peer' => false,
+			'verify_peer_name' => false,
+			'allow_self_signed' => true
+		)
+	);
+	$mail->Port = 587;
 	if(!empty($replyToEmail)) {
 		$mail->AddReplyTo($replyToEmail);
 	}

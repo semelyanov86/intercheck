@@ -1,4 +1,5 @@
 Vtiger CRM for HarlyBarly company
+This is instruction for installation
 ==========
 To implement functionality with adding user for sharing rules, first of all you need to execute following queries:
 - "CREATE TABLE `vtiger_datashare_grp2user` (
@@ -70,3 +71,12 @@ To implement functionality with adding user for sharing rules, first of all you 
                        KEY `idx_datashare_user2user_share_userid` (`share_userid`),
                        KEY `idx_datashare_user2user_to_userid` (`to_userid`),
                        CONSTRAINT `fk_vtiger_datashare_user2user` FOREIGN KEY (`to_userid`) REFERENCES `vtiger_users` (`id`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+=======
+=======
+## How to Install
+- Create database and import dump from dump folder.
+- Rename files: _config.inc.php, _config.performance.php, _config.template.php, removed underscore in the beginning.
+- create folders with 777: /logs/, /cache/, /storage/
+- Change your config.inc.php file.
+- Run composer update in modules/PlatformIntegration/helpers folder
+

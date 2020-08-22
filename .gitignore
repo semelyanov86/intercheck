@@ -3,6 +3,7 @@
 /cache/
 /backup/
 /storage/
+/user_privileges/
 /modules/CloudFile/cache/
 /test/templates_c/v7/
 config.inc.php
@@ -11,3 +12,6 @@ config.template.php
 config.performance.php
 config.db.php
 /portal/vue-app/node_modules
+tabdata.php
+test/logo/vtiger-cut.png
+layouts/v7/resources/Images/vtiger.png

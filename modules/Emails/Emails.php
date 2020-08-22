@@ -114,11 +114,17 @@ class Emails extends CRMEntity {
 			}
 		} else {
 			if (isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '') {
+				if (strpos($this->column_fields['parent_id'], '@')) {
+					$crmidArr = explode('@', $this->column_fields['parent_id']);
+					$crmid = $crmidArr[0];
+				} else {
+					$crmid = $this->column_fields['parent_id'];
+				}
 				$adb->pquery("DELETE FROM vtiger_seactivityrel WHERE crmid = ? AND activityid = ? ",
-						array($this->column_fields['parent_id'], $this->id));
+						array($crmid, $this->id));
 				//$this->insertIntoEntityTable('vtiger_seactivityrel', $module);
 				$sql = 'insert into vtiger_seactivityrel values(?,?)';
-				$params = array($this->column_fields['parent_id'], $this->id);
+				$params = array($crmid, $this->id);
 				$adb->pquery($sql, $params);
 			} elseif ($this->column_fields['parent_id'] == '' && $insertion_mode == "edit") {
 				$this->deleteRelation('vtiger_seactivityrel');

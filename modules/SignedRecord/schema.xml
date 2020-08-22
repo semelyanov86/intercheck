@@ -1,0 +1,57 @@
+<?xml version='1.0'?>
+<schema>
+	<tables>
+		<table>
+			<name>vtiger_signedrecord</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `vtiger_signedrecord` (
+						  `signedrecordid` int(19) NOT NULL,
+						  `signedrecordno` varchar(255) NOT NULL,
+						  `signature` text,
+						  `signature_name` varchar(255) DEFAULT NULL COMMENT '// name of signature',
+						  `signature_date` date DEFAULT NULL COMMENT '// date of signature',
+						  `filename` text COMMENT '// file(signed or rejected document) to download',
+						  `signedrecord_status` varchar(50) DEFAULT NULL COMMENT '// update this field with "accept & sign" or "decline" value(based on mapping)',
+						  `related_to` int(19) DEFAULT NULL,
+						  PRIMARY KEY (`signedrecordid`)
+						) ENGINE=InnoDB  DEFAULT CHARSET=utf8;]]></sql>
+		</table>
+		<table>
+			<name>vtiger_signedrecord</name>
+			<sql><![CDATA[ALTER TABLE `vtiger_signedrecord`
+							ADD COLUMN `signedrecord_type` VARCHAR(50) NULL DEFAULT NULL COMMENT '// *If user signs document - set type to "Signed"; *If user OPENS document - set type to "Opened"';]]></sql>
+		</table>
+		<table>
+			<name>vtiger_signedrecord</name>
+			<sql><![CDATA[ALTER TABLE `vtiger_signedrecord` ADD INDEX `related_to_index` (`related_to`) USING BTREE ;]]></sql>
+		</table>
+		<table>
+			<name>vtiger_signedrecord</name>
+			<sql><![CDATA[ALTER TABLE `vtiger_signedrecord`
+						ADD COLUMN `secondary_signature` text,
+						ADD COLUMN `secondary_signature_name` varchar(255) DEFAULT NULL COMMENT '// name of secondary_signature',
+						ADD COLUMN `secondary_signature_date` date DEFAULT NULL COMMENT '// date of secondary_signature',
+						ADD COLUMN `secondary_filename` text COMMENT '// file(signed or rejected document) to download',
+						ADD COLUMN `secondary_signedrecord_status` varchar(50) DEFAULT NULL COMMENT '// update this field with "accept & sign" or "decline" value(based on mapping)'
+                        ;]]></sql>
+		</table>
+		<table>
+			<name>vtiger_signedrecordcf</name>
+			<sql><![CDATA[CREATE TABLE IF NOT EXISTS `vtiger_signedrecordcf` (
+						  `signedrecordid` int(19) NOT NULL,
+						  `cf_signature_time` varchar(100) DEFAULT NULL,
+						  PRIMARY KEY (`signedrecordid`)
+						) ENGINE=InnoDB  DEFAULT CHARSET=utf8;]]></sql>
+		</table>
+		<table>
+			<name>vtiger_signedrecordcf</name>
+			<sql><![CDATA[ALTER TABLE `vtiger_signedrecordcf`
+						ADD COLUMN `cf_secondary_signature_time` varchar(100) DEFAULT NULL,
+						ADD COLUMN `transactionid` int(19) NULL
+                        ;]]></sql>
+		</table>
+		<table>
+			<name>vtiger_signedrecord</name>
+			<sql><![CDATA[ALTER TABLE `vtiger_signedrecord` ADD COLUMN `customer_comment` text;]]></sql>
+		</table>
+	</tables>
+</schema>

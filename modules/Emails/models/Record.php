@@ -34,12 +34,14 @@ class Emails_Record_Model extends Vtiger_Record_Model {
     public static function getPermissionValue($value, $user = false)
     {
         global $restrictedFieldRoles;
+        $restrictedArr = explode('||', $restrictedFieldRoles);
         if (!$user) {
             $user = Users_Record_Model::getCurrentUserModel();
         }
-        if (in_array($user->getRole(), $restrictedFieldRoles)) {
+        if (in_array($user->getRole(), $restrictedArr)) {
             $value = strip_tags($value);
-            return substr($value, 0, 2) . '****' . substr($value, -1, 2);
+//            return substr($value, 0, 2) . '****' . substr($value, -1, 2);
+            return '****';
         } else {
             return $value;
         }

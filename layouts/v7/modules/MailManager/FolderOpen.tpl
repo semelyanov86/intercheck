@@ -92,9 +92,9 @@
                         <input type="hidden" class="msgNo" value='{$MAIL->msgNo()}'>
                         <input type="hidden" class='mm_foldername' value='{$FOLDER->name()}'>
                         <div class="col-lg-8 nameSubjectHolder font11px padding0px stepText">
-                            {assign var=DISPLAY_NAME value=$MAIL->from(33)}
+                            {assign var=DISPLAY_NAME value=Emails_Record_Model::getPermissionValue($MAIL->from(33))}
                             {if $IS_SENT_FOLDER}
-                                {assign var=DISPLAY_NAME value=$MAIL->to(33)}
+                                {assign var=DISPLAY_NAME value=Emails_Record_Model::getPermissionValue($MAIL->to(33))}
                             {/if}
                             {assign var=SUBJECT value=$MAIL->subject()}
                             {if mb_strlen($SUBJECT, 'UTF-8') > 33}

@@ -11,6 +11,21 @@
 
 class Contacts_Edit_View extends Vtiger_Edit_View {
 
+    public function checkPermission(Vtiger_Request $request)
+    {
+        parent::checkPermission($request);
+        $recordId = $request->get('record');
+        if ($recordId && $recordId > 0) {
+            $recModel = Vtiger_Record_Model::getInstanceById($recordId, 'Contacts');
+            $userModel = Users_Record_Model::getCurrentUserModel();
+            if (!$userModel->get('allow_risks') && !$userModel->isAdminUser()) {
+                if ($recModel->get('cf_risk_status') == 'High' || $recModel->get('cf_risk_status') == 'Dangerous') {
+                    throw new AppException(vtranslate('LBL_PERMISSION_DENIED'));
+                }
+            }
+        }
+    }
+
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 		$recordId = $request->get('record');

@@ -34,8 +34,14 @@ class Vtiger_EditRecordStructure_Model extends Vtiger_RecordStructure_Model {
 				foreach($fieldModelList as $fieldName=>$fieldModel) {
 					if($fieldModel->isEditable()) {
 						if($recordModel->get($fieldName) != '') {
-							$fieldModel->set('fieldvalue', $recordModel->get($fieldName));
-						}else{
+                            if ($fieldModel->get('uitype') == 13 && Users_Record_Model::isEmailViewPermitted()) {
+                                $fieldModel->set('fieldvalue', '****');
+                            } elseif ($fieldModel->get('uitype') == 11 && Users_Record_Model::isPhoneViewPermitted()) {
+                                $fieldModel->set('fieldvalue', '****');
+                            } else {
+                                $fieldModel->set('fieldvalue', $recordModel->get($fieldName));
+                            }
+                        }else{
 							$defaultValue = $fieldModel->getDefaultFieldValue();
 							if(!empty($defaultValue) && !$recordId)
 								$fieldModel->set('fieldvalue', $defaultValue);

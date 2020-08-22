@@ -1389,6 +1389,8 @@ $languageStrings = array(
 	'LBL_DEFAULT_DASHBOARD_TOOLTIP'=>'Make this dashboard as default by reordering it as the first tab!',
 	'LBL_RELATED_MODULES_PERMISSION_DENIED' => 'Related modules permission is denied',
 	'LBL_RECORD_PERMISSION_DENIED' => 'Record permissions denied',
+    'LBL_RESTRICTED_FIELD_ROLES' => 'Restricted roles for viewing emails',
+    'LBL_RESTRICTED_FIELD_PHONES' => 'Restricted roles for viewing phones'
 );
 
 $jsLanguageStrings = array(

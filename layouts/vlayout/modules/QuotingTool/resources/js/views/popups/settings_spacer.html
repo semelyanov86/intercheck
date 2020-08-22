@@ -1,0 +1,28 @@
+<div id="popup_settings_spacer" class="modal-settings"
+     data-type="blocks" data-target="spacer" data-name="settings_spacer"
+     data-template="layouts/vlayout/modules/QuotingTool/resources/js/views/popups/settings_spacer.html" style="width: 300px;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">{{ 'Settings' | translate }}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form">
+            <table class="table_settings_related_module_fields">
+                <tbody>
+                <tr>
+                    <th>{{ 'Pixel' | translate }}</th>
+                    <td>
+                        <input id="settings_spacer" class="input-large">
+                    </td>
+                    <td>px</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-submit ng-binding btn-submit-spacer" ng-click="changePixelSpacer($event)">{{ 'OK' | translate }}</button>
+    </div>
+</div>

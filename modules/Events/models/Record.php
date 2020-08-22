@@ -24,6 +24,18 @@ class Events_Record_Model extends Calendar_Record_Model {
 		return 'index.php?module=Calendar&view='.$module->getEditViewName().'&record='.$this->getId();
 	}
 
+    /**
+     * Function to get the Edit View url for the record
+     * @return <String> - Record Edit View Url
+     */
+    public function getFullDetailViewUrl() {
+        $module = $this->getModule();
+        // If we don't send tab label then it will show full detail view, but it will select summary tab
+        $moduleName = 'Calendar';
+        $fullDetailViewLabel = vtranslate('SINGLE_'.$moduleName, $moduleName).' '. vtranslate('LBL_DETAILS', $moduleName);
+        return 'index.php?module='.$moduleName.'&view='.$module->getDetailViewName().'&record='.$this->getId().'&mode=showDetailViewByMode&requestMode=full&tab_label='.$fullDetailViewLabel;
+    }
+
 	/**
 	 * Function to get the Delete Action url for the record
 	 * @return <String> - Record Delete Action Url

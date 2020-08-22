@@ -121,6 +121,13 @@ class Users_Save_Action extends Vtiger_Save_Action {
 		$result = Vtiger_Util_Helper::transformUploadedFiles($_FILES, true);
 		$_FILES = $result['imagename'];
         $currentUser = Users_Record_Model::getCurrentUserModel();
+        if ($request->get('is_admin') && $currentUser->getId() != '1') {
+            throw new AppException('Only Super Admin can create new admin users');
+        }
+        if ($request->get('roleid') == 'H2' && $currentUser->getId() != '1') {
+            throw new AppException('Only Super Admin can create users with admin role');
+        }
+
 		$recordId = $request->get('record');
 		if (!$recordId) {
 			$module = $request->getModule();
@@ -172,7 +179,11 @@ class Users_Save_Action extends Vtiger_Save_Action {
                     $groups[] = $groupModel->getId();
                 }
             } else {
-                $groups = Users_Record_Model::getUserGroups($userModel->getId());
+                if ($userModel->get('group_view')) {
+                    $groups = Users_Record_Model::getUserGroups($userModel->getId());
+                } else {
+                    $groups = array();
+                }
                 $this->removeOldPermissions($userModel);
             }
         } else {
@@ -192,9 +203,10 @@ class Users_Save_Action extends Vtiger_Save_Action {
                 $ruleModel->set('source_id', 'Groups:' . $group);
                 $ruleModel->set('target_id', 'Users:' . $userModel->getId());
                 $ruleModel->set('permission', 1);
-                $ruleModel->save();
+                $ruleModel->save(false);
             }
         }
+        Settings_SharingAccess_Module_Model::recalculateSharingRules();
     }
     public function removeOldPermissions(Users_Record_Model $user)
     {
@@ -207,10 +219,11 @@ class Users_Save_Action extends Vtiger_Save_Action {
             $rules = Settings_SharingAccess_Rule_Model::getAllByModule($module);
             foreach ($rules as $rule) {
                 if ($rule && $rule->getTargetMember()->getId() == $userRule) {
-                    $rule->delete();
+                    $rule->delete(false);
                 }
             }
         }
+        Settings_SharingAccess_Module_Model::recalculateSharingRules();
     }
     public function addToGroups(Users_Record_Model $recordModel)
     {
@@ -236,8 +249,12 @@ class Users_Save_Action extends Vtiger_Save_Action {
     public function removeFromGroups(Users_Record_Model $record_Model)
     {
         $allGroups = Settings_Groups_Record_Model::getAll();
-        $curGroups = $record_Model->get('user_groups');
-        if ($curGroups && !empty($curGroups)) {
+        if (true) {
+            if ($record_Model->has('user_groups')) {
+                $curGroups = $record_Model->get('user_groups');
+            } else {
+                $curGroups = array();
+            }
             foreach ($allGroups as $id=>$groupModel) {
                 if (in_array($id, $curGroups) || $id == 24) {
                     continue;

@@ -572,7 +572,7 @@ class PHPMailer
      * @var array
      * @access protected
      */
-    protected $language = array();
+    public $language = array();
 
     /**
      * The number of errors encountered.

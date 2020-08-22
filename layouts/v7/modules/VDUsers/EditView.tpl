@@ -101,6 +101,7 @@
 					<tr name="fieldHeaders" class="listViewEntries">
 						<td class="textAlignCenter"><b>Role</b></td>
 						<td class="textAlignCenter"><b>Constraints</b></td>
+						<td class="textAlignCenter"><b>Allow Edit</b></td>
 						<td><b>Delete</b></td>
 					</tr>
 					{foreach item=ROLE_FIELD_MODEL key=ROLEID from=$ROLE_FIELDS}
@@ -109,6 +110,7 @@
 						<td class="textAlignCenter fieldValue" data-name="fieldUI_{$ROLEID}">
 							{include file=vtemplate_path($ROLE_FIELD_MODEL->getUITypeModel()->getTemplateName(), 'VDUsers') FIELD_MODEL=$ROLE_FIELD_MODEL}
 						</td>
+						<td class="textAlignCenter fieldValue"><input type="checkbox" name="edit-{$ROLEID}" {if $ROLE_FIELD_MODEL->get('edit') > 0} checked {/if}></td>
 						<td><div id="removeField" class="actions"><a class="removeTargetModuleField"><i class="fa fa-trash icon-remove-sign"></i></a></div></td>
 					</tr>
 					{/foreach}

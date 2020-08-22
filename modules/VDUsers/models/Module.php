@@ -198,6 +198,7 @@ class VDUsers_Module_Model extends Vtiger_Module_Model {
 			$roleFiled->set('name', $roleid);
 			$roleFiled->set('label', $roles[$roleid]->getName());
 			$roleFiled->set('fieldvalue', $row['roles']);
+			$roleFiled->set('edit', $row['edit']);
 			$roleFileds[$roleid] = $roleFiled;
 		}
 		return $roleFileds;
@@ -207,9 +208,9 @@ class VDUsers_Module_Model extends Vtiger_Module_Model {
 
         if ($current_user->column_fields['is_admin'] == 'on') return 1;
         $roleid = $current_user->column_fields['roleid'];
-        $select = "SELECT * FROM vtiger_vdusers_roles WHERE roleid = '$roleid' and edit = 1";
-        $result = $adb->pquery($select);
-       // print_r ($select);  print_r ($result); die;
+        $select = "SELECT * FROM vtiger_vdusers_roles WHERE roleid = ? and edit = ?";
+        $result = $adb->pquery($select, array($roleid, 1));
+//        print_r ($result); die;
         if ($adb->num_rows($result) > 0){
             return 1;
         } else {

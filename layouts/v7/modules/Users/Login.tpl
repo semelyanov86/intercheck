@@ -121,7 +121,7 @@ body {
 <span class="app-nav"></span>
 <div class="login-page">
   <div class="form">
-  <img class="img-responsive user-logo" src="layouts/v7/resources/Images/vtiger.png">
+  <img class="img-responsive user-logo" src="layouts/v7/resources/Images/{$PAGETITLE}.png">
   
   <div>
     <span class="{if !$ERROR}hide{/if} failureMessage" id="validationMessage">{$MESSAGE}</span>

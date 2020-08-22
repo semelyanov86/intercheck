@@ -27,16 +27,24 @@ class VDUsers_Save_Action extends Vtiger_Action_Controller
 		if ($roles) {
 			foreach($roles as $role) {
 				$rolelist = $request->get($role);
+                $edit = $request->get('edit-' . $role);
+                if ($edit && $edit == 'on') {
+                    $allowEdit = 1;
+                } else {
+                    $allowEdit = 0;
+                }
 				if(empty($rolelist)){
                     $data = array(
                         'roleid' => $role,
-                        'roles' =>  '');
+                        'roles' =>  '',
+                        'edit' => $allowEdit
+                    );
 
-                }
-                else {
+                } else {
                     $data = array(
                         'roleid' => $role,
-                        'roles' => implode(' |##| ', $rolelist)
+                        'roles' => implode(' |##| ', $rolelist),
+                        'edit' => $allowEdit
                     );
                 }
 				$adb->run_insert_data('vtiger_vdusers_roles', $data);

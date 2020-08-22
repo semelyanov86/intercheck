@@ -23,7 +23,7 @@
 		$entityName = $meta->getObjectEntityName($id);
 		$types = vtws_listtypes(null, $user);
 		if(!in_array($entityName,$types['types'])){
-			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied for retrieve $entityName and id $id");
 		}
 		if($meta->hasReadAccess()!==true){
 			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to write is denied");

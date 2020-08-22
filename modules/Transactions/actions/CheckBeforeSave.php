@@ -4,6 +4,7 @@ class Transactions_CheckBeforeSave_Action extends Vtiger_Action_Controller {
 
     public $mapTypes = array(
         'Deposit - credit card' => true,
+        'card' => true,
         'Deposit - wire transaction' => true,
         'Purchase - campaign' => true,
         'Purchase - market buy' => true,
@@ -16,6 +17,8 @@ class Transactions_CheckBeforeSave_Action extends Vtiger_Action_Controller {
         'Click Income' => false,
         'Bid' => true,
         'Impression Income' => false,
+        'Purchase - initial' => true,
+        'Purchase - additional' => true
     );
 
     function checkPermission(Vtiger_Request $request) {

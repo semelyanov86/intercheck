@@ -50,6 +50,12 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 		return $this->get('description');
 	}
 
+
+    public function getSignature()
+    {
+        return $this->get('signature');
+    }
+
 	/**
 	 * Function to get the Edit View Url for the Profile
 	 * @return <String>
@@ -199,6 +205,9 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 
 	public function isModuleFieldLocked($module, $field) {
 		$fieldModel = $this->getProfileTabFieldModel($module, $field);
+		if ($fieldModel->getName() === 'assigned_user_id') {
+		    return false;
+        }
         if(!$fieldModel->isEditable() || $fieldModel->isMandatory()
 				|| in_array($fieldModel->get('uitype'),self::$fieldLockedUiTypes) || $fieldModel->hasCustomLock()) {
 			return true;
@@ -427,15 +436,16 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
             $isProfileDirectlyRelatedToRole = $this->get('directly_related_to_role');
         }
 		$profileId = $this->getId();
+        $signature = $this->getSignature();
 		if(!$profileId) {
 			$profileId = $db->getUniqueId('vtiger_profile');
 			$this->setId($profileId);
-			$sql = 'INSERT INTO vtiger_profile(profileid, profilename, description, directly_related_to_role) VALUES (?,?,?,?)';
-			$params = array($profileId, $profileName, $description, $isProfileDirectlyRelatedToRole);
+			$sql = 'INSERT INTO vtiger_profile(profileid, profilename, description, directly_related_to_role, signature) VALUES (?,?,?,?,?)';
+			$params = array($profileId, $profileName, $description, $isProfileDirectlyRelatedToRole, $signature);
 			$isNewProfile = true;
 		} else {
-			$sql = 'UPDATE vtiger_profile SET profilename=?, description=?, directly_related_to_role=? WHERE profileid=?';
-			$params = array($profileName, $description, $isProfileDirectlyRelatedToRole, $profileId);
+			$sql = 'UPDATE vtiger_profile SET profilename=?, description=?, directly_related_to_role=?, signature=? WHERE profileid=?';
+			$params = array($profileName, $description, $isProfileDirectlyRelatedToRole, $signature, $profileId);
 
 			$db->pquery('DELETE FROM vtiger_profile2globalpermissions WHERE profileid=?', array($profileId));
 		}

@@ -90,7 +90,7 @@
                     {foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
                     {assign var=LISTVIEW_HEADERNAME value=$LISTVIEW_HEADER->get('name')}
                     {assign var=LISTVIEW_ENTRY_VALUE value=$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
-                    <td class="listViewEntryValue value textOverflowEllipsis {$WIDTHTYPE}" title="{$RECORD_DATA[$LISTVIEW_HEADERNAME]}">
+                    <td class="listViewEntryValue value textOverflowEllipsis {$WIDTHTYPE}" {if $LISTVIEW_HEADER->get('uitype') eq 13 and Users_Record_Model::isEmailViewPermitted()}title="****"{else} title="{$RECORD_DATA[$LISTVIEW_HEADERNAME]}" {/if}>
                         {if $LISTVIEW_HEADER->isNameField() eq true or $LISTVIEW_HEADER->get('uitype') eq '4'}
                             <a>{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}</a>
                         {else if $LISTVIEW_HEADER->get('uitype') eq '72'}
@@ -111,7 +111,11 @@
                                 <span {if !empty($LISTVIEW_ENTRY_VALUE)} class="picklist-color picklist-{$LISTVIEW_HEADER->getId()}-{Vtiger_Util_Helper::convertSpaceToHyphen(trim($MULTI_PICKLIST_VALUE))}" {/if}> {trim($MULTI_PICKLIST_VALUES[$MULTI_PICKLIST_INDEX])} </span>
                             {/foreach}
                         {else}
+                            {if $LISTVIEW_HEADER->get('uitype') eq 13}
+                                <a class="emailField" data-rawvalue="{$RECORD_DATA[$LISTVIEW_HEADERNAME]}">{Emails_Record_Model::getPermissionValue($RECORD_DATA[$LISTVIEW_HEADERNAME])}</a>
+                            {else}
                             {$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
+                            {/if}
                         {/if}
                     </td>
                     {/foreach}

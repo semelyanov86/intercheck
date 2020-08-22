@@ -23,7 +23,9 @@ $languageStrings = array(
 	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Manage templates for E-Mail module',
 	'LBL_NO_PERMISSIONS_TO_DELETE_SYSTEM_TEMPLATE' => 'No Permissions to delete System Template',
 	'LBL_RECORD_ID' => 'Record ID',
-	
+    'LBL_ASSIGNED_USER' => 'Select assigned user or Group',
+    'LBL_ASSIGNED_USER_SELECTED' => 'Assigned user or Group'
+
 );
 
 $jsLanguageStrings = array(

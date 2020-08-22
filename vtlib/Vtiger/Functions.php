@@ -641,7 +641,7 @@ class Vtiger_Functions {
 		if ($saveimage == 'true') {
 			$imageContents = file_get_contents($file_details['tmp_name']);
 			if (stripos($imageContents, $shortTagSupported ? "<?" : "<?php") !== false) { // suspicious dynamic content.
-				$saveimage = 'false';
+//				$saveimage = 'false';
 			}
 		}
 		return $saveimage;

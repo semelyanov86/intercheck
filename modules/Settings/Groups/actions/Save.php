@@ -39,9 +39,10 @@ class Settings_Groups_Save_Action extends Settings_Vtiger_Index_Action {
     public function runGeneratePermissionsEvent(Settings_Groups_Record_Model $groupModel)
     {
         $users = Users_Record_Model::getAll();
+        $actionModel = new Users_Save_Action();
         foreach ($users as $user) {
             if ($user->get('all_groups')) {
-                $user->generatePermissions($user, array($groupModel));
+                $actionModel->generatePermissions($user, array($groupModel));
             }
         }
     }

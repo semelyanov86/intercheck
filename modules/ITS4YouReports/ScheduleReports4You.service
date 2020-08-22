@@ -1,0 +1,5 @@
+<?php
+
+require_once 'modules/ITS4YouReports/ScheduledReports4You.php';
+ITS4YouScheduledReport::runScheduledReports($adb);
+?>

@@ -37,6 +37,7 @@ class EmailTemplates_Save_Action extends Vtiger_Save_Action {
 
 		$recordModel->set('templatename', $request->get('templatename'));
 		$recordModel->set('description', $request->get('description'));
+		$recordModel->set('user_id', $request->get('user_id'));
 		$recordModel->set('subject', $request->get('subject'));
 		$recordModel->set('module', $request->get('modulename'));
 		$recordModel->set('systemtemplate', $request->get('systemtemplate'));

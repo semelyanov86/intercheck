@@ -1,0 +1,171 @@
+<div class="quoting_tool-tool-items">
+    <div class="quoting_tool-tool-items-main">
+        <ul class="list list--tabs list--justified m--bottom">
+            <li ng-class="" class="active">
+                <a href="">{{ 'Data Objects' | translate }}</a>
+            </li>
+        </ul>
+
+        <div class="quoting_tool-tool-items-container" resize>
+            <!-- blocks sections-->
+            <div class="btn-sq-holder m--bottom">
+                <h4 style="color: #59b671; text-decoration: underline;padding-left: 21%">{{ 'Data Elements' | translate
+                    }}</h4>
+                <div class="widget-handle btn btn--sq-icon quoting_tool-drag-widget-component-to-content block-custom"
+                     ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id == 'text_field'"
+                     ng-click="addVtigerField(widget)" data-id="{{widget.layout.id}}" on-finish-render-item="ngRepeatWidgetFinished">
+                    <span class="btn--sq-icon__bd" title="{{ widget.layout.name | translate }}">
+                            <i class="icon icon--big icon--clear-background-image {{widget.layout.icon}}"></i>
+                        <span class="btn--sq-icon__text" style="width: 80px">{{ widget.layout.name | translate}}</span>
+                        <div><span ng-if="widget.layout.icon_helptext"
+                                   ng-click="showIconHelpText(widget.layout.id);$event.stopPropagation()" class="icon-helptext hide">{{ widget.layout.icon_helptext }}</span>
+                        </div>
+                    </span>
+
+                </div>
+
+                <div class="btn btn--sq-icon block-handle quoting_tool-drag-component-to-content block-custom"
+                     ng-repeat="block in app.data.blocksOrder"
+                     ng-if="block.layout.id != 'init' && block.layout.is_data_elements == true"
+                     ng-click="addBlock(block)" data-id="{{block.layout.id}}"
+                     on-finish-render-item="ngRepeatBlockFinished">
+                    {{block.layout.is_design_elements}}
+                    <span class="btn--sq-icon__bd" title="{{ block.layout.name | translate}}">
+                        <i ng-if="block.layout.icon_name==null" class="icon icon--xbig icon--clear-background-image {{block.layout.icon}}"></i>
+                        <i ng-if="block.layout.icon_name" class="{{block.layout.icon}}">{{block.layout.icon_name}}</i>
+                        <span ng-if="block.layout.icon_supplement" class="icon-supplement">{{ block.layout.icon_supplement }}</span>
+                        <div><span ng-if="block.layout.icon_helptext"
+                                   ng-click="showIconHelpText(block.layout.id);$event.stopPropagation()" class="icon-helptext hide">{{ block.layout.icon_helptext }}</span>
+                        </div>
+                        <span ng-if="block.layout.id=='create_related_record'" class="btn--sq-icon__text" style="width: 80px">{{ block.layout.name | translate}}</span>
+                        <span ng-if="block.layout.id=='pricing_table'" class="btn--sq-icon__text" style="width: 60px">{{ block.layout.name | translate}}</span>
+                        <span ng-if="block.layout.id!='create_related_record' && block.layout.id!='pricing_table' " class="btn--sq-icon__text" style="width: 70px">{{ block.layout.name | translate}}</span>
+                        <span ng-if="block.layout.name_row2" class="btn--sq-icon__text" style="width: 80px;top: 53px;">{{ block.layout.name_row2 | translate}}</span>
+                    </span>
+                </div>
+                <h4 style="color: #59b671; text-decoration: underline;padding-left: 21%; margin-bottom: 10px">{{ 'Digital Signature' | translate}}</h4>
+                <div class="btn btn--sq-icon block-handle quoting_tool-drag-component-to-content block-custom" style="height: 96px"
+                     ng-repeat="block in app.data.blocks"
+                     ng-if="block.layout.id == 'inline_primary_signature' || block.layout.id == 'inline_secondary_signature'"
+                     ng-click="addBlock(block)" data-id="{{block.layout.id}}"
+                     on-finish-render-item="ngRepeatBlockFinished">
+                    {{block.layout.is_design_elements}}
+                    <span class="btn--sq-icon__bd" title="{{ block.layout.name | translate}}">
+                        <i ng-if="block.layout.icon_name==null" class="icon icon--big icon--clear-background-image {{block.layout.icon}}"></i>
+                        <i ng-if="block.layout.icon_name" class="{{block.layout.icon}}">{{block.layout.icon_name}}</i>
+                        <span ng-if="block.layout.icon_supplement" class="icon-supplement">{{ block.layout.icon_supplement }}</span>
+                        <div><span ng-if="block.layout.icon_helptext"
+                                   ng-click="showIconHelpText(block.layout.id);$event.stopPropagation()" class="icon-helptext hide">{{ block.layout.icon_helptext }}</span>
+                        </div>
+                        <span class="btn--sq-icon__text" style="width: 75px">{{ block.layout.name | translate}}</span>
+                    </span>
+                </div>
+
+                <h4 style="color: #59b671; text-decoration: underline;padding-left: 35%">{{ 'Other' | translate}}</h4>
+                <div class="widget-handle btn btn--sq-icon quoting_tool-drag-widget-component-to-content block-custom"
+                     ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id != 'init' && widget.layout.id=='signature' && widget.layout.not_digital!=true"
+                     ng-click="addWidget(widget)" data-id="{{widget.layout.id}}" on-finish-render-item="ngRepeatWidgetFinished">
+                    <span class="btn--sq-icon__bd" title="{{ widget.layout.name | translate }}">
+                            <i class="icon icon--big icon--clear-background-image {{widget.layout.icon}}"></i>
+                        <span class="btn--sq-icon__text" style="width: 80px">PRIMARY SIGNATURE</span>
+                    </span>
+                </div>
+                <div class="widget-handle btn btn--sq-icon quoting_tool-drag-widget-component-to-content block-custom"
+                     ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id != 'init' && widget.layout.id=='date' && widget.layout.not_digital!=true"
+                     ng-click="addWidget(widget)" data-id="{{widget.layout.id}}" on-finish-render-item="ngRepeatWidgetFinished">
+                    <span class="btn--sq-icon__bd" title="{{ widget.layout.name | translate }}">
+                            <i class="icon icon--big icon--clear-background-image {{widget.layout.icon}}"></i>
+                        <span class="btn--sq-icon__text" style="width: 80px">DATE SIGNED (PRIMARY)</span>
+                    </span>
+                </div>
+                <div class="widget-handle btn btn--sq-icon quoting_tool-drag-widget-component-to-content block-custom"
+                     ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id != 'init' && widget.layout.id=='initials' && widget.layout.not_digital!=true"
+                     ng-click="addWidget(widget)" data-id="{{widget.layout.id}}" on-finish-render-item="ngRepeatWidgetFinished">
+                    <span class="btn--sq-icon__bd" title="{{ widget.layout.name | translate }}">
+                            <i class="icon icon--big icon--clear-background-image {{widget.layout.icon}}"></i>
+                        <span class="btn--sq-icon__text" style="width: 80px">INITIALS</span>
+                    </span>
+                </div>
+                <div class="widget-handle btn btn--sq-icon quoting_tool-drag-widget-component-to-content block-custom"
+                     ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id != 'init' && widget.layout.id=='secondary_signature' && widget.layout.not_digital!=true"
+                     ng-click="addWidget(widget)" data-id="{{widget.layout.id}}" on-finish-render-item="ngRepeatWidgetFinished">
+                    <span class="btn--sq-icon__bd" title="{{ widget.layout.name | translate }}">
+                            <i class="icon icon--big icon--clear-background-image {{widget.layout.icon}}"></i>
+                        <span class="btn--sq-icon__text" style="width: 80px">SECONDARY SIGNATURE</span>
+                    </span>
+                </div>
+                <div class="widget-handle btn btn--sq-icon quoting_tool-drag-widget-component-to-content block-custom"
+                     ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id != 'init' && widget.layout.id=='datetime' && widget.layout.not_digital!=true"
+                     ng-click="addWidget(widget)" data-id="{{widget.layout.id}}" on-finish-render-item="ngRepeatWidgetFinished">
+                    <span class="btn--sq-icon__bd" title="{{ widget.layout.name | translate }}">
+                            <i class="icon icon--big icon--clear-background-image {{widget.layout.icon}}"></i>
+                        <span class="btn--sq-icon__text" style="width: 80px">DATE SIGNED (SECONDARY)</span>
+                    </span>
+                </div>
+
+                <div class="widget-handle btn btn--sq-icon quoting_tool-drag-widget-component-to-content block-custom"
+                     ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id != 'init' && widget.layout.other==true && widget.layout.id=='text_field'"
+                     ng-click="addWidget(widget)" data-id="{{widget.layout.id}}" on-finish-render-item="ngRepeatWidgetFinished">
+                    <span class="btn--sq-icon__bd" title="{{ widget.layout.name | translate }}">
+                        <i ng-if="widget.layout.icon_name==null" class="icon icon--big icon--clear-background-image {{widget.layout.icon}}"></i>
+        <i ng-if="widget.layout.icon_name" class="{{widget.layout.icon}}">{{widget.layout.icon_name}}</i>
+                            <!--<i class="icon icon&#45;&#45;big icon&#45;&#45;clear-background-image {{widget.layout.icon}}"></i>-->
+                        <span class="btn--sq-icon__text" style="width: 80px">TEXT INPUT FIELD</span>
+                    </span>
+                </div>
+                 <div class="widget-handle btn btn--sq-icon quoting_tool-drag-widget-component-to-content block-custom"
+                     ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id != 'init' && widget.layout.other==true && widget.layout.id=='checkbox'"
+                     ng-click="addWidget(widget)" data-id="{{widget.layout.id}}" on-finish-render-item="ngRepeatWidgetFinished">
+                    <span class="btn--sq-icon__bd" title="{{ widget.layout.name | translate }}">
+                        <i ng-if="widget.layout.icon_name==null" class="icon icon--big icon--clear-background-image {{widget.layout.icon}}"></i>
+        <i ng-if="widget.layout.icon_name" class="{{widget.layout.icon}}">{{widget.layout.icon_name}}</i>
+                            <!--<i class="icon icon&#45;&#45;big icon&#45;&#45;clear-background-image {{widget.layout.icon}}"></i>-->
+                        <span class="btn--sq-icon__text" style="width: 80px">CHECKBOX</span>
+                    </span>
+                </div>
+                 <div class="widget-handle btn btn--sq-icon quoting_tool-drag-widget-component-to-content block-custom"
+                     ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id != 'init' && widget.layout.other==true && widget.layout.id=='date'"
+                     ng-click="addWidget(widget)" data-id="{{widget.layout.id}}" on-finish-render-item="ngRepeatWidgetFinished">
+                    <span class="btn--sq-icon__bd" title="{{ widget.layout.name | translate }}">
+                        <i ng-if="widget.layout.icon_name==null" class="icon icon--big icon--clear-background-image {{widget.layout.icon}}"></i>
+        <i ng-if="widget.layout.icon_name" class="{{widget.layout.icon}}">{{widget.layout.icon_name}}</i>
+                            <!--<i class="icon icon&#45;&#45;big icon&#45;&#45;clear-background-image {{widget.layout.icon}}"></i>-->
+                        <span class="btn--sq-icon__text" style="width: 80px">DATE</span>
+                    </span>
+                </div>
+                 <div class="widget-handle btn btn--sq-icon quoting_tool-drag-widget-component-to-content block-custom"
+                     ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id != 'init' && widget.layout.other==true && widget.layout.id=='textarea_field'"
+                     ng-click="addWidget(widget)" data-id="{{widget.layout.id}}" on-finish-render-item="ngRepeatWidgetFinished">
+                    <span class="btn--sq-icon__bd" title="{{ widget.layout.name | translate }}">
+                        <i ng-if="widget.layout.icon_name==null" class="icon icon--big icon--clear-background-image {{widget.layout.icon}}"></i>
+        <i ng-if="widget.layout.icon_name" class="{{widget.layout.icon}}">{{widget.layout.icon_name}}</i>
+                            <!--<i class="icon icon&#45;&#45;big icon&#45;&#45;clear-background-image {{widget.layout.icon}}"></i>-->
+                        <span class="btn--sq-icon__text" style="width: 80px">TEXTAREA INPUT FIELD</span>
+                    </span>
+                </div>
+                 <div class="widget-handle btn btn--sq-icon quoting_tool-drag-widget-component-to-content block-custom"
+                     ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id != 'init' && widget.layout.other==true && widget.layout.id=='field_image'"
+                     ng-click="addWidget(widget)" data-id="{{widget.layout.id}}" on-finish-render-item="ngRepeatWidgetFinished">
+                    <span class="btn--sq-icon__bd" title="{{ widget.layout.name | translate }}">
+                        <i ng-if="widget.layout.icon_name==null" class="icon icon--big icon--clear-background-image {{widget.layout.icon}}"></i>
+        <i ng-if="widget.layout.icon_name" class="{{widget.layout.icon}}">{{widget.layout.icon_name}}</i>
+                            <!--<i class="icon icon&#45;&#45;big icon&#45;&#45;clear-background-image {{widget.layout.icon}}"></i>-->
+                        <span class="btn--sq-icon__text">IMAGE FIELD</span>
+                    </span>
+                </div>
+                 <div class="widget-handle btn btn--sq-icon quoting_tool-drag-widget-component-to-content block-custom"
+                     ng-repeat="widget in app.data.widgets" ng-if="widget.layout.id != 'init' && widget.layout.other==true && widget.layout.id=='datetime'"
+                     ng-click="addWidget(widget)" data-id="{{widget.layout.id}}" on-finish-render-item="ngRepeatWidgetFinished">
+                    <span class="btn--sq-icon__bd" title="{{ widget.layout.name | translate }}">
+                        <i ng-if="widget.layout.icon_name==null" class="icon icon--big icon--clear-background-image {{widget.layout.icon}}"></i>
+        <i ng-if="widget.layout.icon_name" class="{{widget.layout.icon}}">{{widget.layout.icon_name}}</i>
+                            <!--<i class="icon icon&#45;&#45;big icon&#45;&#45;clear-background-image {{widget.layout.icon}}"></i>-->
+                        <span class="btn--sq-icon__text" style="width: 50px">DATE & TIME</span>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

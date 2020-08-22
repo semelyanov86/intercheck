@@ -29,7 +29,7 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 
 			$mail = $connector->openMail($request->get('_msgno'), $foldername);
 			$connector->updateFolder($folder, SA_MESSAGES|SA_UNSEEN);
-			if (Users_Record_Model::isEmailAndPhoneViewPermitted()) {
+			if (Users_Record_Model::isEmailViewPermitted()) {
 				$mail->setTo('****');
 				$mail->setFrom('****');
 			}
@@ -39,6 +39,9 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 			$viewer->assign('USERNAME', $this->mMailboxModel->mUsername);
 			$viewer->assign('ATTACHMENTS', $mail->attachments(false));
 			$body = $mail->body();
+			if (Users_Record_Model::isEmailViewPermitted()) {
+				$body = Vtiger_Util_Helper::hidePhoneAndEmails($body);
+			}
 			$inlineAttachments = $mail->inlineAttachments();
 			if(is_array($inlineAttachments)) {
 				foreach($inlineAttachments as $index => $att) {

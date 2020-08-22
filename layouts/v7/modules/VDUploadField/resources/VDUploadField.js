@@ -134,12 +134,15 @@ Vtiger.Class("VDUploadField_Js",{
         else if(view == 'Detail'){
             var thisInstance = this;
             this.showLinks();
-            app.event.on("post.overlay.load", function (event, data) {
-                thisInstance.showLinks();
+            app.event.on("post.overlay.load", function (event, data, parent) {
+                thisInstance.showLinks(parent.record);
             });
         }
     },
-    showLinks:function() {
+    showLinks:function(record) {
+        if (!record) {
+            record = app.getRecordId();
+        }
         jQuery("[id*='fieldValue_" + supportedVDFields.Upload_Field.prefix + "']").each(function() {
             var current = jQuery( this).find("span.value");
             var curfieldarr = current.context.id.split('_');

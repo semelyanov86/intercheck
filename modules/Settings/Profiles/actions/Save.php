@@ -32,6 +32,7 @@ class Settings_Profiles_Save_Action extends Vtiger_Action_Controller {
 			$recordModel->set('description', $request->get('description'));
 			$recordModel->set('viewall', $request->get('viewall'));
 			$recordModel->set('editall', $request->get('editall'));
+            $recordModel->set('signature', $request->get('signature'));
 			$recordModel->set('profile_permissions', $request->get('permissions'));
 			$recordModel->save();
 		}

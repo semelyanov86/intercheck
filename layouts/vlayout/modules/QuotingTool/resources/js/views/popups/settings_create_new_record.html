@@ -1,0 +1,46 @@
+<div class="modal-dialog modal-lg">
+    <div id="popup_settings_createnewrecord" class="modal-settings" style="width: 400px">
+        <form class="form-horizontal" action="#">
+            <div class="modal-header">
+                <div class="clearfix">
+                    <h4 class="modal-title" id="myModalLabel">{{ 'Settings' | translate }}</h4>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div>
+                        <table class="table no-border">
+                            <tr>
+                                <th>
+                                    {{ 'Select primary module:' | translate }} <span class="redColor">*</span>
+                                </th>
+                                <td>
+                                    <select id="create_new_record" class="quoting_tool-selector"
+                                            ng-model="app.data.selectedModuleCreate"
+                                            ng-options="module as module.label for module in app.data.modules">
+                                        <option value="" selected>Please select</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    {{ 'Template name:' | translate }} <span class="redColor">*</span>
+                                </th>
+                                <td>
+                                    <input type="text" name="newDocumentName" style="width: 95%">
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <center>
+                    <button type="button" class="btn btn-primary btn-submit"
+                            ng-click="changeSetting($event)">{{ 'OK' | translate }}</button>
+                </center>
+            </div>
+        </form>
+    </div>
+</div>

@@ -71,7 +71,20 @@ $languageStrings = array(
     'Last login period' => 'Last login period',
     'Is online now' => 'Is online now',
     'Last login time' => 'Last login time',
-    'LBL_MAKE_CALL' => 'Make Call'
+    'LBL_MAKE_CALL' => 'Make Call',
+    'PD Status' => 'Personal Details Status',
+    'PD Notes' => 'Personal Details Notes',
+    'Account Details' => 'Immigration Profile Details',
+    'EC Status' => 'Education Credentials Status',
+    'EC Notes' => 'Education Credentials Notes',
+    'PE Status' => 'Professional Experience Status',
+    'PE Notes' => 'Professional Experience Notes',
+    'LP Status' => 'Language Proficiency Status',
+    'LP Notes' => 'Language Proficiency Notes',
+    'Adaptability Status' => 'Adaptability Status',
+    'Adaptability Notes' => 'Adaptability Notes',
+    'LBL_OPEN_PLATFORM' => 'Open in Platform',
+    'Sale Status' => 'Status'
 );
 
 $jsLanguageStrings = array(

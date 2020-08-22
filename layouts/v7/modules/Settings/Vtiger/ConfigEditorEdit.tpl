@@ -26,22 +26,29 @@
 					<div class="detailViewInfo">
 						{assign var=FIELD_DATA value=$MODEL->getViewableData()}
 						{foreach key=FIELD_NAME item=FIELD_DETAILS from=$MODEL->getEditableFields()}
+							{assign var=FIELD_VALUE value=$FIELD_DATAS[$FIELD_NAME]}
 							<div class="row form-group">
 								<div class="col-lg-4 control-label fieldLabel">
 									<label>{if $FIELD_NAME == 'upload_maxsize'}{if $FIELD_DATA[$FIELD_NAME] gt 5}{vtranslate($FIELD_DETAILS['label'], $QUALIFIED_MODULE,$FIELD_DATA[$FIELD_NAME])}{else}{vtranslate($FIELD_DETAILS['label'], $QUALIFIED_MODULE,5)}{/if}{else}{vtranslate($FIELD_DETAILS['label'], $QUALIFIED_MODULE)}{/if}</label>
 								</div>
 								<div  class="{$WIDTHTYPE}  col-lg-4 input-group">
-									{if $FIELD_DETAILS['fieldType'] == 'picklist'}
+									{if $FIELD_DETAILS['fieldType'] == 'picklist' or $FIELD_DETAILS['fieldType'] == 'multipicklist'}
 
-										<select class="select2-container inputElement select2 col-lg-11" name="{$FIELD_NAME}" >
+										<select class="select2-container inputElement select2 col-lg-11" name="{$FIELD_NAME}" {if $FIELD_DETAILS['fieldType'] == 'picklist'} multiple {/if}>
+
 											{foreach key=optionName item=optionLabel from=$MODEL->getPicklistValues($FIELD_NAME)}
-												{if $FIELD_NAME != 'default_module' && $FIELD_NAME != 'default_reply_to'}
-													<option {if $optionLabel == $FIELD_DATA[$FIELD_NAME]} selected {/if}>{vtranslate($optionLabel, $QUALIFIED_MODULE)}</option>
-												{else if $FIELD_NAME == 'default_reply_to'}
-													<option value="{$optionName}" {if $optionName == $FIELD_DATA[$FIELD_NAME]} selected {/if}>{vtranslate($optionName)}</option>
-												{else}
-													<option value="{$optionName}" {if $optionLabel == $FIELD_DATA[$FIELD_NAME]} selected {/if}>{vtranslate($optionLabel, $optionLabel)}</option>
-												{/if}
+
+													{if $FIELD_NAME != 'default_module' && $FIELD_NAME != 'default_reply_to'}
+														{if $FIELD_NAME eq 'restrictedFieldRoles' or $FIELD_NAME eq 'restrictedFieldRolesPhones'}
+															<option value="{$optionName}" {if in_array($optionName, $FIELD_VALUE)} selected {/if}>{vtranslate($optionLabel, $QUALIFIED_MODULE)}</option>
+														{else}
+															<option {if $optionLabel == $FIELD_DATA[$FIELD_NAME]} selected {/if}>{vtranslate($optionLabel, $QUALIFIED_MODULE)}</option>
+														{/if}
+													{else if $FIELD_NAME == 'default_reply_to'}
+														<option value="{$optionName}" {if $optionName == $FIELD_DATA[$FIELD_NAME]} selected {/if}>{vtranslate($optionName)}</option>
+													{else}
+														<option value="{$optionName}" {if $optionLabel == $FIELD_DATA[$FIELD_NAME]} selected {/if}>{vtranslate($optionLabel, $optionLabel)}</option>
+													{/if}
 											{/foreach}
 										</select>
 										{if $FIELD_NAME == 'default_reply_to'}

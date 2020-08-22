@@ -10,6 +10,7 @@
 	
 	function vtws_delete($id,$user){
 		global $log,$adb;
+		$log->debug("SE: Prepared ID for delete: $id and user:");
 		$webserviceObject = VtigerWebserviceObject::fromId($adb,$id);
 		$handlerPath = $webserviceObject->getHandlerPath();
 		$handlerClass = $webserviceObject->getHandlerClass();
@@ -22,7 +23,7 @@
 		
 		$types = vtws_listtypes(null, $user);
 		if(!in_array($entityName,$types['types'])){
-			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied in delete for $entityName");
 		}
 		
 		if($entityName !== $webserviceObject->getEntityName()){

@@ -20,6 +20,19 @@ class EmailTemplates_Detail_View extends Vtiger_Index_View {
         if(!$moduleModel->isActive()){
             return false;
         }
+        $record = $request->get('record');
+        if (!empty($record)) {
+            $userModel = Users_Record_Model::getCurrentUserModel();
+            if (!$userModel->isAdminUser()) {
+                $groupsArr = array_keys($userModel->getAccessibleGroups());
+                $groupsArr[] = $userModel->getId();
+                $recordModel = EmailTemplates_Record_Model::getInstanceById($record);
+                $curOwner = $recordModel->get('user_id');
+                if (!in_array($curOwner, $groupsArr)) {
+                    throw new AppException(vtranslate('LBL_PERMISSION_DENIED'));
+                }
+            }
+        }
         return true;
     }
     
@@ -69,8 +82,9 @@ class EmailTemplates_Detail_View extends Vtiger_Index_View {
 
 		$recordModel = EmailTemplates_Record_Model::getInstanceById($record);
 		$recordModel->setModule($moduleName);
-
+        $fieldOwnerModel = new Vtiger_Owner_UIType();
 		$viewer->assign('RECORD', $recordModel);
+		$viewer->assign('OWNER_FIELD', $fieldOwnerModel);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		$viewer->assign('MODULE_NAME', $moduleName);
 		if ($request->isAjax()) {

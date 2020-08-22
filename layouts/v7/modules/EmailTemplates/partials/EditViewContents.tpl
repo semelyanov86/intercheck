@@ -25,6 +25,38 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="fieldLabel {$WIDTHTYPE} alignMiddle">{vtranslate('LBL_ASSIGNED_USER', $MODULE)}&nbsp;<span class="redColor">*</span></td>
+                        <td class="fieldValue {$WIDTHTYPE}">
+                            {assign var=ALL_ACTIVEUSER_LIST value=$USER_MODEL->getAccessibleUsers()}
+                            {assign var=ALL_ACTIVEGROUP_LIST value=$USER_MODEL->getAccessibleGroups()}
+                            {assign var=CURRENT_USER_ID value=$USER_MODEL->get('id')}
+                            {assign var=FIELD_VALUE value=$RECORD->get('user_id')}
+                            {assign var=ACCESSIBLE_USER_LIST value=$USER_MODEL->getAccessibleUsersForModule($MODULE)}
+                            {assign var=ACCESSIBLE_GROUP_LIST value=$USER_MODEL->getAccessibleGroupForModule($MODULE)}
+                            <select class="inputElement select2" type="owner" data-fieldtype="owner" data-fieldname="user_id" data-name="user_id" name="user_id"
+                                    data-rule-required="true"
+                            >
+                                <optgroup label="{vtranslate('LBL_USERS')}">
+                                    {foreach key=OWNER_ID item=OWNER_NAME from=$ALL_ACTIVEUSER_LIST}
+                                        <option value="{$OWNER_ID}" data-picklistvalue= '{$OWNER_NAME}' {if $FIELD_VALUE eq $OWNER_ID} selected {/if}
+                                                {if array_key_exists($OWNER_ID, $ACCESSIBLE_USER_LIST)} data-recordaccess=true {else} data-recordaccess=false {/if}
+                                                data-userId="{$CURRENT_USER_ID}">
+                                            {$OWNER_NAME}
+                                        </option>
+                                    {/foreach}
+                                </optgroup>
+                                <optgroup label="{vtranslate('LBL_GROUPS')}">
+                                    {foreach key=OWNER_ID item=OWNER_NAME from=$ALL_ACTIVEGROUP_LIST}
+                                        <option value="{$OWNER_ID}" data-picklistvalue= '{$OWNER_NAME}' {if $FIELD_VALUE eq $OWNER_ID} selected {/if}
+                                                {if array_key_exists($OWNER_ID, $ACCESSIBLE_GROUP_LIST)} data-recordaccess=true {else} data-recordaccess=false {/if} >
+                                            {$OWNER_NAME}
+                                        </option>
+                                    {/foreach}
+                                </optgroup>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="fieldLabel {$WIDTHTYPE} alignMiddle">{vtranslate('LBL_DESCRIPTION', $MODULE)}</td>
                         <td class="fieldValue {$WIDTHTYPE}">
                             <textarea class="inputElement col-lg-12" id="description" name="description">{$RECORD->get('description')}</textarea>

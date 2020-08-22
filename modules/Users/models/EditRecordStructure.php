@@ -78,7 +78,11 @@ class Users_EditRecordStructure_Model extends Vtiger_EditRecordStructure_Model {
                         } elseif ($fieldName == 'user_profiles') {
 						    $roleId = $recordModel->getRole();
 						    $roleModel = Settings_Roles_Record_Model::getInstanceById($roleId);
-						    $profiles = $roleModel->getProfiles();
+						    if ($roleModel) {
+                                $profiles = $roleModel->getProfiles();
+                            } else {
+						        $profiles = array();
+                            }
 						    $profilesArr = array();
                             foreach ($profiles as $key=>$profile) {
                                 $profilesArr[] = $profile->getId();
